@@ -23,6 +23,7 @@ public class PlantUmlCodeBlockSpecTest extends RendererSpecTest {
     final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
     final private static DataHolder OPTIONS = new MutableDataSet()
             .set(Parser.EXTENSIONS, Collections.singleton(PlantUmlExtension.create()))
+            .set(PlantUmlExtension.KEY_RENDER_FENCED_PLANTUML_CODE_BLOCKS, true)
             .toImmutable();
 
     public PlantUmlCodeBlockSpecTest(@NotNull SpecExample example) {

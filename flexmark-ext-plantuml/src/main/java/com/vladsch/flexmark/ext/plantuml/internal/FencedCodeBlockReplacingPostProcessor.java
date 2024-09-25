@@ -9,6 +9,7 @@ package com.vladsch.flexmark.ext.plantuml.internal;
 import org.jetbrains.annotations.NotNull;
 
 import com.vladsch.flexmark.ast.FencedCodeBlock;
+import com.vladsch.flexmark.ext.plantuml.PlantUmlExtension;
 import com.vladsch.flexmark.ext.plantuml.PlantUmlFencedCodeBlockNode;
 import com.vladsch.flexmark.parser.block.NodePostProcessor;
 import com.vladsch.flexmark.parser.block.NodePostProcessorFactory;
@@ -20,8 +21,20 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 
 public class FencedCodeBlockReplacingPostProcessor extends NodePostProcessor {
 	
+	private final DataHolder options;
+	
+	public FencedCodeBlockReplacingPostProcessor(DataHolder options) {
+		this.options = options;
+	}
+	
     @Override
     public void process(@NotNull NodeTracker state, @NotNull Node node) {
+        Boolean renderFencedPlantUmlCodeBlocks = PlantUmlExtension.KEY_RENDER_FENCED_PLANTUML_CODE_BLOCKS.get(this.options);
+        
+        if (renderFencedPlantUmlCodeBlocks == null || !renderFencedPlantUmlCodeBlocks.booleanValue()) {
+        	return;
+        }
+        
         if (node instanceof FencedCodeBlock) {
             FencedCodeBlock fencedCodeBlock = (FencedCodeBlock) node;
             BasedSequence info = fencedCodeBlock.getInfo();
@@ -38,9 +51,12 @@ public class FencedCodeBlockReplacingPostProcessor extends NodePostProcessor {
     }
 
     public static class Factory extends NodePostProcessorFactory {
+    	
+    	private final DataHolder options;
 
         public Factory(DataHolder options) {
             super(false);
+            this.options = options;
 
             addNodes(FencedCodeBlock.class);
         }
@@ -48,7 +64,7 @@ public class FencedCodeBlockReplacingPostProcessor extends NodePostProcessor {
         @NotNull
         @Override
         public NodePostProcessor apply(@NotNull Document document) {
-            return new FencedCodeBlockReplacingPostProcessor();
+            return new FencedCodeBlockReplacingPostProcessor(this.options);
         }
     }
 }

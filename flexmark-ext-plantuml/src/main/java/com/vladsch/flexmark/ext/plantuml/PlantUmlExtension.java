@@ -22,8 +22,9 @@ import java.util.Map;
 
 public class PlantUmlExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
 
-    final public static NullableDataKey<String> KEY_DOCUMENT_FILE_PATH = new NullableDataKey<>("DOC_FILE_PATH");
-    final public static NullableDataKey<Map<String,String>> KEY_DOCUMENT_PATH_TO_FILE_CONTENTS_MAP = new NullableDataKey<>("RELATIVE_PATH_TO_FILE_CONTENTS_MAP");
+    public static final NullableDataKey<String> KEY_DOCUMENT_FILE_PATH = new NullableDataKey<>("DOC_FILE_PATH");
+    public static final NullableDataKey<Map<String,String>> KEY_DOCUMENT_PATH_TO_FILE_CONTENTS_MAP = new NullableDataKey<>("RELATIVE_PATH_TO_FILE_CONTENTS_MAP");
+    public static final NullableDataKey<Boolean> KEY_RENDER_FENCED_PLANTUML_CODE_BLOCKS = new NullableDataKey<Boolean>("RENDER_FENCED_PLANUML_CODE_BLOCKS", false);
 
     private PlantUmlExtension() {
     }
