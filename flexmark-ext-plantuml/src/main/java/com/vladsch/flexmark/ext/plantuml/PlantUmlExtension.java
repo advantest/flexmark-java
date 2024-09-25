@@ -6,9 +6,11 @@
  */
 package com.vladsch.flexmark.ext.plantuml;
 
+import com.vladsch.flexmark.ext.plantuml.internal.FencedCodeBlockReplacingPostProcessor;
 import com.vladsch.flexmark.ext.plantuml.internal.ImageReplacingPostProcessor;
 import com.vladsch.flexmark.ext.plantuml.internal.PlantUmlBlockNodeRenderer;
 import com.vladsch.flexmark.ext.plantuml.internal.PlantUmlCodeBlockParser;
+import com.vladsch.flexmark.ext.plantuml.internal.PlantUmlFencedCodeBlockRenderer;
 import com.vladsch.flexmark.ext.plantuml.internal.PlantUmlImageNodeRenderer;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -42,8 +44,9 @@ public class PlantUmlExtension implements Parser.ParserExtension, HtmlRenderer.H
 
     @Override
     public void extend(Parser.Builder parserBuilder) {
-        parserBuilder.customBlockParserFactory(new PlantUmlCodeBlockParser.Factory());
-        parserBuilder.postProcessorFactory(new ImageReplacingPostProcessor.Factory(parserBuilder));
+        parserBuilder.customBlockParserFactory(new PlantUmlCodeBlockParser.Factory())
+            .postProcessorFactory(new ImageReplacingPostProcessor.Factory(parserBuilder))
+            .postProcessorFactory(new FencedCodeBlockReplacingPostProcessor.Factory(parserBuilder));
     }
 
     @Override
@@ -51,7 +54,8 @@ public class PlantUmlExtension implements Parser.ParserExtension, HtmlRenderer.H
         if (htmlRendererBuilder.isRendererType("HTML")) {
             htmlRendererBuilder
                     .nodeRendererFactory(new PlantUmlBlockNodeRenderer.Factory())
-                    .nodeRendererFactory(new PlantUmlImageNodeRenderer.Factory());
+                    .nodeRendererFactory(new PlantUmlImageNodeRenderer.Factory())
+                    .nodeRendererFactory(new PlantUmlFencedCodeBlockRenderer.Factory());
         }
     }
 

@@ -19,6 +19,7 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.jetbrains.annotations.NotNull;
 
 public class ImageReplacingPostProcessor extends NodePostProcessor {
+	
     @Override
     public void process(@NotNull NodeTracker state, @NotNull Node node) {
         if (node instanceof Image) {
