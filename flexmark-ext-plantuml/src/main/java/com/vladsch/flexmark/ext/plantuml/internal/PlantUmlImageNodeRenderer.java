@@ -29,6 +29,7 @@ import java.util.Set;
 public class PlantUmlImageNodeRenderer implements NodeRenderer {
 
     private PlantUmlBlockNodeRenderer plantUmlRenderer = new PlantUmlBlockNodeRenderer();
+    
     @Override
     public @Nullable Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
         HashSet<NodeRenderingHandler<?>> set = new HashSet<>();
