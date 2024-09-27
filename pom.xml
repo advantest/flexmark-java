@@ -113,7 +113,7 @@
                       <version>[3.9.0,4)</version>
                     </requireMavenVersion>
                     <requireJavaVersion>
-                      <version>[11,18)</version>
+                      <version>21</version>
                     </requireJavaVersion>
                   </rules>
                 </configuration>
@@ -142,7 +142,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.1</version>
                     <configuration>
-                        <release>11</release>
+                        <release>21</release>
                     </configuration>
                 </plugin>
                 <plugin>
