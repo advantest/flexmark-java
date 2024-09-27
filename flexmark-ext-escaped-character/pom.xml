@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.vladsch.flexmark</groupId>
         <artifactId>flexmark-java</artifactId>
-        <version>0.64.10-20240927-1457</version>
+        <version>0.64.11-SNAPSHOT</version>
     </parent>
 
     <artifactId>flexmark-ext-escaped-character</artifactId>
