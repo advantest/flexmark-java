@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.ext.footnotes.internal;
 
+import com.vladsch.flexmark.ast.Paragraph;
 import com.vladsch.flexmark.ext.footnotes.Footnote;
 import com.vladsch.flexmark.ext.footnotes.FootnoteBlock;
 import com.vladsch.flexmark.ext.footnotes.FootnoteExtension;
@@ -7,9 +8,12 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.html.HtmlWriter;
 import com.vladsch.flexmark.html.renderer.*;
 import com.vladsch.flexmark.util.ast.Document;
+import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.ast.NodeVisitor;
 import com.vladsch.flexmark.util.ast.VisitHandler;
 import com.vladsch.flexmark.util.data.DataHolder;
+import com.vladsch.flexmark.util.sequence.BasedSequence;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -22,6 +26,8 @@ public class FootnoteNodeRenderer implements PhasedNodeRenderer {
     final private FootnoteRepository footnoteRepository;
     final private FootnoteOptions options;
     final private boolean recheckUndefinedReferences;
+    
+    private static final String PARAGRAPH_END_TAG = "</p>"; 
 
     public FootnoteNodeRenderer(DataHolder options) {
         this.options = new FootnoteOptions(options);
@@ -83,21 +89,45 @@ public class FootnoteNodeRenderer implements PhasedNodeRenderer {
                             int footnoteOrdinal = footnoteBlock.getFootnoteOrdinal();
                             html.attr("id", "fn-" + footnoteOrdinal);
                             html.withAttr().tagIndent("li", () -> {
+                                Node lastFootnoteBlockChild = footnoteBlock.getLastChild();
+                                boolean lastChildIsParagraph = lastFootnoteBlockChild instanceof Paragraph;
+                                
                                 context.renderChildren(footnoteBlock);
-
-                                int iMax = footnoteBlock.getFootnoteReferences();
-                                for (int i = 0; i < iMax; i++) {
-                                    html.attr("href", "#fnref-" + footnoteOrdinal + (i == 0 ? "" : String.format(Locale.US, "-%d", i)));
-                                    if (!options.footnoteBackLinkRefClass.isEmpty()) html.attr("class", options.footnoteBackLinkRefClass);
-                                    html.line().withAttr().tag("a");
-                                    html.raw(options.footnoteBackRefString);
-                                    html.tag("/a");
+                                
+                                if (lastChildIsParagraph) {
+                                    int lastLineIndex = html.getLineCount() - 1;
+                                    BasedSequence lastLineChars = html.getLine(lastLineIndex);
+                                    int indexOfClosingParagraphTag = lastLineChars.lastIndexOf(PARAGRAPH_END_TAG);
+                                    BasedSequence lineStartWithoutParagraphEndTag = lastLineChars.subSequence(0, indexOfClosingParagraphTag);
+                                    BasedSequence lineEndWithParagraphEndTag = lastLineChars.subSequence(indexOfClosingParagraphTag);
+                                    
+                                    html.removeLines(lastLineIndex, lastLineIndex + 1);
+                                    html.append(lineStartWithoutParagraphEndTag);
+                                    
+                                    appendFootnoteBackLinkReferences(html, footnoteBlock, footnoteOrdinal);
+                                    
+                                    html.append(lineEndWithParagraphEndTag);
+                                } else {
+                                    html.tagIndent("p", () -> {
+                                    	appendFootnoteBackLinkReferences(html, footnoteBlock, footnoteOrdinal);
+                                    });
                                 }
                             });
                         }
                     });
                 });
             }
+        }
+    }
+
+    private void appendFootnoteBackLinkReferences(HtmlWriter html, FootnoteBlock footnoteBlock, int footnoteOrdinal) {
+        int iMax = footnoteBlock.getFootnoteReferences();
+        for (int i = 0; i < iMax; i++) {
+            html.attr("href", "#fnref-" + footnoteOrdinal + (i == 0 ? "" : String.format(Locale.US, "-%d", i)));
+            if (!options.footnoteBackLinkRefClass.isEmpty()) html.attr("class", options.footnoteBackLinkRefClass);
+            html.line().withAttr().tag("a");
+            html.raw(options.footnoteBackRefString);
+            html.tag("/a");
         }
     }
 
