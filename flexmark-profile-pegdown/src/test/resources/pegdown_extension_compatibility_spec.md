@@ -2067,8 +2067,8 @@ this is an undefined footnote [^undef]
   <hr />
   <ol>
     <li id="fn-1">
-      <p>footnote A</p>
-      <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      <p>footnote A
+      <a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
     </li>
   </ol>
 </div>
