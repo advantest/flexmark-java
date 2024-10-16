@@ -108,7 +108,9 @@ public class FootnoteNodeRenderer implements PhasedNodeRenderer {
                                     
                                     html.append(lineEndWithParagraphEndTag);
                                 } else {
-                                    appendFootnoteBackLinkReferences(html, footnoteBlock, footnoteOrdinal);
+                                    html.tagIndent("p", () -> {
+                                    	appendFootnoteBackLinkReferences(html, footnoteBlock, footnoteOrdinal);
+                                    });
                                 }
                             });
                         }

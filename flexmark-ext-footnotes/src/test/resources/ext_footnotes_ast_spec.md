@@ -255,7 +255,9 @@ with continuation text. Inline _italic_ and
         <li>item 1</li>
         <li>item 2</li>
       </ul>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
   </ol>
 </div>
@@ -374,7 +376,9 @@ with continuation text. Inline _italic_ and
         <li>item 1</li>
         <li>item 2</li>
       </ul>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
   </ol>
 </div>
@@ -506,7 +510,9 @@ with continuation text. Inline _italic_ and
         <li>item 1</li>
         <li>item 2</li>
       </ul>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
     <li id="fn-2">
       <p>This is the body of the unused footnote.
@@ -597,7 +603,9 @@ with continuation text. Inline _italic_ and
         <li>item 1</li>
         <li>item 2</li>
       </ul>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
     <li id="fn-2">
       <p>This is the body of a nested footnote.
@@ -688,7 +696,9 @@ with continuation text. Inline _italic_ and
         <li>item 1</li>
         <li>item 2</li>
       </ul>
-      <p><a href="#fnref-1" class="footnote-backref">&lt;back&gt;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&lt;back&gt;</a>
+      </p>
     </li>
     <li id="fn-2">
       <p>This is the body of a nested footnote.
@@ -829,7 +839,9 @@ This paragraph has a footnote[^2].
       <p>Also a paragraph of the footnote</p>
       <pre><code>indented code of the footnote
 </code></pre>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
   </ol>
 </div>
@@ -922,7 +934,9 @@ Paragraph text[^1]
           <tr><td>data</td></tr>
         </tbody>
       </table>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
   </ol>
 </div>
@@ -977,7 +991,9 @@ Paragraph text[^1]
           <tr><td>data</td></tr>
         </tbody>
       </table>
-      <p><a href="#fnref-1" class="footnote-backref">&#8617;</a></p>
+      <p>
+        <a href="#fnref-1" class="footnote-backref">&#8617;</a>
+      </p>
     </li>
   </ol>
 </div>
