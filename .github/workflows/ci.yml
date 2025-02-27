@@ -20,11 +20,13 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: macos-13
 
     steps:
     - name: Install Graphviz (needed for PlantUML)
-      run: sudo apt install graphviz
+      #run: sudo apt install graphviz
+      run: brew install graphviz
     - name: Check out
       uses: actions/checkout@v4
     - name: Set up JDK 21
