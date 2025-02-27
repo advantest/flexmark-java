@@ -51,11 +51,11 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
         renderPlantUmlCode(node.getChars().toString(), htmlWriter, context);
     }
 
-    void renderPlantUmlCode(String plantUmlSourceCode, HtmlWriter htmlWriter, NodeRendererContext context) {
+    public void renderPlantUmlCode(String plantUmlSourceCode, HtmlWriter htmlWriter, NodeRendererContext context) {
         renderPlantUmlCode(plantUmlSourceCode, null, htmlWriter, context);
     }
 
-    void renderPlantUmlCode(String plantUmlSourceCode, String caption, HtmlWriter htmlWriter, NodeRendererContext context) {
+    public void renderPlantUmlCode(String plantUmlSourceCode, String caption, HtmlWriter htmlWriter, NodeRendererContext context) {
         htmlWriter.tagLine("figure").indent();
         String plantUmlToHtmlResult = translatePlantUmlToHtml(plantUmlSourceCode);
         String htmlFormatted = formatHtml(plantUmlToHtmlResult, context);
