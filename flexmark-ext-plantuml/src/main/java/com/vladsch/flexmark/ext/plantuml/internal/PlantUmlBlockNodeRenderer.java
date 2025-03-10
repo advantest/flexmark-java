@@ -6,6 +6,33 @@
  */
 package com.vladsch.flexmark.ext.plantuml.internal;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.html.HtmlEscapers;
 import com.vladsch.flexmark.ext.plantuml.PlantUmlBlockNode;
 import com.vladsch.flexmark.html.HtmlRenderer;
@@ -15,30 +42,20 @@ import com.vladsch.flexmark.html.renderer.NodeRendererContext;
 import com.vladsch.flexmark.html.renderer.NodeRendererFactory;
 import com.vladsch.flexmark.html.renderer.NodeRenderingHandler;
 import com.vladsch.flexmark.util.data.DataHolder;
-import net.sourceforge.plantuml.*;
-import net.sourceforge.plantuml.preproc.Defines;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.xml.XMLConstants;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.GeneratedImage;
+import net.sourceforge.plantuml.SourceFileReader;
+import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.preproc.Defines;
 
 public class PlantUmlBlockNodeRenderer implements NodeRenderer {
+	
+	private static final String REGEX_SVG_TAG = "<svg\\s.*?>";
+	private static final String REGEX_ATTR_VALUE = "(?<attribute>\\S+)=\\\"(?<value>.*?)\\\"";
+	private static final Pattern SVG_TAG_PATTERN = Pattern.compile(REGEX_SVG_TAG, Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+	private static final Pattern ATTRIBUTE_VALUE_PATTERN = Pattern.compile(REGEX_ATTR_VALUE);
 
     @Override
     public @Nullable Set<NodeRenderingHandler<?>> getNodeRenderingHandlers() {
@@ -57,7 +74,8 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
 
     public void renderPlantUmlCode(String plantUmlSourceCode, String caption, HtmlWriter htmlWriter, NodeRendererContext context) {
         htmlWriter.tagLine("figure").indent();
-        String plantUmlToHtmlResult = translatePlantUmlToHtml(plantUmlSourceCode);
+        String plantUmlToSvgResult = translatePlantUmlToSvg(plantUmlSourceCode);
+        String plantUmlToHtmlResult = adaptSvgAttributesForHtmlEmbedding(plantUmlToSvgResult);
         String htmlFormatted = formatHtml(plantUmlToHtmlResult, context);
         htmlWriter.noTrimLeading().append(htmlFormatted);
         if (caption != null && !caption.isBlank()) {
@@ -73,15 +91,102 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
         htmlWriter.append(escapedMessage);
         htmlWriter.tag("/span").line();
     }
+    
+    private String adaptSvgAttributesForHtmlEmbedding(String svgCode) {
+    	List<MatchResult> matches = SVG_TAG_PATTERN.matcher(svgCode).results().toList();
+		
+    	if (matches.isEmpty()) {
+    		return svgCode;
+    	}
+    	
+    	StringBuilder svgCodeBuilder = new StringBuilder();
+    	int cursorIndex = 0;
+    	for (MatchResult match : matches) {
+    		// append everything between last match (or first code char) and this match
+    		svgCodeBuilder.append(svgCode.substring(cursorIndex, match.start()));
+    		
+    		String svgTag = match.group();
+    		String attributes = svgTag.substring("<svg".length(), svgTag.length() - 1);
+    		
+    		// append "<svg "
+    		svgCodeBuilder.append(svgTag.substring(0, "<svg".length()));
+    		svgCodeBuilder.append(' ');
+    		
+    		// collect all attributes and their values
+    		Map<String, String> svgAttributeValuePairs = new LinkedHashMap<>();
+    		ATTRIBUTE_VALUE_PATTERN.matcher(attributes).results()
+    			.forEach(m -> svgAttributeValuePairs.put(m.group("attribute"), m.group("value")));
+    		
+    		// we don't want height attribute, we only need the width attribute
+    		svgAttributeValuePairs.remove("height");
+    		
+    		// we don't want preserveAspectRatio="none"
+    		svgAttributeValuePairs.remove("preserveAspectRatio");
+    		
+    		// we need to modify the entries of style attribute
+    		String styleValue = svgAttributeValuePairs.get("style");
+    		if (styleValue != null && !styleValue.isBlank()) {
+    			Map<String,String> styleAttrValuePairs = new LinkedHashMap<>();
+    			Arrays.stream(styleValue.split(";\s*"))
+    					.forEach(attrValuePair -> {
+    						String[] parts = attrValuePair.split("\s*:\s*");
+    						if (parts.length == 2) {
+    							styleAttrValuePairs.put(parts[0], parts[1]);
+    						}
+    					});
+    			
+    			// remove width and height attributes from style entry
+    			styleAttrValuePairs.remove("width");
+    			styleAttrValuePairs.remove("height");
+    			
+    			// add max-width attribute
+    			styleAttrValuePairs.put("max-width", "100%");
+    			
+    			StringBuilder styleAttrBuilder = new StringBuilder();
+    			for (String styleAttrName : styleAttrValuePairs.keySet()) {
+    				styleAttrBuilder.append(styleAttrName);
+    				styleAttrBuilder.append(": ");
+    				styleAttrBuilder.append(styleAttrValuePairs.get(styleAttrName));
+    				styleAttrBuilder.append("; ");
+    			}
+    			styleValue = styleAttrBuilder.toString().trim();
+    			svgAttributeValuePairs.put("style", styleValue);
+    		}
+    		
+    		int index = 0;
+    		int numKeys = svgAttributeValuePairs.keySet().size();
+    		for (String svgAttrName : svgAttributeValuePairs.keySet()) {
+    			svgCodeBuilder.append(svgAttrName);
+    			svgCodeBuilder.append('=');
+    			svgCodeBuilder.append('"');
+    			svgCodeBuilder.append(svgAttributeValuePairs.get(svgAttrName));
+    			svgCodeBuilder.append('"');
+    			index++;
+    			
+    			if (index != numKeys) {
+    				svgCodeBuilder.append(' ');
+    			}
+    		}
+    		
+    		svgCodeBuilder.append(">");
+    		
+    		cursorIndex = match.end();
+    	}
+    	
+    	// append everything after last match
+    	svgCodeBuilder.append(svgCode.substring(cursorIndex));
+    	
+    	return svgCodeBuilder.toString();
+    }
 
-    private String translatePlantUmlToHtml(String plantUmlSourceCode) {
+    private String translatePlantUmlToSvg(String plantUmlSourceCode) {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             SourceStringReader reader = new SourceStringReader(plantUmlSourceCode);
             reader.outputImage(os, new FileFormatOption(FileFormat.SVG));
             return new String(os.toByteArray(), Charset.forName("UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
-            return "Could not render HTML from PlantUML source code.";
+            return "Could not render SVG from PlantUML source code.";
         }
     }
 
@@ -139,5 +244,4 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
             return new PlantUmlBlockNodeRenderer();
         }
     }
-
 }
