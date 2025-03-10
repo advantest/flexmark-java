@@ -27,7 +27,7 @@ Single PlantUML code block
 @enduml
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="170px" preserveAspectRatio="none" style="width:106px;height:170px;background:#FFFFFF;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class ArrayList-->
@@ -113,7 +113,7 @@ Another paragraph.
 <p>Some text
 in a paragraph.</p>
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="170px" preserveAspectRatio="none" style="width:106px;height:170px;background:#FFFFFF;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class ArrayList-->
@@ -172,7 +172,7 @@ Single fenced PlantUML code block
 ```
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="170px" preserveAspectRatio="none" style="width:144px;height:170px;background:#FFFFFF;" version="1.1" viewBox="0 0 144 170" width="144px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 144 170" width="144px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class SomeInterface-->
