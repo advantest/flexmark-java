@@ -19,7 +19,7 @@
         Java re-implementation of commonmark-java based parser, with AST reflecting source elements, full source position tracking, greater parser extensibility.
     </description>
 
-    <url>https://github.com/vsch/flexmark-java</url>
+    <url>https://github.com/advantest/flexmark-java</url>
 
     <modules>
         <module>flexmark</module>
