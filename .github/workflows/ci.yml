@@ -46,6 +46,9 @@ jobs:
     runs-on: macos-13
     needs: build
     if: github.ref_name == 'develop'
+    permissions:
+      contents: read
+      packages: write
     
     steps:
     - name: Check out
