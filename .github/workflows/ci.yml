@@ -58,7 +58,7 @@ jobs:
         cache: maven
     - name: Deploy to GitHub Maven Packages
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: mvn -B clean -Pdeploy-github deploy
 
     
