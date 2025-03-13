@@ -57,6 +57,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Deploy to GitHub Maven Packages
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: mvn -B clean -Pdeploy-github deploy
 
     
