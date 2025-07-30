@@ -4,7 +4,7 @@
 <!-- see https://shields.io/badges -->
 
 ![GitHub License](https://img.shields.io/github/license/advantest/flexmark-java)
-[![Java CI with Maven](https://github.com/advantest/flexmark-java/actions/workflows/ci.yml/badge.svg)](https://github.com/advantest/flexmark-java/actions/workflows/ci.yml)
+[![Java CI with Maven](https://github.com/advantest/flexmark-java/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/advantest/flexmark-java/actions/workflows/ci.yml)
 
 
 **flexmark-java** is a Java implementation of **[CommonMark (spec 0.28)]** parser using the
