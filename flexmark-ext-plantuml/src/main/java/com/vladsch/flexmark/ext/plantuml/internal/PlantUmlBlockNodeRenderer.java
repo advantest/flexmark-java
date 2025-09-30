@@ -81,7 +81,7 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
         htmlWriter.noTrimLeading().append(htmlFormatted);
         if (caption != null && !caption.isBlank()) {
             String escapedCaption = HtmlEscapers.htmlEscaper().escape(caption);
-            htmlWriter.tag("figcaption").append(escapedCaption).tag("/figcaption").line();
+            htmlWriter.line().tag("figcaption").append(escapedCaption).tag("/figcaption").line();
         }
         htmlWriter.unIndent().tagLine("/figure");
     }
