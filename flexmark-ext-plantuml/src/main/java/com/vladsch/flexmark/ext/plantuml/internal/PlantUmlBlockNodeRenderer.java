@@ -42,6 +42,7 @@ import com.vladsch.flexmark.html.renderer.NodeRendererContext;
 import com.vladsch.flexmark.html.renderer.NodeRendererFactory;
 import com.vladsch.flexmark.html.renderer.NodeRenderingHandler;
 import com.vladsch.flexmark.util.data.DataHolder;
+import com.vladsch.flexmark.util.sequence.SequenceUtils;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -179,6 +180,15 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
     	return svgCodeBuilder.toString();
     }
 
+    private String unifyLineEndings(String lines) {
+    	if (lines == null) {
+    		return null;
+    	}
+    	
+    	String[] linesArray = lines.split("\\r\\n|\\n");
+    	return String.join(SequenceUtils.EOL, linesArray);
+    }
+
     private String translatePlantUmlToSvg(String plantUmlSourceCode) {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             SourceStringReader reader = new SourceStringReader(plantUmlSourceCode);
@@ -208,7 +218,8 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             transformer.transform(xmlInput, xmlOutput);
-            return xmlOutput.getWriter().toString();
+            String formatted = xmlOutput.getWriter().toString();
+            return unifyLineEndings(formatted);
         } catch (Exception e) {
             e.printStackTrace();
             return sourceHtmlCode;
