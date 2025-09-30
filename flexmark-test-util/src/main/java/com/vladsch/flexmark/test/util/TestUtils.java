@@ -535,10 +535,15 @@ public class TestUtils {
     }
 
     @NotNull
-    public static String getResolvedSpecResourcePath(@NotNull String testClassName, @NotNull String resourcePath) {
+    public static String getResolvedSpecResourcePath(@NotNull Class<?> resourceClass, @NotNull String resourcePath) {
         File specInfo = new File(resourcePath);
-        File classInfo = new File("/" + testClassName.replace('.', '/'));
-        return !specInfo.isAbsolute() ? new File(classInfo.getParent(), resourcePath).getAbsolutePath() : resourcePath;
+        
+        if (specInfo.isAbsolute() && specInfo.exists() && specInfo.isFile()) {
+        	return resourcePath;
+        }
+        
+        URL targetUrl = resourceClass.getResource(resourcePath);
+        return targetUrl != null ? new File(targetUrl.getPath()).getAbsolutePath() : "";
     }
 
     @NotNull
@@ -548,14 +553,14 @@ public class TestUtils {
     }
 
     @NotNull
-    public static String getSpecResourceFileUrl(@NotNull Class<?> resourceClass, @NotNull String resourcePath) {
+    public static URL getSpecResourceFileUrl(@NotNull Class<?> resourceClass, @NotNull String resourcePath) {
         if (resourcePath.isEmpty()) {
             throw new IllegalStateException("Empty resource paths not supported");
         } else {
-            String resolvedResourcePath = getResolvedSpecResourcePath(resourceClass.getName(), resourcePath);
-            URL url = resourceClass.getResource(resolvedResourcePath);
-            assert url != null : "Resource path: '" + resolvedResourcePath + "' not found.";
-            return adjustedFileUrl(url);
+            URL url = resourceClass.getResource(resourcePath);
+            assert url != null : "Resource path: '" + resourcePath + "' not found.";
+            //return adjustedFileUrl(url); // TODO do we still need that?
+            return url;
         }
     }
 
@@ -618,9 +623,8 @@ public class TestUtils {
 
     @NotNull
     public static String getTestResourceRootDirectoryForModule(@NotNull Class<?> resourceClass, @NotNull String moduleRootPackage) {
-        String fileUrl;
-        fileUrl = getSpecResourceFileUrl(resourceClass, wrapWith(moduleRootPackage, "/", ".txt"));
-        return removePrefix(removeSuffix(fileUrl, suffixWith(moduleRootPackage, ".txt")), FILE_PROTOCOL);
+        URL fileUrl = getSpecResourceFileUrl(resourceClass, wrapWith(moduleRootPackage, "/", ".txt"));
+        return removePrefix(removeSuffix(fileUrl.toString(), suffixWith(moduleRootPackage, ".txt")), FILE_PROTOCOL);
     }
 
     @NotNull

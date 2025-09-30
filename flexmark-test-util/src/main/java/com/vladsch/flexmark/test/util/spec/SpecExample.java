@@ -100,7 +100,7 @@ public class SpecExample {
 
     @NotNull
     public String getFileUrl() {
-        return resourceLocation.getFileUrl();
+        return resourceLocation.getFileUrl().toString();
     }
 
     @NotNull
