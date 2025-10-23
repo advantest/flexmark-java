@@ -12,7 +12,7 @@
     <description>flexmark-java extension for parsing PlantUML diagram source code blocks and for rendering them to HTML.</description>
 
     <properties>
-        <plantuml-version>1.2024.5</plantuml-version>
+        <plantuml-version>1.2025.9</plantuml-version>
     </properties>
     
     <dependencyManagement>
