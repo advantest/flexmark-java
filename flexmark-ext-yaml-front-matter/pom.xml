@@ -4,7 +4,7 @@
     <parent>
         <artifactId>flexmark-java</artifactId>
         <groupId>com.vladsch.flexmark</groupId>
-        <version>0.64.13-20250310-1604</version>
+        <version>0.64.14-20251024-1824</version>
     </parent>
 
     <artifactId>flexmark-ext-yaml-front-matter</artifactId>
