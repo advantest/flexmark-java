@@ -261,31 +261,31 @@ Single fenced PlantUML code block with ~ symbols
 ~~~
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 138 170" width="138px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 144 170" width="144px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class SomeInterface-->
       <g id="elem_SomeInterface">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="SomeInterface" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="124" x="7" y="7"/>
+        <rect codeLine="1" fill="#F1F1F1" height="48" id="SomeInterface" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="130" x="7" y="7"/>
         <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M22.9531,19.6406 L22.9531,26.2969 L24.6719,26.2969 Q25.2813,26.2969 25.5469,26.5313 Q25.8125,26.7656 25.8125,27.1563 Q25.8125,27.5313 25.5469,27.7656 Q25.2813,28 24.6719,28 L19.5313,28 Q18.9219,28 18.6563,27.7656 Q18.3906,27.5313 18.3906,27.1406 Q18.3906,26.7656 18.6563,26.5313 Q18.9219,26.2969 19.5313,26.2969 L21.25,26.2969 L21.25,19.6406 L19.5313,19.6406 Q18.9219,19.6406 18.6563,19.4063 Q18.3906,19.1719 18.3906,18.7813 Q18.3906,18.4063 18.6563,18.1719 Q18.9219,17.9375 19.5313,17.9375 L24.6719,17.9375 Q25.2813,17.9375 25.5469,18.1719 Q25.8125,18.4063 25.8125,18.7813 Q25.8125,19.1719 25.5469,19.4063 Q25.2813,19.6406 24.6719,19.6406 L22.9531,19.6406 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="92" x="36" y="28.7285">SomeInterface</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="130" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="130" y1="47" y2="47"/>
+        <path d="M18.4277,19.2651 L18.4277,17.1069 L25.8071,17.1069 L25.8071,19.2651 L23.3418,19.2651 L23.3418,27.3418 L25.8071,27.3418 L25.8071,29.5 L18.4277,29.5 L18.4277,27.3418 L20.8931,27.3418 L20.8931,19.2651 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="36" y="28.291">SomeInterface</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="47" y2="47"/>
       </g>
       <!--class SomeClass-->
       <g id="elem_SomeClass">
-        <rect fill="#F1F1F1" height="48" id="SomeClass" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="103" x="17.5" y="115"/>
-        <ellipse cx="32.5" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M35.2656,126.875 Q35.4219,126.6563 35.6094,126.5469 Q35.7969,126.4375 36.0156,126.4375 Q36.3906,126.4375 36.625,126.7031 Q36.8594,126.9531 36.8594,127.5625 L36.8594,129.0156 Q36.8594,129.625 36.625,129.8906 Q36.3906,130.1563 36.0156,130.1563 Q35.6719,130.1563 35.4688,129.9531 Q35.2656,129.7656 35.1563,129.25 Q35.1094,128.8906 34.9219,128.7031 Q34.5938,128.3281 33.9844,128.1094 Q33.375,127.8906 32.75,127.8906 Q31.9844,127.8906 31.3438,128.2188 Q30.7188,128.5469 30.2188,129.2969 Q29.7344,130.0469 29.7344,131.0781 L29.7344,132.1719 Q29.7344,133.4063 30.625,134.2344 Q31.5156,135.0469 33.1094,135.0469 Q34.0469,135.0469 34.7031,134.7969 Q35.0938,134.6406 35.5156,134.2031 Q35.7813,133.9375 35.9219,133.8594 Q36.0781,133.7813 36.2813,133.7813 Q36.6094,133.7813 36.8594,134.0469 Q37.125,134.2969 37.125,134.6406 Q37.125,134.9844 36.7813,135.3906 Q36.2813,135.9688 35.4844,136.2969 Q34.4063,136.75 33.1094,136.75 Q31.5938,136.75 30.3906,136.125 Q29.4063,135.625 28.7188,134.5625 Q28.0313,133.4844 28.0313,132.2031 L28.0313,131.0469 Q28.0313,129.7188 28.6406,128.5781 Q29.2656,127.4219 30.3594,126.8125 Q31.4531,126.1875 32.6875,126.1875 Q33.4219,126.1875 34.0625,126.3594 Q34.7188,126.5156 35.2656,126.875 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="46.5" y="136.7285">SomeClass</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="18.5" x2="119.5" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="18.5" x2="119.5" y1="155" y2="155"/>
+        <rect fill="#F1F1F1" height="48" id="SomeClass" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="106" x="19" y="115"/>
+        <ellipse cx="34" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+        <path d="M36.4731,137.1431 Q35.8921,137.4419 35.2529,137.5913 Q34.6138,137.7407 33.9082,137.7407 Q31.4014,137.7407 30.0815,136.0889 Q28.7617,134.437 28.7617,131.3159 Q28.7617,128.1865 30.0815,126.5347 Q31.4014,124.8828 33.9082,124.8828 Q34.6138,124.8828 35.2612,125.0322 Q35.9087,125.1816 36.4731,125.4805 L36.4731,128.2031 Q35.8423,127.6221 35.2488,127.3523 Q34.6553,127.0825 34.0244,127.0825 Q32.6797,127.0825 31.9949,128.1492 Q31.3101,129.2158 31.3101,131.3159 Q31.3101,133.4077 31.9949,134.4744 Q32.6797,135.541 34.0244,135.541 Q34.6553,135.541 35.2488,135.2712 Q35.8423,135.0015 36.4731,134.4204 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="48" y="136.291">SomeClass</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="155" y2="155"/>
       </g>
       <!--reverse link SomeInterface to SomeClass-->
       <g id="link_SomeInterface_SomeClass">
-        <path codeLine="2" d="M69,73 C69,90.66 69,96.94 69,114.68 " fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="69,55,63,73,75,73,69,55" style="stroke:#181818;stroke-width:1.0;"/>
+        <path codeLine="2" d="M72,73.26 C72,90.94 72,97.13 72,114.79 " fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
+        <polygon fill="none" points="72,55.26,66,73.26,78,73.26,72,55.26" style="stroke:#181818;stroke-width:1.0;"/>
       </g>
       <!--SRC=[Kr38p2j9BKfBJ4vL2CxFJVM4yRWKKFaADZLwUc0Xvvp4uc80]-->
     </g>
