@@ -27,33 +27,33 @@ Single PlantUML code block
 @enduml
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class ArrayList-->
-      <g id="elem_ArrayList">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="ArrayList" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="92" x="7" y="7"/>
-        <ellipse cx="22" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="entity" data-entity="ArrayList" data-source-line="1" data-uid="ent0002" id="entity_ArrayList">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="92.0469" x="7" y="7"/>
+        <ellipse cx="22" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
         <path d="M24.4731,29.1431 Q23.8921,29.4419 23.2529,29.5913 Q22.6138,29.7407 21.9082,29.7407 Q19.4014,29.7407 18.0815,28.0889 Q16.7617,26.437 16.7617,23.3159 Q16.7617,20.1865 18.0815,18.5347 Q19.4014,16.8828 21.9082,16.8828 Q22.6138,16.8828 23.2612,17.0322 Q23.9087,17.1816 24.4731,17.4805 L24.4731,20.2031 Q23.8423,19.6221 23.2488,19.3523 Q22.6553,19.0825 22.0244,19.0825 Q20.6797,19.0825 19.9949,20.1492 Q19.3101,21.2158 19.3101,23.3159 Q19.3101,25.4077 19.9949,26.4744 Q20.6797,27.541 22.0244,27.541 Q22.6553,27.541 23.2488,27.2712 Q23.8423,27.0015 24.4731,26.4204 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="36" y="28.291">ArrayList</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98" y1="47" y2="47"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60.0469" x="36" y="28.291">ArrayList</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98.0469" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98.0469" y1="47" y2="47"/>
       </g>
       <!--class List-->
-      <g id="elem_List">
-        <rect codeLine="2" fill="#F1F1F1" height="48" id="List" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="55" x="25.5" y="115"/>
-        <ellipse cx="40.5" cy="131" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M36.9277,127.2651 L36.9277,125.1069 L44.3071,125.1069 L44.3071,127.2651 L41.8418,127.2651 L41.8418,135.3418 L44.3071,135.3418 L44.3071,137.5 L36.9277,137.5 L36.9277,135.3418 L39.3931,135.3418 L39.3931,127.2651 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="23" x="54.5" y="136.291">List</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="79.5" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="79.5" y1="155" y2="155"/>
+      <g class="entity" data-entity="List" data-source-line="2" data-uid="ent0003" id="entity_List">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="55.8848" x="25.08" y="115"/>
+        <ellipse cx="40.08" cy="131" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
+        <path d="M36.5077,127.2651 L36.5077,125.1069 L43.8871,125.1069 L43.8871,127.2651 L41.4218,127.2651 L41.4218,135.3418 L43.8871,135.3418 L43.8871,137.5 L36.5077,137.5 L36.5077,135.3418 L38.9731,135.3418 L38.9731,127.2651 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="23.8848" x="54.08" y="136.291">List</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="26.08" x2="79.9648" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="26.08" x2="79.9648" y1="155" y2="155"/>
       </g>
       <!--link ArrayList to List-->
-      <g id="link_ArrayList_List">
-        <path codeLine="4" d="M53,55.26 C53,72.94 53,79.13 53,96.79 " fill="none" id="ArrayList-to-List" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="53,114.79,59,96.79,47,96.79,53,114.79" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="link" data-entity-1="ArrayList" data-entity-2="List" data-source-line="4" data-uid="lnk4" id="link_ArrayList_List">
+        <path codeLine="4" d="M53.02,55.26 C53.02,72.94 53.02,79.13 53.02,96.79" fill="none" id="ArrayList-to-List" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+        <polygon fill="none" points="53.02,114.79,59.02,96.79,47.02,96.79,53.02,114.79" style="stroke:#181818;stroke-width:1;"/>
       </g>
-      <!--SRC=[Kr1GK4ZEIImkLd0iAagizCaiBk422YbavfMa5gKb9gSgW8N0Od0L2dfwDNPW2G00]-->
+      <!--SRC=[Kr1GK4ZEIImkLd0iAagizCaiBk422YbavfMa5gKb9gSgm8N015oLWfvUZHrO4W00]-->
     </g>
   </svg>
 </figure>
@@ -113,33 +113,33 @@ Another paragraph.
 <p>Some text
 in a paragraph.</p>
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class ArrayList-->
-      <g id="elem_ArrayList">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="ArrayList" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="92" x="7" y="7"/>
-        <ellipse cx="22" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="entity" data-entity="ArrayList" data-source-line="1" data-uid="ent0002" id="entity_ArrayList">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="92.0469" x="7" y="7"/>
+        <ellipse cx="22" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
         <path d="M24.4731,29.1431 Q23.8921,29.4419 23.2529,29.5913 Q22.6138,29.7407 21.9082,29.7407 Q19.4014,29.7407 18.0815,28.0889 Q16.7617,26.437 16.7617,23.3159 Q16.7617,20.1865 18.0815,18.5347 Q19.4014,16.8828 21.9082,16.8828 Q22.6138,16.8828 23.2612,17.0322 Q23.9087,17.1816 24.4731,17.4805 L24.4731,20.2031 Q23.8423,19.6221 23.2488,19.3523 Q22.6553,19.0825 22.0244,19.0825 Q20.6797,19.0825 19.9949,20.1492 Q19.3101,21.2158 19.3101,23.3159 Q19.3101,25.4077 19.9949,26.4744 Q20.6797,27.541 22.0244,27.541 Q22.6553,27.541 23.2488,27.2712 Q23.8423,27.0015 24.4731,26.4204 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="36" y="28.291">ArrayList</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98" y1="47" y2="47"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60.0469" x="36" y="28.291">ArrayList</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98.0469" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98.0469" y1="47" y2="47"/>
       </g>
       <!--class List-->
-      <g id="elem_List">
-        <rect codeLine="2" fill="#F1F1F1" height="48" id="List" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="55" x="25.5" y="115"/>
-        <ellipse cx="40.5" cy="131" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M36.9277,127.2651 L36.9277,125.1069 L44.3071,125.1069 L44.3071,127.2651 L41.8418,127.2651 L41.8418,135.3418 L44.3071,135.3418 L44.3071,137.5 L36.9277,137.5 L36.9277,135.3418 L39.3931,135.3418 L39.3931,127.2651 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="23" x="54.5" y="136.291">List</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="79.5" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="79.5" y1="155" y2="155"/>
+      <g class="entity" data-entity="List" data-source-line="2" data-uid="ent0003" id="entity_List">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="55.8848" x="25.08" y="115"/>
+        <ellipse cx="40.08" cy="131" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
+        <path d="M36.5077,127.2651 L36.5077,125.1069 L43.8871,125.1069 L43.8871,127.2651 L41.4218,127.2651 L41.4218,135.3418 L43.8871,135.3418 L43.8871,137.5 L36.5077,137.5 L36.5077,135.3418 L38.9731,135.3418 L38.9731,127.2651 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="23.8848" x="54.08" y="136.291">List</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="26.08" x2="79.9648" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="26.08" x2="79.9648" y1="155" y2="155"/>
       </g>
       <!--link ArrayList to List-->
-      <g id="link_ArrayList_List">
-        <path codeLine="4" d="M53,55.26 C53,72.94 53,79.13 53,96.79 " fill="none" id="ArrayList-to-List" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="53,114.79,59,96.79,47,96.79,53,114.79" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="link" data-entity-1="ArrayList" data-entity-2="List" data-source-line="4" data-uid="lnk4" id="link_ArrayList_List">
+        <path codeLine="4" d="M53.02,55.26 C53.02,72.94 53.02,79.13 53.02,96.79" fill="none" id="ArrayList-to-List" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+        <polygon fill="none" points="53.02,114.79,59.02,96.79,47.02,96.79,53.02,114.79" style="stroke:#181818;stroke-width:1;"/>
       </g>
-      <!--SRC=[Kr1GK4ZEIImkLd0iAagizCaiBk422YbavfMa5gKb9gSgW8N0Od0L2dfwDNPW2G00]-->
+      <!--SRC=[Kr1GK4ZEIImkLd0iAagizCaiBk422YbavfMa5gKb9gSgm8N015oLWfvUZHrO4W00]-->
     </g>
   </svg>
 </figure>
@@ -169,33 +169,33 @@ Single PlantUML code block with empty line following
 
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 106 170" width="106px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class ArrayList-->
-      <g id="elem_ArrayList">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="ArrayList" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="92" x="7" y="7"/>
-        <ellipse cx="22" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="entity" data-entity="ArrayList" data-source-line="1" data-uid="ent0002" id="entity_ArrayList">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="92.0469" x="7" y="7"/>
+        <ellipse cx="22" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
         <path d="M24.4731,29.1431 Q23.8921,29.4419 23.2529,29.5913 Q22.6138,29.7407 21.9082,29.7407 Q19.4014,29.7407 18.0815,28.0889 Q16.7617,26.437 16.7617,23.3159 Q16.7617,20.1865 18.0815,18.5347 Q19.4014,16.8828 21.9082,16.8828 Q22.6138,16.8828 23.2612,17.0322 Q23.9087,17.1816 24.4731,17.4805 L24.4731,20.2031 Q23.8423,19.6221 23.2488,19.3523 Q22.6553,19.0825 22.0244,19.0825 Q20.6797,19.0825 19.9949,20.1492 Q19.3101,21.2158 19.3101,23.3159 Q19.3101,25.4077 19.9949,26.4744 Q20.6797,27.541 22.0244,27.541 Q22.6553,27.541 23.2488,27.2712 Q23.8423,27.0015 24.4731,26.4204 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="36" y="28.291">ArrayList</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98" y1="47" y2="47"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60.0469" x="36" y="28.291">ArrayList</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98.0469" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="98.0469" y1="47" y2="47"/>
       </g>
       <!--class List-->
-      <g id="elem_List">
-        <rect codeLine="2" fill="#F1F1F1" height="48" id="List" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="55" x="25.5" y="115"/>
-        <ellipse cx="40.5" cy="131" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M36.9277,127.2651 L36.9277,125.1069 L44.3071,125.1069 L44.3071,127.2651 L41.8418,127.2651 L41.8418,135.3418 L44.3071,135.3418 L44.3071,137.5 L36.9277,137.5 L36.9277,135.3418 L39.3931,135.3418 L39.3931,127.2651 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="23" x="54.5" y="136.291">List</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="79.5" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="26.5" x2="79.5" y1="155" y2="155"/>
+      <g class="entity" data-entity="List" data-source-line="2" data-uid="ent0003" id="entity_List">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="55.8848" x="25.08" y="115"/>
+        <ellipse cx="40.08" cy="131" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
+        <path d="M36.5077,127.2651 L36.5077,125.1069 L43.8871,125.1069 L43.8871,127.2651 L41.4218,127.2651 L41.4218,135.3418 L43.8871,135.3418 L43.8871,137.5 L36.5077,137.5 L36.5077,135.3418 L38.9731,135.3418 L38.9731,127.2651 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="23.8848" x="54.08" y="136.291">List</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="26.08" x2="79.9648" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="26.08" x2="79.9648" y1="155" y2="155"/>
       </g>
       <!--link ArrayList to List-->
-      <g id="link_ArrayList_List">
-        <path codeLine="4" d="M53,55.26 C53,72.94 53,79.13 53,96.79 " fill="none" id="ArrayList-to-List" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="53,114.79,59,96.79,47,96.79,53,114.79" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="link" data-entity-1="ArrayList" data-entity-2="List" data-source-line="4" data-uid="lnk4" id="link_ArrayList_List">
+        <path codeLine="4" d="M53.02,55.26 C53.02,72.94 53.02,79.13 53.02,96.79" fill="none" id="ArrayList-to-List" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+        <polygon fill="none" points="53.02,114.79,59.02,96.79,47.02,96.79,53.02,114.79" style="stroke:#181818;stroke-width:1;"/>
       </g>
-      <!--SRC=[Kr1GK4ZEIImkLd0iAagizCaiBk422YbavfMa5gKb9gSgW8N0Od0L2dfwDNPW2G00]-->
+      <!--SRC=[Kr1GK4ZEIImkLd0iAagizCaiBk422YbavfMa5gKb9gSgm8N015oLWfvUZHrO4W00]-->
     </g>
   </svg>
 </figure>
@@ -219,31 +219,31 @@ Single fenced PlantUML code block
 ```
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 144 170" width="144px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 142 170" width="142px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class SomeInterface-->
-      <g id="elem_SomeInterface">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="SomeInterface" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="130" x="7" y="7"/>
-        <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="entity" data-entity="SomeInterface" data-source-line="1" data-uid="ent0002" id="entity_SomeInterface">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="128.3457" x="7" y="7"/>
+        <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
         <path d="M18.4277,19.2651 L18.4277,17.1069 L25.8071,17.1069 L25.8071,19.2651 L23.3418,19.2651 L23.3418,27.3418 L25.8071,27.3418 L25.8071,29.5 L18.4277,29.5 L18.4277,27.3418 L20.8931,27.3418 L20.8931,19.2651 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="36" y="28.291">SomeInterface</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="47" y2="47"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="96.3457" x="36" y="28.291">SomeInterface</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="134.3457" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="134.3457" y1="47" y2="47"/>
       </g>
       <!--class SomeClass-->
-      <g id="elem_SomeClass">
-        <rect fill="#F1F1F1" height="48" id="SomeClass" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="106" x="19" y="115"/>
-        <ellipse cx="34" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M36.4731,137.1431 Q35.8921,137.4419 35.2529,137.5913 Q34.6138,137.7407 33.9082,137.7407 Q31.4014,137.7407 30.0815,136.0889 Q28.7617,134.437 28.7617,131.3159 Q28.7617,128.1865 30.0815,126.5347 Q31.4014,124.8828 33.9082,124.8828 Q34.6138,124.8828 35.2612,125.0322 Q35.9087,125.1816 36.4731,125.4805 L36.4731,128.2031 Q35.8423,127.6221 35.2488,127.3523 Q34.6553,127.0825 34.0244,127.0825 Q32.6797,127.0825 31.9949,128.1492 Q31.3101,129.2158 31.3101,131.3159 Q31.3101,133.4077 31.9949,134.4744 Q32.6797,135.541 34.0244,135.541 Q34.6553,135.541 35.2488,135.2712 Q35.8423,135.0015 36.4731,134.4204 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="48" y="136.291">SomeClass</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="155" y2="155"/>
+      <g class="entity" data-entity="SomeClass" data-source-line="2" data-uid="ent0003" id="entity_SomeClass">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="104.748" x="18.8" y="115"/>
+        <ellipse cx="33.8" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
+        <path d="M36.2731,137.1431 Q35.6921,137.4419 35.0529,137.5913 Q34.4138,137.7407 33.7082,137.7407 Q31.2014,137.7407 29.8815,136.0889 Q28.5617,134.437 28.5617,131.3159 Q28.5617,128.1865 29.8815,126.5347 Q31.2014,124.8828 33.7082,124.8828 Q34.4138,124.8828 35.0612,125.0322 Q35.7087,125.1816 36.2731,125.4805 L36.2731,128.2031 Q35.6423,127.6221 35.0488,127.3523 Q34.4553,127.0825 33.8244,127.0825 Q32.4797,127.0825 31.7949,128.1492 Q31.1101,129.2158 31.1101,131.3159 Q31.1101,133.4077 31.7949,134.4744 Q32.4797,135.541 33.8244,135.541 Q34.4553,135.541 35.0488,135.2712 Q35.6423,135.0015 36.2731,134.4204 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.748" x="47.8" y="136.291">SomeClass</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="19.8" x2="122.548" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="19.8" x2="122.548" y1="155" y2="155"/>
       </g>
       <!--reverse link SomeInterface to SomeClass-->
-      <g id="link_SomeInterface_SomeClass">
-        <path codeLine="2" d="M72,73.26 C72,90.94 72,97.13 72,114.79 " fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="72,55.26,66,73.26,78,73.26,72,55.26" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="link" data-entity-1="SomeInterface" data-entity-2="SomeClass" data-source-line="2" data-uid="lnk4" id="link_SomeInterface_SomeClass">
+        <path codeLine="2" d="M71.17,73.26 C71.17,90.94 71.17,97.13 71.17,114.79" fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+        <polygon fill="none" points="71.17,55.26,65.17,73.26,77.17,73.26,71.17,55.26" style="stroke:#181818;stroke-width:1;"/>
       </g>
       <!--SRC=[Kr38p2j9BKfBJ4vL2CxFJVM4yRWKKFaADZLwUc0Xvvp4uc80]-->
     </g>
@@ -308,31 +308,31 @@ Single fenced PlantUML code block with ~ symbols
 ~~~
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 144 170" width="144px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 142 170" width="142px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class SomeInterface-->
-      <g id="elem_SomeInterface">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="SomeInterface" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="130" x="7" y="7"/>
-        <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="entity" data-entity="SomeInterface" data-source-line="1" data-uid="ent0002" id="entity_SomeInterface">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="128.3457" x="7" y="7"/>
+        <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
         <path d="M18.4277,19.2651 L18.4277,17.1069 L25.8071,17.1069 L25.8071,19.2651 L23.3418,19.2651 L23.3418,27.3418 L25.8071,27.3418 L25.8071,29.5 L18.4277,29.5 L18.4277,27.3418 L20.8931,27.3418 L20.8931,19.2651 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="36" y="28.291">SomeInterface</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="47" y2="47"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="96.3457" x="36" y="28.291">SomeInterface</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="134.3457" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="134.3457" y1="47" y2="47"/>
       </g>
       <!--class SomeClass-->
-      <g id="elem_SomeClass">
-        <rect fill="#F1F1F1" height="48" id="SomeClass" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="106" x="19" y="115"/>
-        <ellipse cx="34" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M36.4731,137.1431 Q35.8921,137.4419 35.2529,137.5913 Q34.6138,137.7407 33.9082,137.7407 Q31.4014,137.7407 30.0815,136.0889 Q28.7617,134.437 28.7617,131.3159 Q28.7617,128.1865 30.0815,126.5347 Q31.4014,124.8828 33.9082,124.8828 Q34.6138,124.8828 35.2612,125.0322 Q35.9087,125.1816 36.4731,125.4805 L36.4731,128.2031 Q35.8423,127.6221 35.2488,127.3523 Q34.6553,127.0825 34.0244,127.0825 Q32.6797,127.0825 31.9949,128.1492 Q31.3101,129.2158 31.3101,131.3159 Q31.3101,133.4077 31.9949,134.4744 Q32.6797,135.541 34.0244,135.541 Q34.6553,135.541 35.2488,135.2712 Q35.8423,135.0015 36.4731,134.4204 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="48" y="136.291">SomeClass</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="155" y2="155"/>
+      <g class="entity" data-entity="SomeClass" data-source-line="2" data-uid="ent0003" id="entity_SomeClass">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="104.748" x="18.8" y="115"/>
+        <ellipse cx="33.8" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
+        <path d="M36.2731,137.1431 Q35.6921,137.4419 35.0529,137.5913 Q34.4138,137.7407 33.7082,137.7407 Q31.2014,137.7407 29.8815,136.0889 Q28.5617,134.437 28.5617,131.3159 Q28.5617,128.1865 29.8815,126.5347 Q31.2014,124.8828 33.7082,124.8828 Q34.4138,124.8828 35.0612,125.0322 Q35.7087,125.1816 36.2731,125.4805 L36.2731,128.2031 Q35.6423,127.6221 35.0488,127.3523 Q34.4553,127.0825 33.8244,127.0825 Q32.4797,127.0825 31.7949,128.1492 Q31.1101,129.2158 31.1101,131.3159 Q31.1101,133.4077 31.7949,134.4744 Q32.4797,135.541 33.8244,135.541 Q34.4553,135.541 35.0488,135.2712 Q35.6423,135.0015 36.2731,134.4204 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.748" x="47.8" y="136.291">SomeClass</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="19.8" x2="122.548" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="19.8" x2="122.548" y1="155" y2="155"/>
       </g>
       <!--reverse link SomeInterface to SomeClass-->
-      <g id="link_SomeInterface_SomeClass">
-        <path codeLine="2" d="M72,73.26 C72,90.94 72,97.13 72,114.79 " fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="72,55.26,66,73.26,78,73.26,72,55.26" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="link" data-entity-1="SomeInterface" data-entity-2="SomeClass" data-source-line="2" data-uid="lnk4" id="link_SomeInterface_SomeClass">
+        <path codeLine="2" d="M71.17,73.26 C71.17,90.94 71.17,97.13 71.17,114.79" fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+        <polygon fill="none" points="71.17,55.26,65.17,73.26,77.17,73.26,71.17,55.26" style="stroke:#181818;stroke-width:1;"/>
       </g>
       <!--SRC=[Kr38p2j9BKfBJ4vL2CxFJVM4yRWKKFaADZLwUc0Xvvp4uc80]-->
     </g>
@@ -356,31 +356,31 @@ Single fenced PlantUML code block, followed by an empty line
 
 .
 <figure>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 144 170" width="144px" zoomAndPan="magnify">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 142 170" width="142px" zoomAndPan="magnify">
     <defs/>
     <g>
       <!--class SomeInterface-->
-      <g id="elem_SomeInterface">
-        <rect codeLine="1" fill="#F1F1F1" height="48" id="SomeInterface" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="130" x="7" y="7"/>
-        <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="entity" data-entity="SomeInterface" data-source-line="1" data-uid="ent0002" id="entity_SomeInterface">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="128.3457" x="7" y="7"/>
+        <ellipse cx="22" cy="23" fill="#B4A7E5" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
         <path d="M18.4277,19.2651 L18.4277,17.1069 L25.8071,17.1069 L25.8071,19.2651 L23.3418,19.2651 L23.3418,27.3418 L25.8071,27.3418 L25.8071,29.5 L18.4277,29.5 L18.4277,27.3418 L20.8931,27.3418 L20.8931,19.2651 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="98" x="36" y="28.291">SomeInterface</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="39" y2="39"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="136" y1="47" y2="47"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="96.3457" x="36" y="28.291">SomeInterface</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="134.3457" y1="39" y2="39"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="134.3457" y1="47" y2="47"/>
       </g>
       <!--class SomeClass-->
-      <g id="elem_SomeClass">
-        <rect fill="#F1F1F1" height="48" id="SomeClass" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="106" x="19" y="115"/>
-        <ellipse cx="34" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/>
-        <path d="M36.4731,137.1431 Q35.8921,137.4419 35.2529,137.5913 Q34.6138,137.7407 33.9082,137.7407 Q31.4014,137.7407 30.0815,136.0889 Q28.7617,134.437 28.7617,131.3159 Q28.7617,128.1865 30.0815,126.5347 Q31.4014,124.8828 33.9082,124.8828 Q34.6138,124.8828 35.2612,125.0322 Q35.9087,125.1816 36.4731,125.4805 L36.4731,128.2031 Q35.8423,127.6221 35.2488,127.3523 Q34.6553,127.0825 34.0244,127.0825 Q32.6797,127.0825 31.9949,128.1492 Q31.3101,129.2158 31.3101,131.3159 Q31.3101,133.4077 31.9949,134.4744 Q32.6797,135.541 34.0244,135.541 Q34.6553,135.541 35.2488,135.2712 Q35.8423,135.0015 36.4731,134.4204 Z " fill="#000000"/>
-        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="48" y="136.291">SomeClass</text>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="147" y2="147"/>
-        <line style="stroke:#181818;stroke-width:0.5;" x1="20" x2="124" y1="155" y2="155"/>
+      <g class="entity" data-entity="SomeClass" data-source-line="2" data-uid="ent0003" id="entity_SomeClass">
+        <rect fill="#F1F1F1" height="48" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="104.748" x="18.8" y="115"/>
+        <ellipse cx="33.8" cy="131" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1;"/>
+        <path d="M36.2731,137.1431 Q35.6921,137.4419 35.0529,137.5913 Q34.4138,137.7407 33.7082,137.7407 Q31.2014,137.7407 29.8815,136.0889 Q28.5617,134.437 28.5617,131.3159 Q28.5617,128.1865 29.8815,126.5347 Q31.2014,124.8828 33.7082,124.8828 Q34.4138,124.8828 35.0612,125.0322 Q35.7087,125.1816 36.2731,125.4805 L36.2731,128.2031 Q35.6423,127.6221 35.0488,127.3523 Q34.4553,127.0825 33.8244,127.0825 Q32.4797,127.0825 31.7949,128.1492 Q31.1101,129.2158 31.1101,131.3159 Q31.1101,133.4077 31.7949,134.4744 Q32.4797,135.541 33.8244,135.541 Q34.4553,135.541 35.0488,135.2712 Q35.6423,135.0015 36.2731,134.4204 Z " fill="#000000"/>
+        <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.748" x="47.8" y="136.291">SomeClass</text>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="19.8" x2="122.548" y1="147" y2="147"/>
+        <line style="stroke:#181818;stroke-width:0.5;" x1="19.8" x2="122.548" y1="155" y2="155"/>
       </g>
       <!--reverse link SomeInterface to SomeClass-->
-      <g id="link_SomeInterface_SomeClass">
-        <path codeLine="2" d="M72,73.26 C72,90.94 72,97.13 72,114.79 " fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/>
-        <polygon fill="none" points="72,55.26,66,73.26,78,73.26,72,55.26" style="stroke:#181818;stroke-width:1.0;"/>
+      <g class="link" data-entity-1="SomeInterface" data-entity-2="SomeClass" data-source-line="2" data-uid="lnk4" id="link_SomeInterface_SomeClass">
+        <path codeLine="2" d="M71.17,73.26 C71.17,90.94 71.17,97.13 71.17,114.79" fill="none" id="SomeInterface-backto-SomeClass" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+        <polygon fill="none" points="71.17,55.26,65.17,73.26,77.17,73.26,71.17,55.26" style="stroke:#181818;stroke-width:1;"/>
       </g>
       <!--SRC=[Kr38p2j9BKfBJ4vL2CxFJVM4yRWKKFaADZLwUc0Xvvp4uc80]-->
     </g>
