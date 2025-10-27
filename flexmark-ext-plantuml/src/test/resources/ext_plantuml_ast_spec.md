@@ -152,7 +152,7 @@ Document[0, 143]
     Text[11, 20] chars:[11, 20, "Some text"]
     SoftLineBreak[20, 21]
     Text[21, 36] chars:[21, 36, "in a  … raph."]
-  PlantUmlBlockNode[38, 124]
+  PlantUmlBlockNode[38, 123]
   Paragraph[125, 143]
     Text[125, 143] chars:[125, 143, "Anoth … raph."]
 ````````````````````````````````

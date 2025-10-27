@@ -29,8 +29,8 @@ import java.util.List;
  */
 public class PlantUmlBlockNode extends CodeBlock {
 
-    private BasedSequence startMarker;
-    private BasedSequence endMarker;
+    private BasedSequence startMarker = BasedSequence.NULL;
+    private BasedSequence endMarker = BasedSequence.NULL;
 
     public PlantUmlBlockNode() {
     }
@@ -45,6 +45,12 @@ public class PlantUmlBlockNode extends CodeBlock {
 
     public PlantUmlBlockNode(List<BasedSequence> lineSegments) {
         this(getSpanningChars(lineSegments), lineSegments);
+    }
+    
+    @NotNull
+    @Override
+    public BasedSequence[] getSegments() {
+        return new BasedSequence[] { startMarker, getContentChars(), endMarker };
     }
 
     private static @NotNull BasedSequence getSpanningChars(@NotNull List<BasedSequence> lineSegments) {
