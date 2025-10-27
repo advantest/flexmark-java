@@ -74,16 +74,6 @@ public class FencedCodeBlockParser extends AbstractBlockParser {
 
                 if (foundFenceLength >= fenceLength) {
                     // closing fence - we're at end of line, so we can finalize now
-                    BasedSequence lineWithEol = state.getLineWithEOL();
-                    if (lineWithEol.endsWithAnyEOL()) {
-                        BasedSequence trySequenceEol = lineWithEol.subSequence(nextNonSpace, lineWithEol.length());
-                        int eolLength = lineWithEol.eolEndLength();
-                        if (trySequenceEol.length() == foundFenceLength + eolLength) {
-                            block.setClosingMarker(trySequenceEol.subSequence(0, foundFenceLength + eolLength));
-                            return BlockContinue.finished();
-                        }
-                    }
-                    
                     block.setClosingMarker(trySequence.subSequence(0, foundFenceLength));
                     return BlockContinue.finished();
                 }
