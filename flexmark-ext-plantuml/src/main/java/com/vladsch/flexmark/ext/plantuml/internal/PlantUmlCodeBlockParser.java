@@ -14,6 +14,7 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public class PlantUmlCodeBlockParser extends AbstractBlockParser {
@@ -50,7 +51,7 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
             if (blockData != null) {
                 this.blockNode.setEndMarker(blockData.endMarker);
                 this.blockData.finished = true;
-                return BlockContinue.atIndex(state.getIndex());
+                return BlockContinue.finished();
             } else {
                 // this case should never happen since we made a look-ahead before
                 this.blockNode.unlink();
@@ -79,7 +80,10 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
 
             if (start != null && end != null
                     && start.length() > 1 && end.length() > 1) {
-                blockNode.setChars(this.blockData.contents);
+                // Remove first line break from the contents, i.e. after @startuml
+                List<BasedSequence> lines = this.blockData.contents.splitListEOL();
+                blockNode.setContent(lines.subList(1, lines.size()));
+                blockNode.setCharsFromContent();
             }
         }
     }
@@ -133,8 +137,9 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
                 for (BasedSequence currentLine : remainingLines) {
                     BlockData result = tryReadingEndMarker(currentLine, blockData);
                     if (result != null) {
+                        // go on reading code block in the next line, i.e. first line after e.g. @startuml
                         return BlockStart.of(new PlantUmlCodeBlockParser(blockData))
-                                .atColumn(state.getColumn());
+                                .atColumn(state.getLineEndIndex());
                     }
                 }
             }
@@ -149,8 +154,7 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
             if (currentLine.startsWith(marker.getStart())) {
                 BasedSequence remainder = currentLine.subSequence(marker.getStart().length());
                 if (remainder.isBlank()) {
-                    return new BlockData(marker, currentLine.getStartOffset(),
-                            currentLine.subSequence(0, marker.getStart().length()));
+                    return new BlockData(marker, currentLine.subSequence(0, marker.getStart().length()));
                 }
             }
         }
@@ -161,7 +165,6 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
         if (currentLine.startsWith(blockData.marker.getEnd())) {
             BasedSequence remainder = currentLine.subSequence(blockData.marker.getEnd().length());
             if (remainder.isBlank()) {
-                blockData.endOffset = currentLine.getEndOffset();
                 blockData.endMarker = currentLine.subSequence(0, blockData.marker.getEnd().length());
                 return blockData;
             }
@@ -171,17 +174,14 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
 
     private static class BlockData {
         final PlantUmlBlockMarker marker;
-        int startOffset;
-        int endOffset;
         BasedSequence startMarker;
         BasedSequence endMarker;
         BasedSequence contents;
 
         boolean finished = false;
 
-        BlockData(PlantUmlBlockMarker marker, int startOffset, BasedSequence startMarker) {
+        BlockData(PlantUmlBlockMarker marker, BasedSequence startMarker) {
             this.marker = marker;
-            this.startOffset = startOffset;
             this.startMarker = startMarker;
         }
     }

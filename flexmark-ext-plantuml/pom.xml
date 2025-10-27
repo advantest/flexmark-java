@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.vladsch.flexmark</groupId>
         <artifactId>flexmark-java</artifactId>
-        <version>0.64.14-20251024-1824</version>
+        <version>0.65.0-20251027-2130</version>
     </parent>
 
     <artifactId>flexmark-ext-plantuml</artifactId>
@@ -12,7 +12,7 @@
     <description>flexmark-java extension for parsing PlantUML diagram source code blocks and for rendering them to HTML.</description>
 
     <properties>
-        <plantuml-version>1.2024.5</plantuml-version>
+        <plantuml-version>1.2025.9</plantuml-version>
     </properties>
     
     <dependencyManagement>
