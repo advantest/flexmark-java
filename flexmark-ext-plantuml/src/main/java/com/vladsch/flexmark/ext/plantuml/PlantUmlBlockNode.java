@@ -6,13 +6,13 @@
  */
 package com.vladsch.flexmark.ext.plantuml;
 
-import com.vladsch.flexmark.ast.CodeBlock;
-import com.vladsch.flexmark.util.ast.BlockContent;
-import com.vladsch.flexmark.util.ast.Node;
-import com.vladsch.flexmark.util.sequence.BasedSequence;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import com.vladsch.flexmark.ast.CodeBlock;
+import com.vladsch.flexmark.util.ast.BlockContent;
+import com.vladsch.flexmark.util.sequence.BasedSequence;
 
 /**
  * Node representing code blocks like the following
