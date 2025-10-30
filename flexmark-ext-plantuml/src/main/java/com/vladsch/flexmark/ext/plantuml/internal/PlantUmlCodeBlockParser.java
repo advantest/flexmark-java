@@ -52,11 +52,6 @@ public class PlantUmlCodeBlockParser extends AbstractBlockParser {
                 this.blockNode.setEndMarker(blockData.endMarker);
                 this.blockData.finished = true;
                 return BlockContinue.finished();
-            } else {
-                // this case should never happen since we made a look-ahead before
-                this.blockNode.unlink();
-                state.blockRemoved(this.blockNode);
-                return BlockContinue.none();
             }
         }
 
