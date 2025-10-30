@@ -204,6 +204,122 @@ Document[0, 87]
   PlantUmlBlockNode[0, 85]
 ````````````````````````````````
 
+PlantUML code block with timing diagram
+
+```````````````````````````````` example PlantUML Code Block Node: 5
+# Timing diagram example
+
+@startuml
+robust "DNS Resolver" as DNS
+robust "Web Browser" as WB
+concise "Web User" as WU
+
+@0
+WU is Idle
+WB is Idle
+DNS is Idle
+
+@+100
+WU -> WB : URL
+WU is Waiting
+WB is Processing
+
+@+200
+WB is Waiting
+WB -> DNS@+50 : Resolve URL
+
+@+100
+DNS is Processing
+
+@+300
+DNS is Idle
+@enduml
+
+A paragraph following.
+.
+<h1>Timing diagram example</h1>
+<figure>
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="TIMING" style="background: #FFFFFF; max-width: 100%;" version="1.1" viewBox="0 0 499 225" width="499px" zoomAndPan="magnify">
+    <defs/>
+    <g>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="10" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="482.3789" x2="482.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="77.3789" x2="77.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="127.3789" x2="127.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="177.3789" x2="177.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="227.3789" x2="227.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="277.3789" x2="277.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="327.3789" x2="327.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="377.3789" x2="377.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="427.3789" x2="427.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;stroke-dasharray:3,5;" x1="477.3789" x2="477.3789" y1="10" y2="195.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="482.3789" y1="10" y2="10"/>
+      <text fill="#333333" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="96.6191" x="15" y="23.5352">DNS Resolver</text>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="112.6191" y1="27.4883" y2="27.4883"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="112.6191" x2="122.6191" y1="27.4883" y2="10"/>
+      <text fill="#333333" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="21.1641" x="15" y="58.0234">Idle</text>
+      <text fill="#333333" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="62.3789" x="15" y="38.0234">Processing</text>
+      <line style="stroke:#006400;stroke-width:2;" x1="77.3789" x2="277.3789" y1="52.4883" y2="52.4883"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="277.3789" x2="427.3789" y1="32.4883" y2="32.4883"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="427.3789" x2="477.3789" y1="52.4883" y2="52.4883"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="277.3789" x2="277.3789" y1="32.4883" y2="52.4883"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="427.3789" x2="427.3789" y1="32.4883" y2="52.4883"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="482.3789" y1="64.4883" y2="64.4883"/>
+      <text fill="#333333" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="93.4336" x="15" y="78.0234">Web Browser</text>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="109.4336" y1="81.9766" y2="81.9766"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="109.4336" x2="119.4336" y1="81.9766" y2="64.4883"/>
+      <text fill="#333333" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="21.1641" x="15" y="132.5117">Idle</text>
+      <text fill="#333333" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="62.3789" x="15" y="112.5117">Processing</text>
+      <text fill="#333333" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="43.248" x="15" y="92.5117">Waiting</text>
+      <line style="stroke:#006400;stroke-width:2;" x1="77.3789" x2="127.3789" y1="126.9766" y2="126.9766"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="127.3789" x2="227.3789" y1="106.9766" y2="106.9766"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="227.3789" x2="477.3789" y1="86.9766" y2="86.9766"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="127.3789" x2="127.3789" y1="106.9766" y2="126.9766"/>
+      <line style="stroke:#006400;stroke-width:2;" x1="227.3789" x2="227.3789" y1="86.9766" y2="106.9766"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="482.3789" y1="138.9766" y2="138.9766"/>
+      <text fill="#333333" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="67.5391" x="15" y="152.5117">Web User</text>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="10" x2="83.5391" y1="156.4648" y2="156.4648"/>
+      <line style="stroke:#333333;stroke-width:0.5;" x1="83.5391" x2="93.5391" y1="156.4648" y2="138.9766"/>
+      <polygon fill="#E2E2F0" points="89.3789,161.4648,115.3789,161.4648,127.3789,173.4648,115.3789,185.4648,89.3789,185.4648,77.3789,173.4648" style="stroke:#006400;stroke-width:1.5;"/>
+      <polygon fill="#E2E2F0" points="139.3789,161.4648,477.3789,161.4648,477.3789,185.4648,139.3789,185.4648,127.3789,173.4648" style="stroke:#E2E2F0;stroke-width:1.5;"/>
+      <path d="M477.3789,161.4648 L139.3789,161.4648 L127.3789,173.4648 L139.3789,185.4648 L477.3789,185.4648" fill="#E2E2F0" style="stroke:#006400;stroke-width:1.5;"/>
+      <text fill="#333333" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="22.8633" x="90.9473" y="178">Idle</text>
+      <text fill="#333333" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="46.3652" x="139.3789" y="178">Waiting</text>
+      <line style="stroke:#333333;stroke-width:2;" x1="77.3789" x2="77.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="127.3789" x2="127.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="177.3789" x2="177.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="227.3789" x2="227.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="277.3789" x2="277.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="327.3789" x2="327.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="377.3789" x2="377.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="427.3789" x2="427.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="477.3789" x2="477.3789" y1="195.4648" y2="200.4648"/>
+      <line style="stroke:#333333;stroke-width:2;" x1="77.3789" x2="477.3789" y1="195.4648" y2="195.4648"/>
+      <text fill="#333333" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="6.9556" x="73.9011" y="212.0996">0</text>
+      <text fill="#333333" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="20.8667" x="116.9456" y="212.0996">100</text>
+      <text fill="#333333" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="20.8667" x="216.9456" y="212.0996">300</text>
+      <text fill="#333333" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="20.8667" x="266.9456" y="212.0996">400</text>
+      <text fill="#333333" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="20.8667" x="416.9456" y="212.0996">700</text>
+      <line style="stroke:#00008B;stroke-width:1.5;" x1="127.3789" x2="127.3789" y1="173.4648" y2="126.9766"/>
+      <polygon fill="#00008B" points="130.1151,134.4941,124.6427,134.4941,127.3789,126.9766" style="stroke:#00008B;stroke-width:1.5;"/>
+      <text fill="#00008B" font-family="Serif" font-size="14" lengthAdjust="spacing" textLength="28" x="127.3789" y="147.5644">URL</text>
+      <line style="stroke:#00008B;stroke-width:1.5;" x1="227.3789" x2="252.3789" y1="86.9766" y2="52.4883"/>
+      <polygon fill="#00008B" points="250.1822,60.1808,245.7515,56.969,252.3789,52.4883" style="stroke:#00008B;stroke-width:1.5;"/>
+      <text fill="#00008B" font-family="Serif" font-size="14" lengthAdjust="spacing" textLength="76.6035" x="247.9668" y="71.6452">Resolve URL</text>
+      <!--SRC=[NO_12i8m38RlUOgmwn2guiM3bE954959wNchGGfZXMRgwzlEED5Ro9V_-ziKkpkFMErF5so8O_-WL67Bc1UG13hgqAJuP67EW8-33qnlPcTW0RG2Pp4m7guzWJFpM2e-C-XwgQR3nIxhS8ksEKhEjM4CmqsYvnGzCPT53grAoFnTPKLswtgZiaS-CVcaHOf_JUilA2zw0G00]-->
+    </g>
+  </svg>
+</figure>
+<p>A paragraph following.</p>
+.
+Document[0, 332]
+  Heading[0, 24] textOpen:[0, 1, "#"] text:[2, 24, "Timing diagram example"]
+    Text[2, 24] chars:[2, 24, "Timin … ample"]
+  PlantUmlBlockNode[26, 308]
+  Paragraph[310, 332]
+    Text[310, 332] chars:[310, 332, "A par … wing."]
+````````````````````````````````
+
 ---
 
 ## PlantUML Fenced Code Block Node
