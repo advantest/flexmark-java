@@ -74,7 +74,7 @@ public class PlantUmlBlockNodeRenderer implements NodeRenderer {
     }
 
     public void renderPlantUmlCode(String plantUmlSourceCode, String caption, HtmlWriter htmlWriter, NodeRendererContext context) {
-        htmlWriter.tagLine("figure").indent();
+        htmlWriter.withAttr().tagLine("figure").indent();
         String plantUmlToSvgResult = translatePlantUmlToSvg(plantUmlSourceCode);
         String plantUmlToHtmlResult = adaptSvgAttributesForHtmlEmbedding(plantUmlToSvgResult);
         String htmlFormatted = formatHtml(plantUmlToHtmlResult, context);
