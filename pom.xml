@@ -44,6 +44,7 @@
         <module>flexmark-ext-ins</module>
         <module>flexmark-ext-jekyll-front-matter</module>
         <module>flexmark-ext-jekyll-tag</module>
+        <module>flexmark-ext-jira-ticket-links</module>
         <module>flexmark-ext-macros</module>
         <module>flexmark-ext-media-tags</module>
         <module>flexmark-ext-math</module>
