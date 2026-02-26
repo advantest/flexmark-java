@@ -535,13 +535,6 @@ public class TestUtils {
     }
 
     @NotNull
-    public static String getResolvedSpecResourcePath(@NotNull String testClassName, @NotNull String resourcePath) {
-        File specInfo = new File(resourcePath);
-        File classInfo = new File("/" + testClassName.replace('.', '/'));
-        return !specInfo.isAbsolute() ? new File(classInfo.getParent(), resourcePath).getAbsolutePath() : resourcePath;
-    }
-
-    @NotNull
     public static String getAbsoluteSpecResourcePath(@NotNull String testClassPath, @NotNull String resourceRootPath, @NotNull String resourcePath) {
         File resourceFile = resourcePath.startsWith("/") ? new File(resourceRootPath, resourcePath.substring(1)) : new File(new File(testClassPath).getParent(), resourcePath);
         return resourceFile.getAbsolutePath();
@@ -552,9 +545,8 @@ public class TestUtils {
         if (resourcePath.isEmpty()) {
             throw new IllegalStateException("Empty resource paths not supported");
         } else {
-            String resolvedResourcePath = getResolvedSpecResourcePath(resourceClass.getName(), resourcePath);
-            URL url = resourceClass.getResource(resolvedResourcePath);
-            assert url != null : "Resource path: '" + resolvedResourcePath + "' not found.";
+            URL url = resourceClass.getResource(resourcePath);
+            assert url != null : "Resource path: '" + resourcePath + "' not found.";
             return adjustedFileUrl(url);
         }
     }
