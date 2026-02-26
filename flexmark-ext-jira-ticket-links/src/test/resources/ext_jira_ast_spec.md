@@ -46,4 +46,28 @@ Document[0, 40]
     Text[17, 40] chars:[17, 40, " foll … text."]
 ````````````````````````````````
 
+---
 
+## Non-tickets
+
+Ticket numbers have to begin and end at a word boundary
+
+```````````````````````````````` example Non-tickets: 1
+textHMR-157
+.
+<p>textHMR-157</p>
+.
+Document[0, 11]
+  Paragraph[0, 11]
+    Text[0, 11] chars:[0, 11, "textH … R-157"]
+````````````````````````````````
+
+```````````````````````````````` example Non-tickets: 2
+HMR-157text
+.
+<p>HMR-157text</p>
+.
+Document[0, 11]
+  Paragraph[0, 11]
+    Text[0, 11] chars:[0, 11, "HMR-1 … 7text"]
+````````````````````````````````

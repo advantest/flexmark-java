@@ -39,6 +39,14 @@ public class JiraTicketNumberInLineParserExtension implements InlineParserExtens
 
 	@Override
 	public boolean parse(@NotNull LightInlineParser inlineParser) {
+		// abort if the preceding character is a word character
+		if (inlineParser.getIndex() > 0) {
+			char precedingChar = inlineParser.getInput().charAt(inlineParser.getIndex() - 1);
+			if (Character.isLetterOrDigit(precedingChar) || precedingChar == '_') {
+				return false;
+			}
+		}
+		
 		BasedSequence match = inlineParser.match(REGEX_JIRA_TICKET_NUMBER);
 		if (match == null) {
 			return false;
