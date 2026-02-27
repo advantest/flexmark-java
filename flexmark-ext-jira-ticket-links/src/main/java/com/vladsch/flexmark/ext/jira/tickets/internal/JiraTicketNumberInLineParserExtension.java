@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.vladsch.flexmark.ext.jira.tickets.JiraTicketExtension;
 import com.vladsch.flexmark.ext.jira.tickets.JiraTicketNumberNode;
 import com.vladsch.flexmark.parser.InlineParser;
 import com.vladsch.flexmark.parser.InlineParserExtension;
@@ -21,10 +22,14 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 
 public class JiraTicketNumberInLineParserExtension implements InlineParserExtension {
 	
-	private static final Pattern REGEX_JIRA_TICKET_NUMBER = Pattern.compile("^[A-Z]+-\\d+\\b");
+	private final Pattern REGEX_JIRA_PROJECT_KEY;
+	private final Pattern REGEX_JIRA_TICKET_NUMBER;
 	
 	public JiraTicketNumberInLineParserExtension(LightInlineParser inlineParser) {
+		String regex = JiraTicketExtension.JIRA_PROJECT_KEY_REGEX.get(inlineParser.getParsing().options);
 		
+		REGEX_JIRA_PROJECT_KEY = Pattern.compile(regex);
+		REGEX_JIRA_TICKET_NUMBER = Pattern.compile("^" + REGEX_JIRA_PROJECT_KEY + "-\\d+\\b");
 	}
 
 	@Override
@@ -70,7 +75,7 @@ public class JiraTicketNumberInLineParserExtension implements InlineParserExtens
 		@NotNull
 		@Override
 		public CharSequence getCharacters() {
-			return "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			return "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		}
 
 		@Nullable

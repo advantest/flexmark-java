@@ -18,6 +18,7 @@ import com.vladsch.flexmark.util.data.MutableDataHolder;
 public class JiraTicketExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
 
 	public static final DataKey<String> JIRA_URL = new DataKey<>("JIRA_URL", "https://your.atlassian.net/browse/");
+	public static final DataKey<String> JIRA_PROJECT_KEY_REGEX = new DataKey<>("JIRA_PROJECT_KEY_REGEX", "[A-Z][A-Z_0-9]+");
 
 	private JiraTicketExtension() {
 	}

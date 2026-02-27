@@ -35,6 +35,7 @@ public class JiraTicketNumberParserRendererSpecTest extends RendererSpecTest {
 	private static final Map<String, DataHolder> optionsMap = new HashMap<>();
 	static {
 		optionsMap.put("custom_root", new MutableDataSet().set(JiraTicketExtension.JIRA_URL, "https://www.your-domain.com/browse/"));
+		optionsMap.put("custom_proj_key_regex", new MutableDataSet().set(JiraTicketExtension.JIRA_PROJECT_KEY_REGEX, "[A-Z0-9][A-Z_0-9]+"));
 	}
 
 	public JiraTicketNumberParserRendererSpecTest(@NotNull SpecExample example) {
