@@ -117,4 +117,23 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        <!-- Open the java.lang package for reflection, otherwise pegdown throws the following exception in tests
+                             Could not determine whether class 'org.pegdown.Parser$$parboiled' has already been loaded
+                        
+                             See https://stackoverflow.com/questions/75116023/unable-to-make-protected-final-java-lang-class-java-lang-classloader-defineclass -->
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

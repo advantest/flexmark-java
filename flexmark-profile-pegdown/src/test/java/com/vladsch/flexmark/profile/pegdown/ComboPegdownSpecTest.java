@@ -9,12 +9,10 @@ import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.junit.Ignore;
 import org.junit.runners.Parameterized;
 
 import java.util.List;
 
-@Ignore
 public class ComboPegdownSpecTest extends ComboSpecTestCase {
     final private static String SPEC_RESOURCE = "/pegdown_spec.md";
     final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
