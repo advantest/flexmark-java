@@ -605,10 +605,6 @@ Copyright (c) 2015-2016 Atlassian and others.
 
 Copyright (c) 2016-2023, Vladimir Schneider.
 
-Some flexmark extensions are under
-Copyright (c) 2022-2024, Advantest Europe GmbH.
-
-
 BSD (2-clause) licensed, see [LICENSE.txt] file.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/reference/admonitions/
