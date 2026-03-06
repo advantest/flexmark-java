@@ -34,7 +34,6 @@
         <module>flexmark-ext-emoji</module>
         <module>flexmark-ext-enumerated-reference</module>
         <module>flexmark-ext-escaped-character</module>
-        <module>flexmark-ext-figures</module>
         <module>flexmark-ext-footnotes</module>
         <module>flexmark-ext-gfm-issues</module>
         <module>flexmark-ext-gfm-strikethrough</module>
@@ -44,11 +43,8 @@
         <module>flexmark-ext-ins</module>
         <module>flexmark-ext-jekyll-front-matter</module>
         <module>flexmark-ext-jekyll-tag</module>
-        <module>flexmark-ext-jira-ticket-links</module>
         <module>flexmark-ext-macros</module>
         <module>flexmark-ext-media-tags</module>
-        <module>flexmark-ext-math</module>
-        <module>flexmark-ext-plantuml</module>
         <module>flexmark-ext-resizable-image</module>
         <module>flexmark-ext-spec-example</module>
         <module>flexmark-ext-superscript</module>

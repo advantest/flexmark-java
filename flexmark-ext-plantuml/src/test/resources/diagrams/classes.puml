@@ -1,6 +1,0 @@
-@startuml
-    title PlantUML version: %version()
-
-    Image --|> Node
-    PlantUmlImage --|> Image
-@enduml
