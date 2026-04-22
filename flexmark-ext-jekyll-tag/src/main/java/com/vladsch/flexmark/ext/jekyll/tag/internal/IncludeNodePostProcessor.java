@@ -103,7 +103,7 @@ public class IncludeNodePostProcessor extends NodePostProcessor {
                         }
 
                         if (resolvedContent.getStatus() == LinkStatus.VALID) {
-                            fileContent = new String(resolvedContent.getContent(), StandardCharsets.UTF_8);
+                            fileContent = new String(resolvedContent.getContent(), StandardCharsets.UTF_8).replace("\r\n", "\n");
                         }
                     }
                 }
