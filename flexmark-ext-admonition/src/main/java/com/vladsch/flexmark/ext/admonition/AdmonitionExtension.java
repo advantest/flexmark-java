@@ -11,6 +11,7 @@ import com.vladsch.flexmark.util.data.MutableDataHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,7 +148,7 @@ public class AdmonitionExtension implements Parser.ParserExtension, HtmlRenderer
 
     public static String getInputStreamContent(InputStream inputStream) {
         try {
-            InputStreamReader streamReader = new InputStreamReader(inputStream);
+            InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             StringWriter stringWriter = new StringWriter();
             copy(streamReader, stringWriter);
             stringWriter.close();
