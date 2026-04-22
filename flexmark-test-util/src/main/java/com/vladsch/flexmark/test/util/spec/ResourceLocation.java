@@ -37,7 +37,7 @@ public class ResourceLocation {
 
     @NotNull
     public String getFileDirectoryUrl() {
-        int pos = fileUrl.lastIndexOf(File.separatorChar);
+        int pos = fileUrl.lastIndexOf('/');
         if (pos > 0) {
             return fileUrl.substring(0, pos + 1);
         }
