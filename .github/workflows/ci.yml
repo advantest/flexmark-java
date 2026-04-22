@@ -22,7 +22,7 @@ jobs:
   build:
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os:  # see https://docs.github.com/en/actions/reference/runners/github-hosted-runners
         - ubuntu-latest
