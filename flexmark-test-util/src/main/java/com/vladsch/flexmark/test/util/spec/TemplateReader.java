@@ -98,7 +98,7 @@ public class TemplateReader {
         resetContents();
 
         String line;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         while ((line = reader.readLine()) != null) {
             processLine(line);
         }
