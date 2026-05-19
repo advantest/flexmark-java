@@ -2,12 +2,12 @@ package com.vladsch.flexmark.util.misc;
 
 import com.vladsch.flexmark.util.sequence.SequenceUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -255,7 +255,6 @@ public class UtilsTest {
         assertEquals("prefixreceiversuffix", Utils.wrapWith("receiver", "prefix", "suffix"));
     }
 
-    @Ignore
     @Test
     public void test_parseNumberOrNull() {
         assertEquals(null, SequenceUtils.parseNumberOrNull("0x0001."));
@@ -267,6 +266,15 @@ public class UtilsTest {
         assertEquals(342391L, SequenceUtils.parseNumberOrNull("01234567"));
         assertEquals(12345678L, SequenceUtils.parseNumberOrNull("012345678"));
         assertEquals(0b0001L, SequenceUtils.parseNumberOrNull("0b0001"));
+        
+        Locale systemsLocale = Locale.getDefault();
+        
+        Locale.setDefault(Locale.ENGLISH);
         assertEquals(0.5, SequenceUtils.parseNumberOrNull("0.5"));
+        
+        Locale.setDefault(Locale.GERMAN);
+        assertEquals(0.5, SequenceUtils.parseNumberOrNull("0,5"));
+        
+        Locale.setDefault(systemsLocale);
     }
 }

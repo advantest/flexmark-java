@@ -795,7 +795,7 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                 });
             } else {
                 try {
-                    docx.getDocxDocument().addAltChunk(AltChunkType.Html, node.getChars().toString().getBytes());
+                    docx.getDocxDocument().addAltChunk(AltChunkType.Html, node.getChars().toString().getBytes(StandardCharsets.UTF_8));
                 } catch (Docx4JException e) {
                     e.printStackTrace();
                 }

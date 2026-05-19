@@ -4,13 +4,30 @@ import com.vladsch.flexmark.util.data.MutableDataSet;
 import com.vladsch.flexmark.util.sequence.BasedOptionsHolder;
 import com.vladsch.flexmark.util.sequence.BasedOptionsSequence;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-@Ignore
+import java.util.Locale;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
 public class SegmentedSequenceStatsTest {
+
+    private static Locale systemsLocale;
+
+    @BeforeClass
+    public static void setUp() {
+        systemsLocale = Locale.getDefault();
+        Locale.setDefault(Locale.ENGLISH);
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        Locale.setDefault(systemsLocale);
+    }
+
     @Test
     public void basic_stats() {
         SegmentedSequenceStats stats = SegmentedSequenceStats.getInstance();

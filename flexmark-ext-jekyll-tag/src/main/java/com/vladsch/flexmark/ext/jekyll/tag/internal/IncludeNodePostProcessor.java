@@ -19,7 +19,7 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class IncludeNodePostProcessor extends NodePostProcessor {
@@ -103,11 +103,7 @@ public class IncludeNodePostProcessor extends NodePostProcessor {
                         }
 
                         if (resolvedContent.getStatus() == LinkStatus.VALID) {
-                            try {
-                                fileContent = new String(resolvedContent.getContent(), "UTF-8");
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
+                            fileContent = new String(resolvedContent.getContent(), StandardCharsets.UTF_8).replace("\r\n", "\n");
                         }
                     }
                 }

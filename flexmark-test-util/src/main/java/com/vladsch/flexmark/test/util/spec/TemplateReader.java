@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class TemplateReader {
         StringBuilder sb = new StringBuilder();
         try {
             String line;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getSpecInputStream(resource), Charset.forName("UTF-8")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getSpecInputStream(resource), StandardCharsets.UTF_8));
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
                 sb.append("\n");
@@ -98,7 +98,7 @@ public class TemplateReader {
         resetContents();
 
         String line;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         while ((line = reader.readLine()) != null) {
             processLine(line);
         }

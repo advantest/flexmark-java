@@ -13,7 +13,7 @@
 
     <groupId>com.vladsch.flexmark</groupId>
     <artifactId>flexmark-java</artifactId>
-    <version>0.65.1-20251030-1701</version>
+    <version>0.65.2-20260519-1651</version>
     <name>flexmark-java</name>
     <description>
         Java re-implementation of commonmark-java based parser, with AST reflecting source elements, full source position tracking, greater parser extensibility.
@@ -34,7 +34,6 @@
         <module>flexmark-ext-emoji</module>
         <module>flexmark-ext-enumerated-reference</module>
         <module>flexmark-ext-escaped-character</module>
-        <module>flexmark-ext-figures</module>
         <module>flexmark-ext-footnotes</module>
         <module>flexmark-ext-gfm-issues</module>
         <module>flexmark-ext-gfm-strikethrough</module>
@@ -46,8 +45,6 @@
         <module>flexmark-ext-jekyll-tag</module>
         <module>flexmark-ext-macros</module>
         <module>flexmark-ext-media-tags</module>
-        <module>flexmark-ext-math</module>
-        <module>flexmark-ext-plantuml</module>
         <module>flexmark-ext-resizable-image</module>
         <module>flexmark-ext-spec-example</module>
         <module>flexmark-ext-superscript</module>
@@ -88,7 +85,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.outputTimestamp>1761840105</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1779202315</project.build.outputTimestamp>
         <flexmark.javadoc.location>${project.basedir}/target/apidocs/</flexmark.javadoc.location>
         <!-- Don't automatically publish artifacts to Central, we might want to inspect them first. -->
         <nexus.staging.autoRelease>false</nexus.staging.autoRelease>

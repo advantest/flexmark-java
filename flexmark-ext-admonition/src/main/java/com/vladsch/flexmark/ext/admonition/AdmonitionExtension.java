@@ -11,6 +11,7 @@ import com.vladsch.flexmark.util.data.MutableDataHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,11 +148,13 @@ public class AdmonitionExtension implements Parser.ParserExtension, HtmlRenderer
 
     public static String getInputStreamContent(InputStream inputStream) {
         try {
-            InputStreamReader streamReader = new InputStreamReader(inputStream);
-            StringWriter stringWriter = new StringWriter();
-            copy(streamReader, stringWriter);
-            stringWriter.close();
-            return stringWriter.toString();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+            return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -164,16 +167,6 @@ public class AdmonitionExtension implements Parser.ParserExtension, HtmlRenderer
 
     public static String getDefaultScript() {
         return getInputStreamContent(AdmonitionExtension.class.getResourceAsStream("/admonition.js"));
-    }
-
-    public static void copy(Reader reader, Writer writer) throws IOException {
-        char[] buffer = new char[4096];
-        int n;
-        while (-1 != (n = reader.read(buffer))) {
-            writer.write(buffer, 0, n);
-        }
-        writer.flush();
-        reader.close();
     }
 
     private AdmonitionExtension() {

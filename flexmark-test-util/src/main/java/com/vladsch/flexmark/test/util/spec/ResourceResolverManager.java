@@ -35,7 +35,7 @@ public class ResourceResolverManager {
             } else {
                 File file = new File(filePath);
                 if (file.exists()) {
-                    return TestUtils.FILE_PROTOCOL + filePath;
+                    return TestUtils.FILE_PROTOCOL_DOUBLE_SLASH + filePath;
                 }
             }
         }

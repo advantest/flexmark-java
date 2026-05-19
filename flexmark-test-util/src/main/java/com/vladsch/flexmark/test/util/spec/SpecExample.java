@@ -162,14 +162,14 @@ public class SpecExample {
             String fileName = traceElement.getFileName();
             // need path to class, so fake it with class resource file
             String javaFilePath = resourceClass.getName().replace('.', '/');
-            File javaPathFile = new File("/" + javaFilePath).getParentFile();
-            String javaPath = javaPathFile.getPath() + "/" + fileName;
+            File javaPathFile = new File('/' + javaFilePath).getParentFile();
+            String javaPath = new File(javaPathFile, fileName).getPath().replace('\\', '/');
             URL url = null;
             String prefix = null;
             String resourcePath = null;
             while (true) {
-                String absolutePath = Utils.removeSuffix(javaPathFile.getPath(), "/");
-                resourcePath = Utils.removePrefix(absolutePath, '/').replace('/', '.') + ".txt";
+                String absolutePath = Utils.removeSuffix(javaPathFile.getPath(), File.separator);
+                resourcePath = Utils.removePrefix(absolutePath, File.separatorChar).replace(File.separatorChar, '.') + ".txt";
                 url = resourceClass.getResource("/" + resourcePath);
                 if (url != null) {
                     prefix = Utils.getResourceAsString(resourceClass, "/" + resourcePath).trim();

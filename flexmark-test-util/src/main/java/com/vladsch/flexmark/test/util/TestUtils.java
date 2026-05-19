@@ -76,7 +76,8 @@ public class TestUtils {
     final public static DataKey<Collection<Extension>> LOAD_EXTENSIONS = LoadUnloadDataKeyAggregator.LOAD_EXTENSIONS;
     final private static DataHolder EMPTY_OPTIONS = new DataSet();
     final public static DataKey<BiFunction<String, String, DataHolder>> CUSTOM_OPTION = new DataKey<>("CUSTOM_OPTION", (option, params) -> EMPTY_OPTIONS);
-    final public static String FILE_PROTOCOL = ResourceUrlResolver.FILE_PROTOCOL;
+    final public static String FILE_PROTOCOL_SINGLE_SLASH = ResourceUrlResolver.FILE_PROTOCOL_SINGLE_SLASH;
+    final public static String FILE_PROTOCOL_DOUBLE_SLASH = ResourceUrlResolver.FILE_PROTOCOL_DOUBLE_SLASH;
 
     public static DataHolder processOption(@NotNull Map<String, ? extends DataHolder> optionsMap, @NotNull String option) {
         DataHolder dataHolder = null;
@@ -535,13 +536,6 @@ public class TestUtils {
     }
 
     @NotNull
-    public static String getResolvedSpecResourcePath(@NotNull String testClassName, @NotNull String resourcePath) {
-        File specInfo = new File(resourcePath);
-        File classInfo = new File("/" + testClassName.replace('.', '/'));
-        return !specInfo.isAbsolute() ? new File(classInfo.getParent(), resourcePath).getAbsolutePath() : resourcePath;
-    }
-
-    @NotNull
     public static String getAbsoluteSpecResourcePath(@NotNull String testClassPath, @NotNull String resourceRootPath, @NotNull String resourcePath) {
         File resourceFile = resourcePath.startsWith("/") ? new File(resourceRootPath, resourcePath.substring(1)) : new File(new File(testClassPath).getParent(), resourcePath);
         return resourceFile.getAbsolutePath();
@@ -552,9 +546,8 @@ public class TestUtils {
         if (resourcePath.isEmpty()) {
             throw new IllegalStateException("Empty resource paths not supported");
         } else {
-            String resolvedResourcePath = getResolvedSpecResourcePath(resourceClass.getName(), resourcePath);
-            URL url = resourceClass.getResource(resolvedResourcePath);
-            assert url != null : "Resource path: '" + resolvedResourcePath + "' not found.";
+            URL url = resourceClass.getResource(resourcePath);
+            assert url != null : "Resource path: '" + resourcePath + "' not found.";
             return adjustedFileUrl(url);
         }
     }
@@ -620,7 +613,13 @@ public class TestUtils {
     public static String getTestResourceRootDirectoryForModule(@NotNull Class<?> resourceClass, @NotNull String moduleRootPackage) {
         String fileUrl;
         fileUrl = getSpecResourceFileUrl(resourceClass, wrapWith(moduleRootPackage, "/", ".txt"));
-        return removePrefix(removeSuffix(fileUrl, suffixWith(moduleRootPackage, ".txt")), FILE_PROTOCOL);
+        fileUrl = removeSuffix(fileUrl, suffixWith(moduleRootPackage, ".txt"));
+        if (fileUrl.startsWith(FILE_PROTOCOL_DOUBLE_SLASH)) {
+            fileUrl = removePrefix(fileUrl, FILE_PROTOCOL_DOUBLE_SLASH);
+        } else if (fileUrl.startsWith(FILE_PROTOCOL_SINGLE_SLASH)) {
+        	fileUrl = removePrefix(fileUrl, FILE_PROTOCOL_SINGLE_SLASH);
+        }
+        return fileUrl;
     }
 
     @NotNull
@@ -631,7 +630,11 @@ public class TestUtils {
         if (pos != -1) {
             fileUrl = fileUrl.substring(0, pos);
         }
-        fileUrl = fileUrl.substring(FILE_PROTOCOL.length());
+        if (fileUrl.startsWith(FILE_PROTOCOL_DOUBLE_SLASH)) {
+            fileUrl = fileUrl.substring(FILE_PROTOCOL_DOUBLE_SLASH.length());
+        } else if (fileUrl.startsWith(FILE_PROTOCOL_SINGLE_SLASH)) {
+            fileUrl = fileUrl.substring(FILE_PROTOCOL_SINGLE_SLASH.length());
+        }
         return fileUrl;
     }
 

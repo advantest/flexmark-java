@@ -11,10 +11,11 @@ public interface ResourceUrlResolver extends Function<String, String> {
     @Override
     String apply(String externalForm);
 
-    String FILE_PROTOCOL = "file://";
+    String FILE_PROTOCOL_SINGLE_SLASH = "file:/";
+    String FILE_PROTOCOL_DOUBLE_SLASH = FILE_PROTOCOL_SINGLE_SLASH + "/";
 
     static boolean isFileProtocol(@NotNull String externalForm) {
-        return externalForm.startsWith("file:/");
+        return externalForm.startsWith(FILE_PROTOCOL_SINGLE_SLASH);
     }
 
     static boolean hasProtocol(@NotNull String externalForm) {

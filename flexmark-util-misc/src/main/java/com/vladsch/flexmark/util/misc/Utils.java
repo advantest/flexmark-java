@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -571,7 +572,7 @@ public class Utils {
     }
 
     public static void streamAppend(StringBuilder sb, InputStream inputStream) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         try {
             while (true) {
                 String line = br.readLine();
