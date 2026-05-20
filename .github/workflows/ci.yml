@@ -12,10 +12,9 @@ on:
   push:
     branches-ignore:
     - master
-    - main
   pull_request:
     branches:
-    - develop
+    - main
   workflow_dispatch:
 
 jobs:
@@ -61,7 +60,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref_name == 'develop'
+    if: github.ref_name == 'main' && github.repository == 'advantest/flexmark-java'
     permissions:
       contents: read
       packages: write
