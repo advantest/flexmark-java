@@ -7,6 +7,8 @@ import com.vladsch.flexmark.util.dependency.LastDependent;
 import com.vladsch.flexmark.util.misc.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.Collections;
 import java.util.Set;
 
 public class FileUriContentResolver implements UriContentResolver {
+    private static final Logger LOG = LoggerFactory.getLogger(FileUriContentResolver.class);
+
     public FileUriContentResolver(LinkResolverBasicContext context) {
 
     }
@@ -34,7 +38,8 @@ public class FileUriContentResolver implements UriContentResolver {
                     try {
                         return content.withContent(FileUtil.getFileContentBytesWithExceptions(includedFile)).withStatus(LinkStatus.VALID);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        LOG.warn("The linked file {} could not be read, so the link is left"
+                                + " without its content.", includedFile, e);
                     }
                 }
             }

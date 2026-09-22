@@ -9,6 +9,8 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.DataKey;
 import com.vladsch.flexmark.util.data.MutableDataHolder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +27,8 @@ import java.util.Map;
 public class AdmonitionExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, Formatter.FormatterExtension
         // , Parser.ReferenceHoldingExtension
 {
+    private static final Logger LOG = LoggerFactory.getLogger(AdmonitionExtension.class);
+
     final public static DataKey<Integer> CONTENT_INDENT = new DataKey<>("ADMONITION.CONTENT_INDENT", 4);
     final public static DataKey<Boolean> ALLOW_LEADING_SPACE = new DataKey<>("ADMONITION.ALLOW_LEADING_SPACE", true);
     final public static DataKey<Boolean> INTERRUPTS_PARAGRAPH = new DataKey<>("ADMONITION.INTERRUPTS_PARAGRAPH", true);
@@ -156,7 +160,8 @@ public class AdmonitionExtension implements Parser.ParserExtension, HtmlRenderer
             }
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.warn("A resource of the admonition extension could not be read, so what is"
+                    + " rendered from it stays empty.", e);
             return "";
         }
     }

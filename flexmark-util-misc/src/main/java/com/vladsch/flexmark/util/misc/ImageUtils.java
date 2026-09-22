@@ -39,6 +39,9 @@
 
 package com.vladsch.flexmark.util.misc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -56,6 +59,8 @@ import java.util.regex.Pattern;
 import static com.vladsch.flexmark.util.misc.Utils.minLimit;
 
 public class ImageUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(ImageUtils.class);
+
     public static Color TRANSPARENT = new Color(0, 0, 0, 0);
 
     public static Image getImageFromClipboard() {
@@ -71,7 +76,7 @@ public class ImageUtils {
                 return null;
             }
         } catch (UnsupportedFlavorException e) {
-            e.printStackTrace();
+            LOG.warn("What was offered is not an image after all, so no image is returned.", e);
         } catch (IOException e) {
             throw new RuntimeException();
         }
@@ -124,7 +129,8 @@ public class ImageUtils {
         try {
             ImageIO.write(image, format, file);  // ignore returned boolean
         } catch (Throwable e) {
-            System.out.println("Write error for " + file.getPath() + ": " + e.getMessage());
+            LOG.warn("An image could not be written to {}, so that file holds no image.",
+                    file.getPath(), e);
         }
     }
 
@@ -145,12 +151,15 @@ public class ImageUtils {
                 try {
                     read = ImageIO.read(cachedImageFile);
                 } catch (IndexOutOfBoundsException e) {
-                    System.err.print("*");
-                    System.err.println("could not read" + cachedImageFile);
+                    if (i == 2) {
+                        LOG.warn("The image file {} could not be read on any of 3 attempts, so no"
+                                + " image is returned.", cachedImageFile, e);
+                    } else {
+                        LOG.debug("Reading the image file {} failed on attempt {} of 3.",
+                                cachedImageFile, i + 1, e);
+                    }
                     continue;
                 }
-
-                if (i > 0) System.err.println();
 
                 return read;
             }
@@ -179,13 +188,14 @@ public class ImageUtils {
         try {
             return ImageIO.read(inputStream);
         } catch (IndexOutOfBoundsException | IOException e) {
-            System.err.print("*");
-            System.err.println("could not read from image bytes for " + idPath);
+            LOG.warn("The cached image bytes for {} could not be read as an image, so no image is"
+                    + " returned.", idPath, e);
         } finally {
             try {
                 inputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.warn("The stream over the cached image bytes for {} could not be closed.",
+                        idPath, e);
             }
         }
 
@@ -203,7 +213,7 @@ public class ImageUtils {
             imageString = Base64.getEncoder().encodeToString(imageBytes).replace("\r", "").replace("\n", "");
             bos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("An image could not be written as PNG, so what is encoded stays empty.", e);
         }
 
         return "data:image/png;base64," + imageString;
@@ -306,7 +316,8 @@ public class ImageUtils {
                 return toBufferedImage(image);
             } catch (IOException e) {
                 if (logImageProcessing) {
-                    e.printStackTrace();
+                    LOG.warn("The image at {} could not be loaded, so no image is returned.",
+                            imageURL, e);
                 }
             }
         }
@@ -697,7 +708,8 @@ public class ImageUtils {
             bos.close();
             return imageBytes;
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("An image could not be written as PNG, so no bytes are returned in place of"
+                    + " it.", e);
         }
 
         return null;

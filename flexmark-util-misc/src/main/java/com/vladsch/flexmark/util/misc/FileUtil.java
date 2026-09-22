@@ -2,6 +2,8 @@ package com.vladsch.flexmark.util.misc;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +12,8 @@ import java.nio.file.Files;
 import static com.vladsch.flexmark.util.misc.Utils.suffixWith;
 
 public class FileUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
+
     public static boolean isChildOf(File receiver, File ancestor) {
         return (suffixWith(receiver.getPath(), File.separator)).startsWith(suffixWith(ancestor.getPath(), File.separator));
     }
@@ -53,7 +57,8 @@ public class FileUtil {
             inputStream.close();
             return sb.toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("The file {} could not be read, so nothing is returned in place of its"
+                    + " contents.", receiver, e);
         }
         return null;
     }
@@ -80,7 +85,8 @@ public class FileUtil {
         try {
             return Files.readAllBytes(receiver.toPath());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("The bytes of file {} could not be read, so nothing is returned in place of"
+                    + " them.", receiver, e);
         }
         return null;
     }
