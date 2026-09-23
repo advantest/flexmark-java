@@ -5,6 +5,8 @@ import com.vladsch.flexmark.html.HtmlWriter;
 import com.vladsch.flexmark.html.renderer.*;
 import com.vladsch.flexmark.util.data.DataHolder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class YouTubeLinkNodeRenderer implements NodeRenderer {
+    private static final Logger LOG = LoggerFactory.getLogger(YouTubeLinkNodeRenderer.class);
 
     public YouTubeLinkNodeRenderer(DataHolder options) {
     }
@@ -34,6 +37,9 @@ public class YouTubeLinkNodeRenderer implements NodeRenderer {
             try {
                 url = new URL(resolvedLink.getUrl());
             } catch (MalformedURLException e) {
+                LOG.warn("The address \"{}\" of a video is no valid URL, so the video is not"
+                        + " embedded and the address is rendered as it stands.",
+                        resolvedLink.getUrl(), e);
             }
 
             if (url != null && "youtu.be".equalsIgnoreCase(url.getHost())) {

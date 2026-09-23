@@ -1412,7 +1412,9 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(useFormat);
             currentTime = dateFormat.format(date);
-        } catch (Exception ignored) {
+        } catch (Exception failure) {
+            LOG.warn("\"{}\" is no format a time can be written in, so the time stays empty in the"
+                    + " document.", useFormat, failure);
         }
         return currentTime;
     }
@@ -1424,7 +1426,9 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(useFormat);
                 currentDate = dateFormat.format(date);
-            } catch (Exception ignored) {
+            } catch (Exception failure) {
+                LOG.warn("\"{}\" is no format a date can be written in, so the date stays empty in"
+                        + " the document.", useFormat, failure);
             }
         }
         return currentDate;
