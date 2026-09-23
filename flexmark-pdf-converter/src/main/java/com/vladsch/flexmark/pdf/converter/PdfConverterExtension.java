@@ -13,6 +13,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import java.io.FileNotFoundException;
@@ -35,6 +37,8 @@ import java.io.OutputStream;
  * </p>
  */
 public class PdfConverterExtension {
+    private static final Logger LOG = LoggerFactory.getLogger(PdfConverterExtension.class);
+
     final public static NullableDataKey<PdfRendererBuilder.TextDirection> DEFAULT_TEXT_DIRECTION = new NullableDataKey<>("DEFAULT_TEXT_DIRECTION");
     final public static NullableDataKey<ProtectionPolicy> PROTECTION_POLICY = new NullableDataKey<>("PROTECTION_POLICY");
     final public static String DEFAULT_CSS_RESOURCE_PATH = "/default.css";
@@ -89,7 +93,7 @@ public class PdfConverterExtension {
             OutputStream os = new FileOutputStream(out);
             exportToPdf(os, html, url, defaultTextDirection, protectionPolicy);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOG.warn("The file {} could not be opened for writing, so no PDF was produced.", out, e);
         }
     }
 
@@ -120,8 +124,8 @@ public class PdfConverterExtension {
             renderer.layout();
             renderer.createPDF();
         } catch (Exception e) {
-            e.printStackTrace();
-            // LOG exception
+            LOG.warn("The HTML could not be laid out as a PDF, so the stream holds no document or"
+                    + " an incomplete one.", e);
         } finally {
             try {
                 if (renderer != null) {
@@ -129,7 +133,7 @@ public class PdfConverterExtension {
                 }
                 os.close();
             } catch (IOException e) {
-                // swallow
+                LOG.warn("The renderer or the stream it wrote to could not be closed.", e);
             }
         }
     }

@@ -8,6 +8,8 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.NumberingDefinitionsPart;
 import org.docx4j.wml.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
@@ -18,6 +20,8 @@ import java.util.List;
 import static java.math.BigInteger.ZERO;
 
 public class DocxHelper {
+    private static final Logger LOG = LoggerFactory.getLogger(DocxHelper.class);
+
     protected final WordprocessingMLPackage myPackage;
     protected final MainDocumentPart myDocumentPart;
     protected final ObjectFactory myFactory;
@@ -42,7 +46,8 @@ public class DocxHelper {
             try {
                 myResolver = new PropertyResolver(myPackage);
             } catch (Docx4JException e) {
-                e.printStackTrace();
+                LOG.warn("The properties of the document could not be resolved, so nothing that"
+                        + " asks this helper for an effective property will be answered.", e);
             }
         }
         return myResolver;
@@ -359,7 +364,8 @@ public class DocxHelper {
             }
             return null;
         } catch (Docx4JException e) {
-            e.printStackTrace();
+            LOG.warn("The numbering definitions could not be read, so the list numbering {} keeps"
+                    + " its own colour instead of {}.", baseNumID, color.getVal(), e);
         }
         return null;
     }
