@@ -164,8 +164,8 @@ public class ImageUtils {
                 return read;
             }
         } catch (Throwable e) {
-            //System.err.println("deleting " + cachedImageFile);
-            //cachedImageFile.delete();
+            LOG.warn("The image file {} could not be read, so no image is returned.",
+                    cachedImageFile, e);
             return null;
         }
 
@@ -233,6 +233,8 @@ public class ImageUtils {
             }
             return null;
         } catch (Throwable e) {
+            LOG.warn("The file {} could not be encoded as an image, so nothing is returned in"
+                    + " place of it.", file, e);
             return null;
         }
     }
@@ -260,6 +262,8 @@ public class ImageUtils {
             }
             return null;
         } catch (Throwable e) {
+            LOG.warn("The encoded image in file {} could not be decoded, so no image is returned.",
+                    file, e);
             return null;
         }
     }
@@ -292,6 +296,8 @@ public class ImageUtils {
             }
             return null;
         } catch (Throwable e) {
+            LOG.warn("An image written into the document itself could not be decoded, so no image"
+                    + " is returned.", e);
             return null;
         }
     }
