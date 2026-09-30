@@ -491,17 +491,22 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                 // set 0.28 parsing rule options
                 // IMPORTANT: 0.28/0.29 differences
             } else if (this == COMMONMARK_0_29) {
-                // set 0.29 parsing rule options
-                dataHolder.set(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES, true);
-                dataHolder.set(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES, true);
-                dataHolder.set(Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION, true);
-                dataHolder.set(Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES, true);
-                dataHolder.set(Parser.LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET, true);
-                dataHolder.set(Parser.REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE, true);
-                dataHolder.set(Parser.HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS, true);
-                dataHolder.set(Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING, true);
-                // Parser.LISTS_NO_ITEM_AT_CODE_INDENT is a list option, set by getOptions()
+                // IMPORTANT: 0.29 is implemented as the defaults of the parser options, older profiles opt out
+                // set the next specification version's parsing rule options here
             }
+        }
+
+        if (this != COMMONMARK_0_29) {
+            // CommonMark 0.29 parsing rules are the defaults, every other profile keeps the previous behaviour
+            dataHolder.set(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES, false);
+            dataHolder.set(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES, false);
+            dataHolder.set(Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION, false);
+            dataHolder.set(Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES, false);
+            dataHolder.set(Parser.LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET, false);
+            dataHolder.set(Parser.REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE, false);
+            dataHolder.set(Parser.HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS, false);
+            dataHolder.set(Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING, false);
+            // Parser.LISTS_NO_ITEM_AT_CODE_INDENT is a list option, set by getOptions()
         }
 
         return dataHolder;
