@@ -705,7 +705,7 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
     }
 
     private void render(Text node, NodeFormatterContext context, MarkdownWriter markdown) {
-        if (listOptions.isNoItemAtCodeIndent() && !context.isTransformingText() && startsLineLikeListItem(node)) {
+        if (listOptions.isNoItemAtCodeIndent() && listOptions.getParserEmulationProfile().family == ParserEmulationProfile.COMMONMARK && !context.isTransformingText() && startsLineLikeListItem(node)) {
             // a continuation line that looks like a list item must stay indented as code or it would become an item
             markdown.pushOptions().preserveSpaces().append(CODE_INDENT_SPACES).popOptions();
         }

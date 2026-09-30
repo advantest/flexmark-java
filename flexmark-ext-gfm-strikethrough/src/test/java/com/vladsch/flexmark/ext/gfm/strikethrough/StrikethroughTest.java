@@ -61,6 +61,11 @@ public class StrikethroughTest extends RenderingTestCase {
     }
 
     @Test
+    public void threeInnerThreeIsATildeFenceInCommonMark029() {
+        assertRendering("~~~foo~~~", "<pre><code class=\"language-foo~~~\"></code></pre>\n");
+    }
+
+    @Test
     public void threeInnerThree() {
         DataHolder pre029 = new MutableDataSet().setFrom(OPTIONS).setFrom(ParserEmulationProfile.COMMONMARK_0_28).toImmutable();
         assertEquals("<p>~<del>foo</del>~</p>\n", HtmlRenderer.builder(pre029).build().render(Parser.builder(pre029).build().parse("~~~foo~~~")));

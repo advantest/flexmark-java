@@ -133,6 +133,10 @@ non-CommonMark families (FIXED_INDENT, KRAMDOWN, MARKDOWN, MULTI_MARKDOWN, PEGDO
 previous parsing behaviour when their profile is applied. Code which needs the pre-0.29 behaviour and applies
 no profile must now apply `COMMONMARK_0_28` (or an older profile) explicitly, for example
 `new MutableDataSet().setFrom(ParserEmulationProfile.COMMONMARK_0_28)`.
+The opt-out happens when a profile is applied (`setFrom(profile)`, `getOptions()`, `getProfileOptions()`);
+setting only `Parser.PARSER_EMULATION_PROFILE` never applied a profile's options and still does not. Visible
+effects include code spans, which now keep interior and edge spaces, tilde fences whose info string contains
+backticks or tildes, and the formatter, which reads `LISTS_NO_ITEM_AT_CODE_INDENT` only for the CommonMark family.
 
 * **Breaking:** `ParserEmulationProfile.COMMONMARK_LATEST` now resolves to `COMMONMARK_0_29`, previously
   `COMMONMARK_0_28`. Code comparing against it, or relying on the default of
