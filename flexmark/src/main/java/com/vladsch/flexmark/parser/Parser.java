@@ -37,6 +37,14 @@ public class Parser implements IParse {
     final public static DataKey<Collection<Extension>> EXTENSIONS = SharedDataKeys.EXTENSIONS;
 
     final public static DataKey<KeepType> REFERENCES_KEEP = new DataKey<>("REFERENCES_KEEP", KeepType.FIRST);
+    /**
+     * REFERENCE_LABEL_UNICODE_CASE_FOLD default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_29:
+     * link labels match if they are equal after the Unicode case fold, instead of after lower casing, so that [ẞ] matches [SS].
+     * The case fold is an approximation, see {@link com.vladsch.flexmark.util.sequence.Escaping#caseFold(CharSequence)}.
+     * Only the lookup key of the {@link com.vladsch.flexmark.ast.util.ReferenceRepository} is changed, the source text of labels is kept
+     */
+    final public static DataKey<Boolean> REFERENCE_LABEL_UNICODE_CASE_FOLD = new DataKey<>("REFERENCE_LABEL_UNICODE_CASE_FOLD", true);
+
     final public static DataKey<ReferenceRepository> REFERENCES = new DataKey<>("REFERENCES", new ReferenceRepository(null), ReferenceRepository::new);
 
     final public static DataKey<Boolean> ASTERISK_DELIMITER_PROCESSOR = new DataKey<>("ASTERISK_DELIMITER_PROCESSOR", true);

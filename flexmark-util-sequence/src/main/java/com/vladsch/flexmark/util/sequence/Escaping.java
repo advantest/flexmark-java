@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -552,14 +553,43 @@ public class Escaping {
     /**
      * Normalize the link reference id
      *
-     * @param s           sequence containing the link reference id
-     * @param changeCase  if true then reference will be case folded or lower cased
-     * @param unicodeCaseFold if true the case is folded, otherwise it is only lower cased
+     * @param s               sequence containing the link reference id
+     * @param changeCase      if true then the case of the reference is changed, see unicodeCaseFold
+     * @param unicodeCaseFold if true the case is folded with {@link #caseFold(CharSequence)}, as CommonMark 0.30
+     *                        requires, otherwise it is only lower cased with the default locale
      * @return normalized link reference id
      */
     @NotNull
     public static String normalizeReference(@NotNull CharSequence s, boolean changeCase, boolean unicodeCaseFold) {
-        return normalizeReference(s, changeCase);
+        String collapsed = Escaping.collapseWhitespace(s.toString(), true);
+        if (!changeCase) return collapsed;
+        return unicodeCaseFold ? caseFold(collapsed) : collapsed.toLowerCase();
+    }
+
+    /**
+     * Approximation of the Unicode case fold (full case folding, C and F status of CaseFolding.txt) which is locale
+     * independent: lower case, upper case, lower case, each applied per code point (so the final sigma rule of String.toLowerCase is\n     * not applied). Lower casing first maps U+1E9E (capital sharp s), which has no
+     * upper case mapping, to U+00DF, the upper casing expands that to SS, and the last lower casing gives ss.
+     * <p>
+     * This is not a table based case fold. It is not an implementation of CaseFolding.txt. Compared with the C and F entries of the latest
+     * CaseFolding.txt, 163 of 1606 differ: U+0130 (folds to i without the combining dot), Cherokee letters (folded to
+     * small instead of capital letters, which still puts the same letters in one equivalence class) and characters
+     * added to Unicode after the Unicode version of the running JDK.
+     *
+     * @param s sequence to fold
+     * @return approximately case folded string
+     */
+    @NotNull
+    public static String caseFold(@NotNull CharSequence s) {
+        String upper = lowerCaseChars(s.toString()).toUpperCase(Locale.ROOT);
+        return lowerCaseChars(upper);
+    }
+
+    // per code point, unlike String.toLowerCase() this does not apply the context dependent final sigma rule
+    private static String lowerCaseChars(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        s.codePoints().forEach(cp -> sb.appendCodePoint(Character.toLowerCase(cp)));
+        return sb.toString();
     }
 
     @Nullable
@@ -624,11 +654,24 @@ public class Escaping {
      */
     @NotNull
     public static String normalizeReferenceChars(@NotNull CharSequence s, boolean changeCase) {
+        return normalizeReferenceChars(s, changeCase, false);
+    }
+
+    /**
+     * Get a normalized the link reference id from reference characters, see {@link #normalizeReference(CharSequence, boolean, boolean)}
+     *
+     * @param s               sequence containing the link reference id
+     * @param changeCase      if true then the case of the reference is changed
+     * @param unicodeCaseFold if true the case is folded, otherwise it is only lower cased
+     * @return normalized link reference id
+     */
+    @NotNull
+    public static String normalizeReferenceChars(@NotNull CharSequence s, boolean changeCase, boolean unicodeCaseFold) {
         // Strip '[' and ']', then trim and convert to lowercase
         if (s.length() > 1) {
             int stripEnd = s.charAt(s.length() - 1) == ':' ? 2 : 1;
             int stripStart = s.charAt(0) == '!' ? 2 : 1;
-            return normalizeReference(s.subSequence(stripStart, s.length() - stripEnd), changeCase);
+            return normalizeReference(s.subSequence(stripStart, s.length() - stripEnd), changeCase, unicodeCaseFold);
         }
         return String.valueOf(s);
     }

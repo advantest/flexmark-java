@@ -15,4 +15,3 @@
 #
 # The cluster labels are PROVISIONAL until confirmed by the implementation of the respective 0.30 change
 # (https://github.com/commonmark/commonmark-spec/blob/0.30/changelog.txt, section [0.30]).
-539 # Links: 59                                    - [case fold] [ẞ] must match [SS], only lower casing is applied (#582)

@@ -18,8 +18,29 @@ import java.util.Set;
 
 public class ReferenceRepository extends NodeRepository<Reference> {
 
+    final private boolean unicodeCaseFold;
+
     public ReferenceRepository(DataHolder options) {
         super(Parser.REFERENCES_KEEP.get(options));
+        this.unicodeCaseFold = Parser.REFERENCE_LABEL_UNICODE_CASE_FOLD.get(options);
+    }
+
+    /**
+     * @return true if keys are normalized with the Unicode case fold (CommonMark 0.30), false if they are only lower cased
+     */
+    public boolean isUnicodeCaseFold() {
+        return unicodeCaseFold;
+    }
+
+    /**
+     * Normalize the characters of a link label, including the delimiters, to a key of this repository
+     *
+     * @param label label characters with leading [ or ![ and trailing ] or ]:
+     * @return normalized key
+     */
+    @NotNull
+    public String normalizeKeyChars(@NotNull CharSequence label) {
+        return Escaping.normalizeReferenceChars(label, true, unicodeCaseFold);
     }
 
     @NotNull
@@ -37,7 +58,7 @@ public class ReferenceRepository extends NodeRepository<Reference> {
     @NotNull
     @Override
     public String normalizeKey(@NotNull CharSequence key) {
-        return Escaping.normalizeReference(key, true);
+        return Escaping.normalizeReference(key, true, unicodeCaseFold);
     }
 
     @NotNull

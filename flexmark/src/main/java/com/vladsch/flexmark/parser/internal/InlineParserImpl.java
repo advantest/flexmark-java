@@ -355,7 +355,7 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
             return 0;
         }
 
-        String normalizedLabel = Escaping.normalizeReferenceChars(rawLabel, true);
+        String normalizedLabel = referenceRepository.normalizeKeyChars(rawLabel);
         if (normalizedLabel.isEmpty()) {
             return 0;
         }
@@ -953,7 +953,7 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
                 }
 
                 if (ref != null) {
-                    String normalizedLabel = Escaping.normalizeReferenceChars(ref, true);
+                    String normalizedLabel = referenceRepository.normalizeKeyChars(ref);
                     if (referenceRepository.containsKey(normalizedLabel)) {
                         BasedSequence sequence = input.subSequence(opener.getStartIndex(), startIndex);
                         boolean containsLinks = containsLinkRefs(refIsBare ? ref : sequence, opener.getNode().getNext(), false);
