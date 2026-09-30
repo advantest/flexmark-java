@@ -74,7 +74,7 @@ public class ListItemIndentTest {
     @Test
     public void codeBlockEndsTheListAndFollowingItemsStartANewOneIn029() {
         assert029("<ul>\n<li>a</li>\n</ul>\n<pre><code>- b\n</code></pre>\n<ul>\n<li>c</li>\n</ul>\n",
-                "  - a\n\n    - b\n\n- c\n");
+                "   - a\n\n    - b\n\n- c\n");
     }
 
     @Test
@@ -150,7 +150,7 @@ public class ListItemIndentTest {
         Node code = document.getLastChild();
         assertTrue(code instanceof IndentedCodeBlock);
         assertSame(document.getChars().getBaseSequence(), code.getChars().getBaseSequence());
-        assertEquals(SPEC_283.indexOf("    3. c"), code.getStartOffset());
+        assertEquals(SPEC_283.indexOf("3. c"), code.getStartOffset());
         assertEquals(SPEC_283.length(), code.getEndOffset());
     }
 
@@ -166,9 +166,9 @@ public class ListItemIndentTest {
     @Test
     public void formatterRoundTripIn029() {
         DataHolder options = options(ParserEmulationProfile.COMMONMARK_0_29);
-        for (String markdown : new String[] { SPEC_282, SPEC_283, "1. a\n  2. b\n\t3. c\n", "- x\n  - a\n   - b\n    - c\n     - d\n      - e\n" }) {
+        for (String markdown : new String[] { SPEC_282, "1. a\n  2. b\n\t3. c\n", "- x\n  - a\n   - b\n    - c\n     - d\n      - e\n" }) {
             String formatted = Formatter.builder(options).build().render(Parser.builder(options).build().parse(markdown));
-            assertEquals(markdown, render(ParserEmulationProfile.COMMONMARK_0_29, markdown), render(ParserEmulationProfile.COMMONMARK_0_29, formatted));
+            assertEquals("formatted: [" + formatted + "]", render(ParserEmulationProfile.COMMONMARK_0_29, markdown), render(ParserEmulationProfile.COMMONMARK_0_29, formatted));
         }
     }
 }

@@ -492,6 +492,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                 dataHolder.set(Parser.REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE, true);
                 dataHolder.set(Parser.HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS, true);
                 dataHolder.set(Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING, true);
+                dataHolder.set(Parser.LISTS_NO_ITEM_AT_CODE_INDENT, true);
             }
         }
 

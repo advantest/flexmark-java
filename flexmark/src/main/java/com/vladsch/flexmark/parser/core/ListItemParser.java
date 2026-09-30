@@ -160,7 +160,8 @@ public class ListItemParser extends AbstractBlockParser {
                             return continueAtColumn(newColumn);
                         }
                     }
-                } else if (listData != null) {
+                } else if (listData != null && !(myOptions.isNoItemAtCodeIndent() && currentIndent >= myOptions.getCodeIndent())) {
+                    // with the 0.29 option a line at code indent cannot start an item and is handled like a line without marker
                     if (!myHadBlankLine && !myOptions.canInterrupt(listData.listBlock, listData.isEmpty, true)) {
                         // our text or lazy continuation
                         listBlockParser.setItemHandledLine(state.getLine());
