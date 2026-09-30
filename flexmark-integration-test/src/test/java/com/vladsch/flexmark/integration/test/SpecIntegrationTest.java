@@ -7,6 +7,7 @@ import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.test.specs.TestSpecLocator;
 import com.vladsch.flexmark.test.util.TestUtils;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
@@ -29,7 +30,9 @@ import java.util.Map;
 @RunWith(Parameterized.class)
 public class SpecIntegrationTest extends RendererSpecTest {
     final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(TestSpecLocator.DEFAULT_SPEC_RESOURCE);
+    // the default spec resource is the specification of the latest supported CommonMark version
     final private static DataHolder OPTIONS = new MutableDataSet()
+            .setFrom(ParserEmulationProfile.COMMONMARK_LATEST.getProfileOptions())
             .set(Parser.EXTENSIONS, Arrays.asList(
                     AutolinkExtension.create(),
                     StrikethroughExtension.create(),

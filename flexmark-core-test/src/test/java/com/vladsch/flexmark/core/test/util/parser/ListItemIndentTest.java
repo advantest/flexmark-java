@@ -26,7 +26,6 @@ public class ListItemIndentTest {
             ParserEmulationProfile.COMMONMARK_0_26,
             ParserEmulationProfile.COMMONMARK_0_27,
             ParserEmulationProfile.COMMONMARK_0_28,
-            ParserEmulationProfile.COMMONMARK_LATEST,
     };
 
     private static final String SPEC_282 = "- a\n - b\n  - c\n   - d\n    - e\n";

@@ -30,8 +30,13 @@ public enum ParserEmulationProfile implements MutableDataSetter {
      * {@code ==} comparisons and serialized configuration always refer to an explicit version. It is
      * advanced only when the corresponding full specification test passes without failures, and every
      * advance is recorded in VERSION.md.
+     * <p>
+     * Currently {@link #COMMONMARK_0_29}, whose full specification test passes without failures. Advancing
+     * this alias changes the default of {@code Parser.PARSER_EMULATION_PROFILE} but not the defaults of the
+     * individual parser options: the CommonMark 0.29 behaviour is enabled only by applying
+     * {@link #COMMONMARK_0_29} explicitly, use {@link #COMMONMARK_0_28} to pin the previous version.
      */
-    final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_28;
+    final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_29;
 
     ParserEmulationProfile(ParserEmulationProfile family) {
         this.family = family == null ? this : family;

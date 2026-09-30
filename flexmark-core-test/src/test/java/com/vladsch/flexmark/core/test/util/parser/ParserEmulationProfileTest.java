@@ -15,6 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class ParserEmulationProfileTest {
     private static MutableDataSet resolve(ParserEmulationProfile profile) {
@@ -63,12 +64,16 @@ public class ParserEmulationProfileTest {
     }
 
     /**
-     * Behaviour neutrality: the default list options (no profile configured) must be identical to the ones
-     * of the profile that is now the default, so explicitly applying it changes nothing.
+     * The defaults of the list options keep the behaviour before CommonMark 0.29, which is enabled only by the
+     * 0.29 profile through LISTS_NO_ITEM_AT_CODE_INDENT. Except for that option, default list options equal the
+     * ones of the CommonMark latest profile.
      */
     @Test
-    public void defaultListOptionsEqualTheCommonMarkLatestProfileOptions() {
-        assertEquals(ParserEmulationProfile.COMMONMARK_LATEST.getOptions(), new MutableListOptions((com.vladsch.flexmark.util.data.DataHolder) null));
+    public void defaultListOptionsEqualTheCommonMarkLatestProfileOptionsExceptTheCommonMark029Ones() {
+        MutableListOptions latest = ParserEmulationProfile.COMMONMARK_LATEST.getOptions();
+        assertTrue(latest.isNoItemAtCodeIndent());
+        latest.setNoItemAtCodeIndent(false);
+        assertEquals(latest, new MutableListOptions((com.vladsch.flexmark.util.data.DataHolder) null));
     }
 
     @Test
@@ -103,9 +108,9 @@ public class ParserEmulationProfileTest {
     @Test
     public void commonMarkLatestMatchesTheDefaultSpecificationResource() throws Exception {
         assertSame("COMMONMARK_LATEST must be advanced together with spec.txt and VERSION.md",
-                ParserEmulationProfile.COMMONMARK_0_28, ParserEmulationProfile.COMMONMARK_LATEST);
+                ParserEmulationProfile.COMMONMARK_0_29, ParserEmulationProfile.COMMONMARK_LATEST);
         assertArrayEquals("spec.txt must be a copy of the spec file of the version COMMONMARK_LATEST points at",
-                readSpecResource("/spec.0.28.txt"), readSpecResource("/spec.txt"));
+                readSpecResource("/spec.0.29.txt"), readSpecResource("/spec.txt"));
     }
 
     private static byte[] readSpecResource(String name) throws Exception {

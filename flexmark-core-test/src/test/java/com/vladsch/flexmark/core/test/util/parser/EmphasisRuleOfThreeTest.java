@@ -17,7 +17,6 @@ public class EmphasisRuleOfThreeTest {
             ParserEmulationProfile.COMMONMARK_0_26,
             ParserEmulationProfile.COMMONMARK_0_27,
             ParserEmulationProfile.COMMONMARK_0_28,
-            ParserEmulationProfile.COMMONMARK_LATEST,
     };
 
     private static String render(ParserEmulationProfile profile, String markdown) {

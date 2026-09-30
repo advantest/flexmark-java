@@ -39,8 +39,7 @@ public class FencedCodeInfoStringTest {
         for (ParserEmulationProfile profile : new ParserEmulationProfile[] {
                 ParserEmulationProfile.COMMONMARK_0_26,
                 ParserEmulationProfile.COMMONMARK_0_27,
-                ParserEmulationProfile.COMMONMARK_0_28,
-                ParserEmulationProfile.COMMONMARK_LATEST}) {
+                ParserEmulationProfile.COMMONMARK_0_28}) {
             assertEquals("profile " + profile, "<p>~~~ aa ``` ~~~\nfoo</p>\n<pre><code></code></pre>\n",
                     render(profile, TILDE_FENCE_WITH_BACKTICKS));
         }
