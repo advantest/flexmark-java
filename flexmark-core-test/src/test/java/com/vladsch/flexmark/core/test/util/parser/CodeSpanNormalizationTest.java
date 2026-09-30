@@ -128,8 +128,8 @@ public class CodeSpanNormalizationTest {
     }
 
     @Test
-    public void optionDefaultsToFalseAndIsSetOnlyBy029Profile() {
-        assertFalse(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(null));
+    public void optionDefaultsToTrueAndIsUnsetByOlderProfiles() {
+        assertTrue(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(null));
         for (ParserEmulationProfile profile : PRE_029) {
             assertFalse("profile " + profile,
                     Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(profile.getProfileOptions()));

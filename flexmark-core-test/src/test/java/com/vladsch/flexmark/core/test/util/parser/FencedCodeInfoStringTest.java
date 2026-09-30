@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * CommonMark 0.29 (#119, #505): info strings of backtick fences cannot contain backticks, info strings of
@@ -60,8 +61,8 @@ public class FencedCodeInfoStringTest {
     }
 
     @Test
-    public void optionIsOffByDefaultAndOnlyEnabledByThe029Profile() {
-        assertFalse(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(null));
+    public void optionIsOnByDefaultAndOnlyKeptByThe029Profile() {
+        assertTrue(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(null));
         for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
             boolean expected = profile == ParserEmulationProfile.COMMONMARK_0_29;
             assertEquals("profile " + profile, expected,

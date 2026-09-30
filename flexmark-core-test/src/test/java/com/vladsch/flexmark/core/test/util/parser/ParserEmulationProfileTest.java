@@ -69,10 +69,9 @@ public class ParserEmulationProfileTest {
      * ones of the CommonMark latest profile.
      */
     @Test
-    public void defaultListOptionsEqualTheCommonMarkLatestProfileOptionsExceptTheCommonMark029Ones() {
+    public void defaultListOptionsEqualTheCommonMarkLatestProfileOptions() {
         MutableListOptions latest = ParserEmulationProfile.COMMONMARK_LATEST.getOptions();
         assertTrue(latest.isNoItemAtCodeIndent());
-        latest.setNoItemAtCodeIndent(false);
         assertEquals(latest, new MutableListOptions((com.vladsch.flexmark.util.data.DataHolder) null));
     }
 

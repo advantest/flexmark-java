@@ -3538,7 +3538,7 @@ Document[0, 31]
 
 Emphasis around inline code spans
 
-```````````````````````````````` example GFM - Emphasis: 1
+```````````````````````````````` example(GFM - Emphasis: 1) options(commonmark-0.28)
 please add  `add_gtest(`**`your_unittest`**` `**`your_unittest_unittest.cc`**` )`
 .
 <p>please add  <code>add_gtest(</code><strong><code>your_unittest</code></strong><code></code><strong><code>your_unittest_unittest.cc</code></strong><code>)</code></p>
@@ -3701,7 +3701,7 @@ Document[0, 27]
 
 code mixed with emphasis:
 
-```````````````````````````````` example GFM - Emphasis: 10
+```````````````````````````````` example(GFM - Emphasis: 10) options(commonmark-0.28)
 `code with `**`bold`**` inside`
 .
 <p><code>code with</code><strong><code>bold</code></strong><code>inside</code></p>
@@ -5554,7 +5554,7 @@ Document[0, 70]
 
 Wrap individual paragraph lines in source position marked spans with spanning inlines
 
-```````````````````````````````` example(Source Position Attribute - Paragraph: 4) options(src-pos, src-pos-lines)
+```````````````````````````````` example(Source Position Attribute - Paragraph: 4) options(src-pos, src-pos-lines, commonmark-0.28)
 paragraph `test 
  with` multiple lazy **lines
 paragraph `test
@@ -5594,7 +5594,7 @@ Document[0, 131]
 ````````````````````````````````
 
 
-```````````````````````````````` example(Source Position Attribute - Paragraph: 5) options(src-pos, src-pos-lines-splice)
+```````````````````````````````` example(Source Position Attribute - Paragraph: 5) options(src-pos, src-pos-lines-splice, commonmark-0.28)
 paragraph `test 
  with` multiple lazy **lines
 paragraph `test
@@ -6635,7 +6635,7 @@ Document[0, 12]
 
 Multi-line code span in paragraph
 
-```````````````````````````````` example(Soft-Breaks in code: 1) options(code-soft-breaks)
+```````````````````````````````` example(Soft-Breaks in code: 1) options(code-soft-breaks, commonmark-0.28)
 line ```{
 "key1": "xxx",
 "key2": [
@@ -6672,7 +6672,7 @@ Document[0, 55]
 ````````````````````````````````
 
 
-```````````````````````````````` example(Soft-Breaks in code: 2) options(code-soft-break-spaces)
+```````````````````````````````` example(Soft-Breaks in code: 2) options(code-soft-break-spaces, commonmark-0.28)
 line ```{
 "key1": "xxx",
 "key2": [
@@ -6813,7 +6813,7 @@ Document[0, 15]
 ````````````````````````````````
 
 
-```````````````````````````````` example Spec 0.28 Changes: 9
+```````````````````````````````` example(Spec 0.28 Changes: 9) options(commonmark-0.28)
 [link](</my uri>)
 .
 <p>[link](&lt;/my uri&gt;)</p>

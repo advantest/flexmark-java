@@ -3,6 +3,7 @@ package com.vladsch.flexmark.core.test.util.renderer;
 import com.vladsch.flexmark.core.test.util.RendererSpecTest;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.test.util.ComboSpecTestCase;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.ast.KeepType;
@@ -26,6 +27,7 @@ public abstract class CoreRendererSpecTest extends RendererSpecTest {
     static {
         ArrayList<String> userTags = new ArrayList<>(Parser.HTML_BLOCK_TAGS.get(null));
         userTags.add("tag");
+        optionsMap.put("commonmark-0.28", new MutableDataSet().setFrom(ParserEmulationProfile.COMMONMARK_0_28));
         optionsMap.put("heading-ids", new MutableDataSet().set(HtmlRenderer.RENDER_HEADER_ID, true));
         optionsMap.put("heading-ids-no-dupe-dashes", new MutableDataSet().set(HtmlRenderer.HEADER_ID_GENERATOR_NO_DUPED_DASHES, true));
         optionsMap.put("heading-ids-no-non-ascii-lowercase", new MutableDataSet().set(HtmlRenderer.HEADER_ID_GENERATOR_NON_ASCII_TO_LOWERCASE, false));

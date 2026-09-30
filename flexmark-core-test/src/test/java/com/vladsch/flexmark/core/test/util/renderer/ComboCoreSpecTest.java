@@ -2,6 +2,7 @@ package com.vladsch.flexmark.core.test.util.renderer;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.test.util.TestUtils;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
@@ -17,6 +18,7 @@ final public class ComboCoreSpecTest extends CoreRendererSpecTest {
     final public static @NotNull ResourceLocation RESOURCE_LOCATION = ResourceLocation.of(SPEC_RESOURCE);
 
     final private static DataHolder OPTIONS = new MutableDataSet()
+            .setFrom(ParserEmulationProfile.COMMONMARK_0_28)
             .set(HtmlRenderer.INDENT_SIZE, 0)
             .set(Parser.INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS, false)
             .set(HtmlRenderer.PERCENT_ENCODE_URLS, true)

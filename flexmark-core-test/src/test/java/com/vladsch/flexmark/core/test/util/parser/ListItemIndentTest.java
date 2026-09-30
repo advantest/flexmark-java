@@ -154,12 +154,12 @@ public class ListItemIndentTest {
     }
 
     @Test
-    public void optionIsOnlySetByCommonMark029() {
+    public void optionIsOnlyKeptByCommonMark029() {
         for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
             boolean expected = profile == ParserEmulationProfile.COMMONMARK_0_29;
             assertEquals("profile " + profile, expected, Parser.LISTS_NO_ITEM_AT_CODE_INDENT.get(profile.getProfileOptions()));
         }
-        assertFalse(Parser.LISTS_NO_ITEM_AT_CODE_INDENT.getDefaultValue());
+        assertTrue(Parser.LISTS_NO_ITEM_AT_CODE_INDENT.getDefaultValue());
     }
 
     @Test
