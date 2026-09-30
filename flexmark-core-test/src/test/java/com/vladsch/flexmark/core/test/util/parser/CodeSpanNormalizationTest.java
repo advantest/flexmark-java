@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.core.test.util.parser;
 
+import com.vladsch.flexmark.formatter.Formatter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
@@ -9,6 +10,8 @@ import com.vladsch.flexmark.util.data.MutableDataSet;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * CommonMark 0.29 (#532, #569 and the simplified normalization): line endings in a code span become spaces, one
@@ -120,5 +123,25 @@ public class CodeSpanNormalizationTest {
         DataHolder options = ParserEmulationProfile.COMMONMARK_0_29.getProfileOptions().toImmutable();
         Node code = Parser.builder(options).build().parse("``\nfoo  bar\n``\n").getFirstChild().getFirstChild();
         assertEquals("\nfoo  bar\n", code.getChildChars().toString());
+    }
+
+    @Test
+    public void optionDefaultsToFalseAndIsSetOnlyBy029Profile() {
+        assertFalse(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(null));
+        for (ParserEmulationProfile profile : PRE_029) {
+            assertFalse("profile " + profile,
+                    Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(profile.getProfileOptions()));
+        }
+        assertTrue(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES
+                .get(ParserEmulationProfile.COMMONMARK_0_29.getProfileOptions()));
+    }
+
+    @Test
+    public void formatterRoundTripKeepsRenderedCodeSpansIn029() {
+        DataHolder options = ParserEmulationProfile.COMMONMARK_0_29.getProfileOptions().toImmutable();
+        for (String markdown : new String[] {"` `\n", "`  `\n", "``\nfoo\nbar  \nbaz\n``\n", "`  ``  `\n", "`\tb\t`\n", "`\n`\n"}) {
+            String formatted = Formatter.builder(options).build().render(Parser.builder(options).build().parse(markdown));
+            assertEquals(markdown, render(options, markdown), render(options, formatted));
+        }
     }
 }

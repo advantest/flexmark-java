@@ -485,6 +485,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
             } else if (this == COMMONMARK_0_29) {
                 // set 0.29 parsing rule options
                 dataHolder.set(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES, true);
+                dataHolder.set(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES, true);
             }
         }
 

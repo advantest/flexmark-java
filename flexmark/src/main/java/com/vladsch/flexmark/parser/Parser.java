@@ -107,6 +107,13 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES = new DataKey<>("FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES", false);
 
     /**
+     * CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES default false, when true makes rendering CommonMark Spec 0.29 compliant:
+     * line endings in a code span become spaces, one space is stripped from both ends unless the span consists only of spaces,
+     * interior whitespace is not collapsed and tabs are not treated as spaces
+     */
+    final public static DataKey<Boolean> CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES = new DataKey<>("CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES", false);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);

@@ -47,6 +47,7 @@ public class CoreNodeRenderer implements NodeRenderer {
     final private boolean recheckUndefinedReferences;
     final private boolean codeContentBlock;
     final private boolean codeSoftLineBreaks;
+    final private boolean codeSpanNormalize;
 
     private List<Range> myLines;
     private List<Integer> myEOLs;
@@ -61,6 +62,7 @@ public class CoreNodeRenderer implements NodeRenderer {
         obfuscateEmailRandom = HtmlRenderer.OBFUSCATE_EMAIL_RANDOM.get(options);
         codeContentBlock = Parser.FENCED_CODE_CONTENT_BLOCK.get(options);
         codeSoftLineBreaks = Parser.CODE_SOFT_LINE_BREAKS.get(options);
+        codeSpanNormalize = Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(options);
         myLines = null;
         myEOLs = null;
         myNextLine = 0;
@@ -428,35 +430,87 @@ public class CoreNodeRenderer implements NodeRenderer {
             } else {
                 html.srcPos(node.getText()).withAttr().tag("code");
             }
-            if (codeSoftLineBreaks && !htmlOptions.isSoftBreakAllSpaces) {
-                for (Node child : node.getChildren()) {
-                    if (child instanceof Text) {
-                        html.text(Escaping.collapseWhitespace(child.getChars(), true));
-                    } else {
-                        context.render(child);
-                    }
-                }
-            } else {
-                html.text(Escaping.collapseWhitespace(node.getText(), true));
-            }
+            renderCodeContent(node, context, html, htmlOptions);
+
             html.tag("/code");
         } else {
             html.raw(htmlOptions.codeStyleHtmlOpen);
-            if (codeSoftLineBreaks && !htmlOptions.isSoftBreakAllSpaces) {
-                for (Node child : node.getChildren()) {
-                    if (child instanceof Text) {
-                        html.text(Escaping.collapseWhitespace(child.getChars(), true));
-                    } else {
-                        context.render(child);
-                    }
-                }
-            } else {
-                html.text(Escaping.collapseWhitespace(node.getText(), true));
-            }
+            renderCodeContent(node, context, html, htmlOptions);
+
             html.raw(htmlOptions.codeStyleHtmlClose);
         }
     }
 
+    private void renderCodeContent(Code node, NodeRendererContext context, HtmlWriter html, HtmlRendererOptions htmlOptions) {
+        boolean softLineBreaks = codeSoftLineBreaks && !htmlOptions.isSoftBreakAllSpaces;
+
+        if (!codeSpanNormalize) {
+            if (softLineBreaks) {
+                for (Node child : node.getChildren()) {
+                    if (child instanceof Text) {
+                        html.text(Escaping.collapseWhitespace(child.getChars(), true));
+                    } else {
+                        context.render(child);
+                    }
+                }
+            } else {
+                html.text(Escaping.collapseWhitespace(node.getText(), true));
+            }
+            return;
+        }
+
+        // CommonMark 0.29: line endings are spaces, one space is stripped from both ends unless all are spaces
+        BasedSequence text = node.getText();
+        int length = text.length();
+        boolean strip = false;
+        if (length >= 2 && isCodeSpace(text.charAt(0)) && isCodeSpace(text.charAt(length - 1))) {
+            for (int i = 0; i < length; i++) {
+                if (!isCodeSpace(text.charAt(i))) {
+                    strip = true;
+                    break;
+                }
+            }
+        }
+
+        if (softLineBreaks) {
+            Node first = node.getFirstChild();
+            while (first instanceof Text && first.getChars().isEmpty()) first = first.getNext();
+            Node last = node.getLastChild();
+            while (last instanceof Text && last.getChars().isEmpty()) last = last.getPrevious();
+            // the parser adds no soft break child for a trailing line ending, so there is nothing to strip
+            boolean endsWithLineEnding = text.charAt(length - 1) != ' ';
+            for (Node child : node.getChildren()) {
+                boolean stripStart = strip && child == first;
+                boolean stripEnd = strip && !endsWithLineEnding && child == last;
+                if (child instanceof Text) {
+                    BasedSequence chars = child.getChars();
+                    if (stripStart) chars = chars.subSequence(1);
+                    if (stripEnd && chars.length() > 0) chars = chars.subSequence(0, chars.length() - 1);
+                    html.text(chars);
+                } else if (!stripStart && !stripEnd) {
+                    context.render(child);
+                }
+            }
+        } else {
+            StringBuilder sb = new StringBuilder(length);
+            int start = strip ? 1 : 0;
+            int end = strip ? length - 1 : length;
+            for (int i = start; i < end; i++) {
+                char c = text.charAt(i);
+                if (c == '\r') {
+                    sb.append(' ');
+                    if (i + 1 < end && text.charAt(i + 1) == '\n') i++;
+                } else {
+                    sb.append(c == '\n' ? ' ' : c);
+                }
+            }
+            html.text(sb);
+        }
+    }
+
+    private static boolean isCodeSpace(char c) {
+        return c == ' ' || c == '\n' || c == '\r';
+    }
     @SuppressWarnings("MethodMayBeStatic")
     void render(HtmlBlock node, NodeRendererContext context, HtmlWriter html) {
         html.line();
