@@ -2,6 +2,7 @@
 
 [TOC]: # ""
 
+- [Next](#next)
 - [0.64.8](#0648)
 - [0.64.6](#0646)
 - [0.64.4](#0644)
@@ -116,6 +117,27 @@
 - [0.40.4](#0404)
 - [0.40.2](#0402)
 - [0.40.0](#0400)
+
+## Next
+
+CommonMark specification tracking. The implemented specification version is now named explicitly by
+`ParserEmulationProfile.COMMONMARK_LATEST`, which currently aliases `COMMONMARK_0_28`.
+
+* Add: `ParserEmulationProfile.COMMONMARK_LATEST`, an alias for the newest CommonMark specification
+  version that this release actually implements. It is the new default of
+  `Parser.PARSER_EMULATION_PROFILE`. It will be advanced only when the full specification test of the
+  next version passes without failures, and every advance will be noted here. `COMMONMARK` keeps its
+  existing role as the CommonMark family sentinel reported by `ParserEmulationProfile.family`, so code
+  comparing against the family is unaffected.
+* Fix: versioned CommonMark profiles resolved `Parser.PARSER_EMULATION_PROFILE` to the `COMMONMARK`
+  family sentinel instead of to themselves, and their list options were never written into the data
+  holder. `COMMONMARK_0_26`, `COMMONMARK_0_27`, `COMMONMARK_0_28` and `COMMONMARK_0_29` now resolve
+  their own identity and options.
+* Fix: `COMMONMARK_0_26` no longer enables `LISTS_END_ON_DOUBLE_BLANK`. CommonMark 0.26 is the version
+  that removed the "two blank lines end a list" rule, so enabling it for the 0.26 profile was inverted.
+  The option was previously discarded by the defect above, so rendering output is unchanged.
+* Fix: `flexmark-ext-definition` compared the emulation profile against the `COMMONMARK` family
+  sentinel, which only worked because of the defect above. It now compares the family explicitly.
 
 ## 0.64.8
 
