@@ -55,9 +55,29 @@ final public class ComboOrigSpec029CoreTest extends CoreRendererSpecTest {
             if (example.isFullSpecExample()) continue;
             // example numbers of the spec, not the section relative ones used by SpecExample
             exampleNumber++;
-            data.add(new Object[] { KNOWN_FAILURES.contains(exampleNumber) ? example.withOptionsSet(TestUtils.FAIL_OPTION_NAME) : example });
+            data.add(new Object[] { KNOWN_FAILURES.contains(exampleNumber) ? withFailOption(example) : example });
         }
+        assertKnownFailuresExist(exampleNumber);
         return data;
+    }
+
+    /** {@link SpecExample#withOptionsSet} replaces the option set, so options declared by the example are kept here. */
+    private static @NotNull SpecExample withFailOption(@NotNull SpecExample example) {
+        String optionsSet = example.getOptionsSet();
+        return example.withOptionsSet(optionsSet == null || optionsSet.trim().isEmpty()
+                ? TestUtils.FAIL_OPTION_NAME
+                : optionsSet + ", " + TestUtils.FAIL_OPTION_NAME);
+    }
+
+    private static void assertKnownFailuresExist(int exampleCount) {
+        List<Integer> unknown = new ArrayList<>();
+        for (int exampleNumber : KNOWN_FAILURES) {
+            if (exampleNumber < 1 || exampleNumber > exampleCount) unknown.add(exampleNumber);
+        }
+        if (!unknown.isEmpty()) {
+            throw new IllegalStateException(KNOWN_FAILURES_RESOURCE + " lists examples which do not exist in "
+                    + SPEC_RESOURCE + " (" + exampleCount + " examples): " + unknown);
+        }
     }
 
     private static @NotNull Set<Integer> loadKnownFailures() {

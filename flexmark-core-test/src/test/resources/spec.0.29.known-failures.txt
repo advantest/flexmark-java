@@ -9,6 +9,10 @@
 # RULES: entries may only be REMOVED, never added, as 0.29 support is implemented. When an example
 # starts to pass, its test fails until its entry is deleted here. When this file is empty,
 # enable FullOrigSpec029CoreTest and delete this file together with the FAIL handling in the test.
+#
+# A failing test is named "<Section>: <n-th example within that section>", not by the global number used
+# here. The entries below are grouped by section to make that mapping easy. A listed example whose test
+# reports anything other than a ComparisonFailure has started to crash rather than to mis-render.
 
 # --- Code spans: stripping of one leading/trailing space, line endings converted to spaces
 331  # code span with inner backticks and padding spaces
