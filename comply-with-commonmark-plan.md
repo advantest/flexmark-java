@@ -355,6 +355,64 @@ Two points need a decision before B312.3 starts:
 
 ## Follow-up tasks (not blocking any version milestone)
 
+### Task F2 — code-point-correct delimiter flanking (DONE)
+
+Done, as an ungated bug fix. `InlineParserImpl.scanDelimiters` read the character before and after a delimiter
+run as a single UTF-16 `char`, so a **supplementary** code point was inspected as a lone surrogate and
+classified wrongly. Measured on JDK 21 (Unicode 15.0), **217 supplementary `P*` code points were misclassified**.
+
+This was **not** a 0.31 change. CommonMark has always defined the flanking rules over Unicode characters, so it
+was wrong under every profile flexmark supports, 0.26 through 0.30. It was therefore fixed **ungated**, by the
+precedent set for the numeric character reference limits — gating it would have encoded the bug as though it
+were intended behaviour.
+
+The fix reads whole code points with `Character.codePointBefore` / `codePointAt` via a `codePointString`
+helper that returns an identical string for BMP input, so BMP behaviour is provably unchanged. The existing
+bounds handling already substituted the end-of-line sentinel before either call, so neither can read out of
+range. `scanDelimiters` turned out to be the **only** site using the whitespace and punctuation matchers; the
+extension delimiter processors consume only the resulting flanking booleans.
+
+No spec example of any version covers supplementary code points, so `SupplementaryCodePointDelimiterTest`
+(14 tests, run against the defaults and the 0.26, 0.29 and 0.30 profiles) is the only enforcement. RED proved
+the bug on 4 of 12 initial cases, all supplementary punctuation. Review: `review-supplementary-code-points.md`.
+
+**Known limitation:** there is no test under `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS`, which the fix does
+touch. A trial showed even BMP punctuation renders differently in that mode, so any expectation would have
+been a guess. Also untested: unpaired surrogates (reasoned to be unchanged). There are no supplementary
+whitespace cases to test, as every `Zs` character is in the BMP.
+
+**Deliberately excluded:** adding the Unicode `S*` categories to the punctuation set. That is Task B312.3.
+
+### Task F3 — tests for the under-tested symbol punctuation rule (open, belongs with B312.3)
+
+
+The 0.31.2 example set detects only **BMP currency symbols** (example 354), yet the change affects roughly
+**7,978** code points. Sm, Sk and So are not exercised at all, and neither is `_` nor any supplementary
+character. Per the standing rule, B312.3 must ship with hand-written tests well beyond example 354:
+
+| Case to cover                        | Example input | Why it matters                              |
+|--------------------------------------|---------------|---------------------------------------------|
+| Sc currency beyond `£`/`€`           | `*¥*x`        | the only group the spec actually tests      |
+| Sm mathematical                      | `*±*x`        | 930 BMP code points, untested               |
+| Sk modifier                          | `*´*x`        | 118 BMP code points, untested               |
+| So other, including emoji            | `a*😀*b`      | 2,731 BMP + 3,903 supplementary, untested   |
+| the `_` delimiter for each of these  | `_±_x`        | stricter intraword rule, untested           |
+| supplementary symbols                | U+1D6C1 etc.  | needs Task F2 to be correct first           |
+
+These tests belong in the same commit series as B312.3 and depend on Task F2.
+
+### Task F4 — exclude DEL (U+007F) from link destinations and autolinks (open, UNCONFIRMED)
+
+`Parsing.EXCLUDED_0_TO_SPACE` is `\u0000-\u0020`, which excludes the C0 controls and space but **not** U+007F.
+Probes show `[a](b<DEL>c)` and `<http://a<DEL>b>` both still produce links. The CommonMark definition of ASCII
+control characters (0.30 onwards) includes U+007F, so the spec text says these should not be links.
+
+**This is explicitly unconfirmed and must be verified before any code is changed.** It was *not* checked
+whether commonmark.js and the other reference implementations actually reject U+007F here; the spec text and
+the reference behaviour may diverge, and no spec example of any version covers it. Verify against
+commonmark.js first. If the references do reject it, treat this as an ungated bug fix like Task F2 and add
+hand-written tests, since no example enforces it.
+
 ### Task F1 — verify the exactness of the Unicode case folding (open)
 
 B30.3 matches link labels with `Escaping.caseFold`, which lower-cases each code point, upper-cases the
