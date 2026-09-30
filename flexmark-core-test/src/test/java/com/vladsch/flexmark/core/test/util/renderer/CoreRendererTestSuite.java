@@ -16,6 +16,7 @@ import org.junit.runners.Suite;
         FullOrigSpec028CoreTest.class,
         FullOrigSpec029CoreTest.class,
         ComboOrigSpec029CoreTest.class,
+        ComboOrigSpec030CoreTest.class,
         ComboCoreSpecTest.class,
         ComboCoreDirectionalSpecTest.class,
 })
