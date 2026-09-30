@@ -10,98 +10,98 @@ the analysis was written. Measured failure counts are unchanged and remain valid
 
 ---
 
-## ⚠️ Budget reality check — read first
+## Decisions taken
 
-The stated limit is **5% of the plan's total tokens**. My own analysis sizes Task B (reaching 0.31.2) at
-**15–30 developer-days**, of which 0.29 alone is the largest share (6 of 9 clusters, including the two
-hardest: list indent and code spans).
+| # | Decision |
+| - | -------- |
+| 1 | Proceed **one CommonMark version at a time**. Task 0 first, then Task A and B for 0.29 only. Versions above 0.29 are planned after 0.29 is green. Completing 0.26 example coverage is a separate task. |
+| 2 | **One branch** (`common-mark-updates`) with a **git tag per milestone**, rather than stacked branches. |
+| 3 | Keep the existing `spec.txt` / `FullOrigSpec*` test convention. `spec.json` may be adopted later only if failure diagnostics prove painful. |
+| 4 | Known-failures **baseline** for not yet implemented examples, so CI stays green and the count can only shrink. |
+| 5 | **One flag per breaking change**, in the style of the existing `Parser` `DataKey` options, so every profile stays exactly reconstructible. |
+| 6 | Commit first, review later. Treat the branch as one or more pull requests. |
+| 7 | Confirm each decision by test before implementing it. If a decision turns out to be wrong, stop and ask. |
+| 8 | Review sub-agent after Task 0 and after every larger task or new version. Apply the improvements, record review and declined suggestions in Markdown. **Max 2 review rounds per task.** |
 
-**Implementing 0.29 is not achievable within 5%.** Attempting it would burn the budget mid-cluster and leave
-the tree in a worse state than not starting.
+Decision 7 already paid off: decision 1 of the analysis (`COMMONMARK_0_26` `endOnDoubleBlank` is a bug)
+was **confirmed** against the 0.25 → 0.26 specification diff before the fix was written.
 
-What *is* achievable and genuinely valuable within the budget:
+## Status
 
-- **Task 0** — machinery fixes + `COMMONMARK_LATEST`. Behaviour-neutral, self-contained, unblocks everything.
-- **Task A** — spec files, harness, and full red test suites for 0.29/0.30/0.31.2.
-
-That produces a reviewed, merged foundation plus an executable definition of "done" for every later version.
-See Question 1.
+- **Task 0 — done and reviewed.** Tag `commonmark-profile-machinery-fixed`. Full test suite green.
+- **Task A — next**, scoped to CommonMark 0.29 only.
 
 ---
 
 ## Task 0 — Profile machinery fixes + rename (behaviour-neutral)
 
-Branch `feat/commonmark-task0-machinery`. No rendering behaviour changes. Acceptance: the §3 conformance
-matrix is **byte-identical** before and after; any moved cell is a bug.
+## Task 0 — Profile machinery fixes + `COMMONMARK_LATEST` (DONE, behaviour-neutral)
 
-| # | Commit (conventional)                                                              | Content |
-| - | ---------------------------------------------------------------------------------- | ------- |
-| 1 | `test(parser): assert emulation profile options resolution`                          | Options-resolution test per analysis §5.2. **Must fail** for `COMMONMARK_0_26/27/28/29` (they report `COMMONMARK`). Commit red. |
-| 2 | `test(ext-definition): pin definition list indent behaviour`                          | Pins `DefinitionItemBlockParser` lines 116 / 292–295 before disturbing them (§5.3). |
-| 3 | `fix(parser): apply list options and profile identity for CommonMark profiles`        | Adds missing `getOptions(dataHolder).setIn(dataHolder)`; removes `setEndOnDoubleBlank(true)` from `COMMONMARK_0_26`; fixes the two profile-vs-family comparisons in `DefinitionItemBlockParser`. **One commit — they are coupled (§5.3).** Turns commit 1 green. |
-| 4 | `feat(parser): add COMMONMARK_LATEST version profile`                                 | `public static final ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_28;` (static field, **not** an enum constant — §5.4). `COMMONMARK` stays the family sentinel. Default of `PARSER_EMULATION_PROFILE` points at it. |
-| 5 | `test(parser): enforce COMMONMARK_LATEST advancement invariants`                       | The four invariants of §5.4, incl. `spec.txt` ≡ `spec.0.28.txt`. |
-| 6 | `docs: record COMMONMARK_LATEST rename in VERSION.md`                                 | States behaviour unchanged at this point. |
+Committed on `common-mark-updates`, tag `commonmark-profile-machinery-fixed`. No rendering behaviour
+changes: the full test suite passed unchanged after every step.
 
-## Task A — Spec files, harness, red tests
+| # | Commit (conventional)                                                              | Result |
+| - | ---------------------------------------------------------------------------------- | ------ |
+| 1 | `test(parser): assert emulation profile options resolution`                          | Committed red: 3 of 4 tests failed, proving both defects of analysis §5.2. |
+| 2 | `fix(parser): apply list options and profile identity for CommonMark profiles`        | Adds the missing `getOptions(dataHolder).setIn(dataHolder)` and profile tagging; drops `setEndOnDoubleBlank(true)` from `COMMONMARK_0_26`; fixes the two profile-vs-family comparisons in `DefinitionItemBlockParser`. **One commit — they are coupled (§5.3).** Turned commit 1 green. |
+| 3 | `feat(parser): add COMMONMARK_LATEST version profile`                                 | `final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_28;` (static field, **not** an enum constant — §5.4). `COMMONMARK` stays the family sentinel. Default of `PARSER_EMULATION_PROFILE` points at it. Includes the advancement invariants, incl. `spec.txt` ≡ `spec.0.28.txt`. |
+| 4 | `docs: record COMMONMARK_LATEST and profile fixes in VERSION.md`                       | Including the breaking-change note on the changed default. |
+| 5 | `test(parser): strengthen emulation profile option resolution coverage`                | Review round 1 improvements; review in `review-task0-profile-machinery.md`. |
 
-Branch `feat/commonmark-spec-test-harness`.
+The separately planned commit "pin definition list indent behaviour" was dropped: the existing
+`flexmark-ext-definition` spec tests plus the full suite already pin that behaviour, so a new
+characterization test would have added no information.
+
+Confirmed by evidence, not assumed:
+
+- 0.26 **removed** the "two blank lines end a list" rule, so enabling it for `COMMONMARK_0_26` was
+  inverted. Checked against the 0.25 → 0.26 diff at <https://spec.commonmark.org/0.26/changes.html>.
+- In `DefinitionItemBlockParser` the `FIXED_INDENT` half of the indent check stays a **profile**
+  comparison while the CommonMark half uses the **family**. Using the family for both would have changed
+  `MULTI_MARKDOWN` and `PEGDOWN*` behaviour, which Task 0 must not do.
+
+## Task A — Spec files, harness, red tests for CommonMark 0.29 only
+
+Branch `feat/commonmark-spec-test-harness`. **Scope: CommonMark 0.29 only.** Completing the example
+coverage for 0.26 is a separate task. Tasks for versions above 0.29 are added later, one version at a
+time.
 
 | # | Commit                                                                  | Content |
 | - | ----------------------------------------------------------------------- | ------- |
-| 1 | `test(specs): add CommonMark 0.31.2 specification resources`              | Adds missing `spec.0.31.2.txt` (+ `spec.json` per version if Q3 = JSON). |
-| 2 | `test(specs): add spec conformance harness`                               | Productionises the throwaway harness (analysis §8). Per-example pass/fail, version × profile matrix. Pitfalls: `→`(U+2192)→tab, `PERCENT_ENCODE_URLS=true`. |
-| 3 | `test(core): add full spec tests for 0.26, 0.30, 0.31.2`                   | Missing `FullOrigSpec026/030/0312CoreTest`; register in `CoreRendererTestSuite`. |
-| 4 | `test(core): enable 0.29 spec test with known-failures baseline`           | Removes the `ResourceLocation.NULL` stub. Baseline per Q4. |
+| 1 | `test(specs): add spec conformance harness`                               | Productionises the throwaway harness (analysis §8). Per-example pass/fail against a spec resource. Pitfalls: `→`(U+2192)→tab, `PERCENT_ENCODE_URLS=true`. |
+| 2 | `test(core): enable 0.29 spec test with known-failures baseline`          | Removes the `ResourceLocation.NULL` stub from `FullOrigSpec029CoreTest`. `spec.0.29.txt` already exists in `flexmark-test-specs`; no new spec resource needed. |
 
-Expected end state (measured, from the analysis): **0.29 → 20 failures, 0.30 → 23, 0.31.2 → 26**, all
-recorded as a shrink-only baseline. Exact per-version cluster mapping is produced *by the harness*, not
-assumed.
+Expected end state (measured, from the analysis): **0.29 → 20 failures**, recorded as a shrink-only
+baseline so CI stays green while the count can only decrease. The exact failing example numbers are
+produced *by the harness*, not assumed.
 
-## Task B29 / B30 / B312 — per-version implementation (NOT in this budget)
+Deferred, not part of Task A:
 
-One branch per version, stacked, each independently reviewable and mergeable:
-`feat/commonmark-0.29` → `feat/commonmark-0.30` → `feat/commonmark-0.31.2` (see Q2).
+- 0.26 example coverage (`FullOrigSpec026CoreTest`) — separate task.
+- `spec.0.31.2.txt` and the 0.30 / 0.31.2 test classes — added with their own version tasks.
 
-Per version, repeated: TDD per cluster (red → green), one commit per cluster, advance `COMMONMARK_LATEST`
-only when that version's `FullOrigSpec0xxCoreTest` is at **zero** failures, `VERSION.md` entry, then a
-review sub-agent pass before the next version starts.
+## Task B29 — CommonMark 0.29 implementation (next, after Task A)
 
-Cluster → version ownership (analysis §6): **0.29** owns code spans, link destinations `<>`, emphasis ÷3,
-list indent ≥4, info strings, entity/case-fold. **0.30** owns `<textarea>`. **0.31.2** owns HTML comments,
-Unicode punctuation.
+Branch `feat/commonmark-0.29`, tagged on completion. Versions above 0.29 are planned only once 0.29 is
+green.
 
-Order within 0.29 — cheapest and least coupled first: info strings → entity/case-fold → code spans → link
-destinations → emphasis ÷3 → **list indent last** (hardest; ~30 interacting list flags, affects every
-emulation family).
+Per cluster: TDD red → green, one commit per cluster. Advance `COMMONMARK_LATEST` to `COMMONMARK_0_29`
+only when `FullOrigSpec029CoreTest` reports **zero** failures, add the `VERSION.md` entry, then a review
+sub-agent pass (max 2 rounds).
 
----
+0.29 owns 6 of the 9 known clusters (analysis §6). Order — cheapest and least coupled first:
+info strings → entity/case-fold → code spans → link destinations `<>` → emphasis ÷3 →
+**list items indented 4+ last** (hardest; ~30 interacting list flags, affects every emulation family).
 
-## Questions — please decide before I implement
-
-1. **Scope for this budget.** Confirm: Task 0 + Task A only, stopping before any 0.29 behaviour change?
-   (My recommendation. Alternative: Task 0 only, done very thoroughly.)
-2. **Branching.** Stacked branches per version as above, or one branch with a git tag per version? Stacked
-   branches review better; tags are simpler. Which?
-3. **Test source.** Drive tests from the existing `spec.txt` `FullOrigSpec*` pattern, or from `spec.json`
-   (gives upstream example number + section in failure messages, but adds a JSON dependency — Jackson or
-   Gson — to the test module)? Is a new test-scope dependency acceptable?
-4. **Red tests and CI.** You asked for failing tests first, but `main`/CI should presumably stay green. How
-   should the 26 known failures land — (a) shrink-only known-failures baseline file, (b) `@Ignore`d per
-   example, or (c) accepted-actual-output baseline? I recommend (a).
-5. **Flag granularity.** One `DataKey` per breaking change (~11 flags, per the analysis), so every profile
-   is exactly reconstructible — or one coarse "spec version" switch read at parse time? I recommend the
-   former; it is more work but is what makes `COMMONMARK_0_28` survive the 0.29 default change.
-6. **Definition-list behaviour change.** The §5.3 fix in Task 0 commit 3 *will* alter `ext-definition`
-   parsing for versioned profiles (it works by accident today). If its committed spec resource files need
-   regenerating, do you want to review that diff explicitly before I commit it?
-7. **`endOnDoubleBlank` removal.** Confirm removing `setEndOnDoubleBlank(true)` from `COMMONMARK_0_26` — no
-   current test covers the rule, and decision 1 says 0.26 removed it.
-8. **Review agent.** Confirm a `code-review` sub-agent pass after each version (and after Task 0), with
-   findings reported to you rather than auto-applied.
+Clusters owned by later versions, for context only: **0.30** `<textarea>`; **0.31.2** HTML comments and
+the Unicode punctuation set.
 
 ---
 
+## Open questions
+
+None blocking Task A. Raise a question only if a recorded decision turns out to be contradicted by the
+code or the specification (decision 7).
 ## Constraints I am operating under
 
 - **Never push.** Commits only, on my branches.

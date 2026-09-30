@@ -123,6 +123,32 @@
 CommonMark specification tracking. The implemented specification version is now named explicitly by
 `ParserEmulationProfile.COMMONMARK_LATEST`, which currently aliases `COMMONMARK_0_28`.
 
+### Breaking changes
+
+Rendering output is unchanged, but the resolved value of `Parser.PARSER_EMULATION_PROFILE` changed.
+
+* **Breaking:** the default of `Parser.PARSER_EMULATION_PROFILE` is now `COMMONMARK_LATEST`, which
+  aliases `COMMONMARK_0_28`, instead of the `COMMONMARK` family sentinel. External code testing the
+  resolved profile with `Parser.PARSER_EMULATION_PROFILE.get(options) == ParserEmulationProfile.COMMONMARK`
+  now gets `false` where it previously got `true`. The same applies to the versioned CommonMark profiles,
+  which now resolve to themselves rather than to `COMMONMARK`. Replace such identity checks with a family
+  check, `Parser.PARSER_EMULATION_PROFILE.get(options).family == ParserEmulationProfile.COMMONMARK`, which
+  is correct for both the sentinel and every versioned CommonMark profile. All comparisons inside
+  flexmark-java were migrated accordingly.
+* **Breaking:** because `ListOptions` equality includes the emulation profile, a default `ListOptions`
+  instance no longer equals `ParserEmulationProfile.COMMONMARK.getOptions()`. It now equals
+  `ParserEmulationProfile.COMMONMARK_LATEST.getOptions()`.
+* **Breaking:** applying a CommonMark profile now writes all list options into the data holder, as the
+  other profile families already did. A list option set before applying a CommonMark profile is therefore
+  overwritten by the profile. Set such options after applying the profile.
+* Note: `COMMONMARK_LATEST` is a static field rather than an enum constant, because Java enum constants
+  cannot alias an existing constant and all profile comparisons are identity based. It is therefore not
+  returned by `ParserEmulationProfile.values()`, not resolvable through `valueOf("COMMONMARK_LATEST")`,
+  and not usable as a `switch` label. Its `name()` returns the concrete version it aliases, so serialized
+  configuration records an explicit version instead of a moving target.
+
+### Changes
+
 * Add: `ParserEmulationProfile.COMMONMARK_LATEST`, an alias for the newest CommonMark specification
   version that this release actually implements. It is the new default of
   `Parser.PARSER_EMULATION_PROFILE`. It will be advanced only when the full specification test of the
