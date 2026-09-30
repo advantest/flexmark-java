@@ -13,14 +13,10 @@ final public class FullOrigSpec029CoreTest extends OrigSpecCoreTest {
     public FullOrigSpec029CoreTest() {
         super(OPTIONS);
     }
-    
+
     @Override
     @NotNull
     protected ResourceLocation getSpecResourceLocation() {
-        // FIX: implement 0.29 spec and enable test. Final zero-failures gate: enable only when 0.29 is fully
-        // implemented. Until then per-example coverage is ComboOrigSpec029CoreTest with the known failures
-        // baseline in spec.0.29.known-failures.txt.
-        //return RESOURCE_LOCATION;
-        return ResourceLocation.NULL;
+        return RESOURCE_LOCATION;
     }
 }
