@@ -17,7 +17,7 @@ the analysis was written. Measured failure counts are unchanged and remain valid
 | 1 | Proceed **one CommonMark version at a time**. Task 0 first, then Task A and B for 0.29 only. Versions above 0.29 are planned after 0.29 is green. Completing 0.26 example coverage is a separate task. |
 | 2 | **One branch** (`common-mark-updates`) with a **git tag per milestone**, rather than stacked branches. |
 | 3 | Keep the existing `spec.txt` / `FullOrigSpec*` test convention. `spec.json` may be adopted later only if failure diagnostics prove painful. |
-| 4 | Known-failures **baseline** for not yet implemented examples, so CI stays green and the count can only shrink. |
+| 4 | Known-failures **baseline** for not yet implemented examples, so CI stays green and the count can only shrink. Retired after B29: the baseline reached zero and was deleted. |
 | 5 | **One flag per breaking change**, in the style of the existing `Parser` `DataKey` options, so every profile stays exactly reconstructible. |
 | 6 | Commit first, review later. Treat the branch as one or more pull requests. |
 | 7 | Confirm each decision by test before implementing it. If a decision turns out to be wrong, stop and ask. |
@@ -82,9 +82,9 @@ exactly the shrink-only ratchet of decision 4, so no new machinery was written.
 Design points:
 
 - The upstream `spec.0.29.txt` stays pristine. `FAIL` is injected into the test data, not into the file.
-- The baseline lives in `flexmark-core-test/src/test/resources/spec.0.29.known-failures.txt`, keyed by
+- (Retired after B29, historical.) The baseline lived in `spec.0.29.known-failures.txt` of `flexmark-core-test`, keyed by
   the spec's global example number, with the rule that entries may only be removed.
-- `FullOrigSpec029CoreTest` deliberately **stays disabled**. It is the final zero-failures gate, enabled
+- `FullOrigSpec029CoreTest` was deliberately **disabled**. It was the final zero-failures gate, enabled
   when the baseline is empty.
 
 Measured end state: **20 of 649 examples fail**, matching the analysis. Proven, not assumed: empty

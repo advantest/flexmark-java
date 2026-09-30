@@ -131,8 +131,10 @@ defaults to the pre-0.29 behaviour. The resolved value of `Parser.PARSER_EMULATI
 
 * **Breaking:** `ParserEmulationProfile.COMMONMARK_LATEST` now resolves to `COMMONMARK_0_29`, previously
   `COMMONMARK_0_28`. Code comparing against it, or relying on the default of
-  `Parser.PARSER_EMULATION_PROFILE`, now sees `COMMONMARK_0_29`. Code which needs the previous
-  specification version should use `ParserEmulationProfile.COMMONMARK_0_28` explicitly. The default of
+  `Parser.PARSER_EMULATION_PROFILE`, now sees `COMMONMARK_0_29`. Code which applies `COMMONMARK_LATEST` as a
+  profile, for example with `getProfileOptions()` or `getOptions()`, now gets all CommonMark 0.29 parsing
+  behaviours. Code which needs the previous specification version should use
+  `ParserEmulationProfile.COMMONMARK_0_28` explicitly. The default of
   the individual parser options is not advanced, the 0.29 behaviour is enabled only by applying
   `COMMONMARK_0_29`, so parsing is unchanged unless that profile is applied.
 * **Breaking:** the default of `Parser.PARSER_EMULATION_PROFILE` is now `COMMONMARK_LATEST`, which
