@@ -487,6 +487,8 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                 dataHolder.set(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES, true);
                 dataHolder.set(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES, true);
                 dataHolder.set(Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION, true);
+                dataHolder.set(Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES, true);
+                dataHolder.set(Parser.LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET, true);
             }
         }
 

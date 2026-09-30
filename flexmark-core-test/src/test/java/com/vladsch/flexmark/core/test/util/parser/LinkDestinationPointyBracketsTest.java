@@ -1,6 +1,7 @@
 package com.vladsch.flexmark.core.test.util.parser;
 
 import com.vladsch.flexmark.ast.Link;
+import com.vladsch.flexmark.formatter.Formatter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
@@ -24,7 +25,7 @@ public class LinkDestinationPointyBracketsTest {
     };
 
     private static String render(ParserEmulationProfile profile, String markdown) {
-        DataHolder options = profile.getProfileOptions().toImmutable();
+        DataHolder options = profile.getProfileOptions().toMutable().set(HtmlRenderer.PERCENT_ENCODE_URLS, true).toImmutable();
         return HtmlRenderer.builder(options).build().render(Parser.builder(options).build().parse(markdown));
     }
 
@@ -64,7 +65,7 @@ public class LinkDestinationPointyBracketsTest {
 
     @Test
     public void escapedClosingPointyBracketBefore029() {
-        assertPre029("<p><a href=\"foo\\\">link</a></p>\n", "[link](<foo\\>)\n");
+        assertPre029("<p><a href=\"foo%5C\">link</a></p>\n", "[link](<foo\\>)\n");
     }
 
     @Test
@@ -74,7 +75,7 @@ public class LinkDestinationPointyBracketsTest {
 
     @Test
     public void bareDestinationMayStartWithPointyBracketBefore029() {
-        assertPre029("<p><a href=\"&lt;b\">a</a>c\n[a](&lt;b)c&gt;\n[a](<b>c)</p>\n", "[a](<b)c\n[a](<b)c>\n[a](<b>c)\n");
+        assertPre029("<p><a href=\"%3Cb\">a</a>c\n[a](&lt;b)c&gt;\n[a](<b>c)</p>\n", "[a](<b)c\n[a](<b)c>\n[a](<b>c)\n");
     }
 
     @Test
@@ -98,15 +99,14 @@ public class LinkDestinationPointyBracketsTest {
         assertEquals(12, link.getEndOffset());
 
         assertEquals("<", link.getUrlOpeningMarker().toString());
-        assertEquals(5, link.getUrlOpeningMarker().getStartOffset());
+        assertEquals(6, link.getUrlOpeningMarker().getStartOffset());
         assertEquals("b c", link.getUrl().toString());
-        assertEquals(6, link.getUrl().getStartOffset());
-        assertEquals(9, link.getUrl().getEndOffset());
+        assertEquals(7, link.getUrl().getStartOffset());
+        assertEquals(10, link.getUrl().getEndOffset());
         assertEquals(">", link.getUrlClosingMarker().toString());
-        assertEquals(9, link.getUrlClosingMarker().getStartOffset());
+        assertEquals(10, link.getUrlClosingMarker().getStartOffset());
 
         assertSame(document.getChars().getBaseSequence(), link.getUrl().getBaseSequence());
         assertEquals("b c", markdown.substring(link.getUrl().getStartOffset(), link.getUrl().getEndOffset()));
     }
 }
-

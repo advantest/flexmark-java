@@ -121,6 +121,19 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION = new DataKey<>("EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION", false);
 
     /**
+     * LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * a link destination in pointy brackets may contain spaces and tabs but no line breaks or unescaped &lt; or &gt;,
+     * an escaped &gt; does not close it. Takes precedence over {@link #SPACE_IN_LINK_URLS} for destinations in pointy brackets
+     */
+    final public static DataKey<Boolean> LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES = new DataKey<>("LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES", false);
+
+    /**
+     * LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * a link destination which is not in pointy brackets may not start with &lt;
+     */
+    final public static DataKey<Boolean> LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET = new DataKey<>("LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET", false);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);

@@ -15,17 +15,9 @@
 # The clusters are the 0.29 changes that cause them, taken from the CommonMark changelog
 # (https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt, section [0.29]).
 
-# --- Cluster 4: link destinations in pointy brackets (spec issues #503, #538, #473, #562)
-# Spaces are allowed again inside <...>, reverting a 0.24 change. A destination may not begin with <
-# unless it is inside <...>.
-486
-490
-491
-
 # --- Cluster 5: link reference definitions (spec issues #454, #395, #469)
 # Setext heading after reference link definitions; a definition whose reference is never used; a space
 # is required before the title.
-164
 170
 184
 185

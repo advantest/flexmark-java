@@ -1184,6 +1184,8 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
         BasedSequence res = match(myParsing.LINK_DESTINATION_ANGLES);
         if (res != null) {
             return res;
+        } else if (options.linkDestinationNotStartingWithPointyBracket && peek() == '<') {
+            return null;
         } else {
             if (linkDestinationParser != null) {
                 BasedSequence match = linkDestinationParser.parseLinkDestination(input, index);

@@ -108,6 +108,9 @@ public class Parsing {
     final private static Pattern ST_LINK_DESTINATION_ANGLES_SPC = Pattern.compile("^(?:[<](?:[^<> \\t\\n\\\\\\x00]" + '|' + ST_ESCAPED_CHAR + '|' + "\\\\| (?![\"']))*[>])");
     final private static Pattern ST_LINK_DESTINATION_ANGLES_NO_SPC = Pattern.compile("^(?:[<](?:[^<> \\t\\n\\\\\\x00]" + '|' + ST_ESCAPED_CHAR + '|' + "\\\\)*[>])");
 
+    // possessive so that an escaped > is not backtracked into a backslash followed by the closing >
+    final private static Pattern ST_LINK_DESTINATION_ANGLES_029 = Pattern.compile("^(?:[<](?:[^<>\\n\\r\\\\\\x00]" + '|' + ST_ESCAPED_CHAR + '|' + "\\\\)*+[>])");
+
     final public Pattern ESCAPABLE = ST_ESCAPABLE;
     final public Pattern TICKS = ST_TICKS;
     final public Pattern TICKS_HERE = ST_TICKS_HERE;
@@ -400,7 +403,7 @@ public class Parsing {
         }
 
         // init flag based patterns
-        this.LINK_DESTINATION_ANGLES = spaceInLinkUrl ? ST_LINK_DESTINATION_ANGLES_SPC : ST_LINK_DESTINATION_ANGLES_NO_SPC;
+        this.LINK_DESTINATION_ANGLES = Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES.get(options) ? ST_LINK_DESTINATION_ANGLES_029 : spaceInLinkUrl ? ST_LINK_DESTINATION_ANGLES_SPC : ST_LINK_DESTINATION_ANGLES_NO_SPC;
         this.ENTITY_HERE = intellijDummyIdentifier ? ST_ENTITY_HERE_IDI : ST_ENTITY_HERE_NO_IDI;
 
         // init dynamic patterns
