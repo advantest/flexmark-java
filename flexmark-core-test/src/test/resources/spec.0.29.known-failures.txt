@@ -1,8 +1,6 @@
 # Known failures of flexmark-java against the unmodified CommonMark spec 0.29 (spec.0.29.txt).
 #
 # One entry per line: the example number as in the spec ("Example N"), then a comment.
-# The comments and the grouping into clusters are a provisional reading of the example sources, not
-# verified root causes. Confirm the cause before implementing a fix.
 # Listed examples are run with the FAIL option by ComboOrigSpec029CoreTest: they pass while they still
 # render incorrectly and FAIL as soon as they render correctly.
 #
@@ -11,36 +9,53 @@
 # enable FullOrigSpec029CoreTest and delete this file together with the FAIL handling in the test.
 #
 # A failing test is named "<Section>: <n-th example within that section>", not by the global number used
-# here. The entries below are grouped by section to make that mapping easy. A listed example whose test
+# here. The entries below are grouped by cluster to make that mapping easy. A listed example whose test
 # reports anything other than a ComparisonFailure has started to crash rather than to mis-render.
+#
+# The clusters are the 0.29 changes that cause them, taken from the CommonMark changelog
+# (https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt, section [0.29]).
+# Note that example 108 sits in the "Fenced code blocks" section of the spec but is a code span case.
 
-# --- Code spans: stripping of one leading/trailing space, line endings converted to spaces
-331  # code span with inner backticks and padding spaces
-332  # single leading space is kept
-334  # space-only code spans
-335  # line ending inside code span becomes a space
-336  # trailing space before line ending
-337  # line ending inside code span becomes a space
-637  # line ending inside code span becomes a space
+# --- Cluster 1: info strings of fenced code blocks (spec issue #119)
+# Backticks are disallowed in info strings after BACKTICK fences only. Both backticks and tildes are
+# allowed in info strings after TILDE fences.
+116  # backticks in the info string of a tilde fence
 
-# --- Fenced code blocks: info string of backtick fences
-108  # backtick fence info string may not contain backticks
-116  # backtick in info string of tilde fence
-# --- Link reference definitions: title/destination on separate lines, setext heading vs. definition
-164  # destination and title on their own lines
-170  # <destination> followed directly by text
-184  # definition inside paragraph before setext underline
-185  # definition followed by setext underline
+# --- Cluster 2: code spans (spec issues #532, #569, and the normalization simplification)
+# Line endings inside a code span are converted to spaces. If the result both begins and ends with a
+# space but does not consist entirely of spaces, one space is stripped from each end. Interior space is
+# never collapsed.
+108  # code span consisting only of spaces: the space must be kept
+331
+332
+334
+335
+336
+337
+637
 
-# --- Lists: indentation rules of list items
-282  # sublist indentation up to 3 spaces
-283  # indented ordered list items
-
-# --- Emphasis: rule of 3 for runs of *
+# --- Cluster 3: emphasis, the rule of three (spec issue #528)
+# Interior delimiter runs match if the lengths of BOTH runs are multiples of 3.
 415  # foo***bar***baz
 416  # foo******bar*********baz
 
-# --- Links: <...> link destinations
-486  # spaces in <destination>
-490  # backslash-escaped > in <destination>
-491  # unmatched < in destination
+# --- Cluster 4: link destinations in pointy brackets (spec issues #503, #538, #473, #562)
+# Spaces are allowed again inside <...>, reverting a 0.24 change. A destination may not begin with <
+# unless it is inside <...>.
+486
+490
+491
+
+# --- Cluster 5: link reference definitions (spec issues #454, #395, #469)
+# Setext heading after reference link definitions; a definition whose reference is never used; a space
+# is required before the title.
+164
+170
+184
+185
+
+# --- Cluster 6: list items indented 4 or more spaces (spec issue #497)
+# Such lines are continuation lines when not blank, and indented code blocks otherwise. Also drops the
+# vestigial "not separated by more than one blank line" restriction (#543).
+282
+283

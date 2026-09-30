@@ -98,7 +98,41 @@ Deferred, not part of Task A:
 - 0.26 example coverage (`FullOrigSpec026CoreTest`) — separate task.
 - `spec.0.31.2.txt` and the 0.30 / 0.31.2 test classes — added with their own version tasks.
 
-## Task B29 — CommonMark 0.29 implementation (next, after Task A)
+## Task B29 — CommonMark 0.29 implementation, split into six clusters
+
+Each cluster is one 0.29 change, taken from the CommonMark changelog, section `[0.29]`
+(<https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt>). The clusters are
+independent except where noted, and each ends with an empty section of
+`spec.0.29.known-failures.txt`, a green full suite, a review and a commit.
+
+Ordered smallest and most isolated first, so the delegation loop is validated on a cheap cluster:
+
+| #     | Cluster                            | Examples                  | 0.29 change | Risk |
+| ----- | ---------------------------------- | ------------------------- | ----------- | ---- |
+| B29.1 | Info strings of fenced code blocks | 116                       | Backticks disallowed in info strings after **backtick** fences only; both backticks and tildes allowed after **tilde** fences (#119). Info string is trimmed of all whitespace, not only spaces (#505). | low |
+| B29.2 | Code spans                         | 108, 331–337, 637         | Line endings become spaces; strip one space from each end only if the content is **not** entirely spaces (#569); never collapse interior space (#532). | medium |
+| B29.3 | Emphasis, rule of three            | 415, 416                  | Interior delimiter runs match if **both** run lengths are multiples of 3 (#528). | medium |
+| B29.4 | Link destinations in `<...>`       | 486, 490, 491             | Spaces allowed again inside `<...>`, reverting 0.24 (#503); a destination may not begin with `<` unless inside `<...>` (#538). | medium |
+| B29.5 | Link reference definitions         | 164, 170, 184, 185        | Setext heading after definitions (#395); unused definition (#454); space required before the title (#469). | medium |
+| B29.6 | List items indented 4+ spaces      | 282, 283                  | Such lines are continuation lines when not blank, indented code otherwise (#497); drops the vestigial "not separated by more than one blank line" restriction (#543). | **high** |
+
+Clusters 4 and 5 both touch link destination parsing, so 4 runs before 5.
+
+Correction found while confirming the causes: example 108 appears in the *Fenced code blocks* section of
+the spec but is a **code span** case, so it belongs to cluster 2, not cluster 1. The provisional cluster
+labels written during task A were wrong here; the baseline file now carries the confirmed causes with
+their spec issue numbers.
+
+### Division of labour
+
+- **Orchestrator**: spec interpretation and root-cause confirmation, cluster definition and ordering,
+  decision-7 calls (stop and ask when a recorded decision turns out to be wrong), plan and `VERSION.md`,
+  tagging, and all questions to the user.
+- **Implementation sub-agent** (Claude Sonnet 5.5), one per cluster: red tests first, implement, run the
+  full suite, drive its own review sub-agent for at most 2 rounds, apply the improvements, write the
+  review Markdown, and commit each concern separately.
+
+### Old, superseded notes
 
 Branch `feat/commonmark-0.29`, tagged on completion. Versions above 0.29 are planned only once 0.29 is
 green.
