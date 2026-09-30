@@ -2,6 +2,7 @@ package com.vladsch.flexmark.ext.gfm.strikethrough;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.test.util.FlexmarkSpecExampleRenderer;
 import com.vladsch.flexmark.test.util.RenderingTestCase;
 import com.vladsch.flexmark.test.util.SpecExampleRenderer;
@@ -61,7 +62,8 @@ public class StrikethroughTest extends RenderingTestCase {
 
     @Test
     public void threeInnerThree() {
-        assertRendering("~~~foo~~~", "<p>~<del>foo</del>~</p>\n");
+        DataHolder pre029 = new MutableDataSet().setFrom(OPTIONS).setFrom(ParserEmulationProfile.COMMONMARK_0_28).toImmutable();
+        assertEquals("<p>~<del>foo</del>~</p>\n", HtmlRenderer.builder(pre029).build().render(Parser.builder(pre029).build().parse("~~~foo~~~")));
     }
 
     @Test

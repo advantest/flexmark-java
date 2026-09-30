@@ -3,6 +3,7 @@ package com.vladsch.flexmark.ext.gfm.strikethrough;
 import com.vladsch.flexmark.core.test.util.RendererSpecTest;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
@@ -25,6 +26,7 @@ public class ComboStrikethroughSubscriptSpecTest extends RendererSpecTest {
 
     final private static Map<String, DataHolder> optionsMap = new HashMap<>();
     static {
+        optionsMap.put("commonmark-0.28", new MutableDataSet().setFrom(ParserEmulationProfile.COMMONMARK_0_28));
         optionsMap.put("style-strikethrough", new MutableDataSet().set(StrikethroughSubscriptExtension.STRIKETHROUGH_STYLE_HTML_OPEN, "<span class=\"text-strike\">").set(StrikethroughSubscriptExtension.STRIKETHROUGH_STYLE_HTML_CLOSE, "</span>"));
         optionsMap.put("style-subscript", new MutableDataSet().set(StrikethroughSubscriptExtension.SUBSCRIPT_STYLE_HTML_OPEN, "<span class=\"text-sub\">").set(StrikethroughSubscriptExtension.SUBSCRIPT_STYLE_HTML_CLOSE, "</span>"));
     }

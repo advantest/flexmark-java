@@ -560,7 +560,7 @@ Converts :warning: to its emoji image
     continuously adding back ticks when at the end of word.</li>
   <li>Fix: references or links to <code>raw/master/*.png</code> showed as unresolved when on wiki home because
     only image links would handle the optional wiki prefix from home page for image files.</li>
-  <li>Fix: backspace at end of file after <code>#</code> did nothing.</li>
+  <li>Fix: backspace at end of file after <code>#   </code> did nothing.</li>
   <li>Fix: Header marker equalization was broken.</li>
   <li>Fix: CSS when task list item is first level, bullet sub-items mess up items</li>
   <li>Fix: when inserting list item above in a loose list, adds a blank line right after the
@@ -655,7 +655,7 @@ Converts :warning: to its emoji image
   <li>Fix: #315, NullPointerException with v2016.3 EAP (163.6110.12)</li>
   <li>Fix: Implement multi-line URL image links in flexmark-java</li>
   <li>Fix: #327, IntelliJ IDEA 2016.3 EAP API change incompatibility.</li>
-  <li>Fix: #328, wiki link can use <code></code>, <code>-</code>, <code>+</code>, <code>&lt;</code> or <code>&gt;</code> to match a <code>-</code> in the file name. Added
+  <li>Fix: #328, wiki link can use <code> </code>, <code>-</code>, <code>+</code>, <code>&lt;</code> or <code>&gt;</code> to match a <code>-</code> in the file name. Added
     stub index for links to make file reference search efficient.</li>
   <li>Change: document icons to match 2016.3 style</li>
 </ul>

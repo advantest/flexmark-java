@@ -3,6 +3,7 @@ package com.vladsch.flexmark.ext.gfm.strikethrough;
 import com.vladsch.flexmark.core.test.util.RendererSpecTest;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.test.util.spec.ResourceLocation;
 import com.vladsch.flexmark.test.util.spec.SpecExample;
 import com.vladsch.flexmark.util.data.DataHolder;
@@ -25,6 +26,7 @@ public class ComboSubscriptSpecTest extends RendererSpecTest {
 
     final private static Map<String, DataHolder> optionsMap = new HashMap<>();
     static {
+        optionsMap.put("commonmark-0.28", new MutableDataSet().setFrom(ParserEmulationProfile.COMMONMARK_0_28));
         optionsMap.put("style-subscript", new MutableDataSet().set(SubscriptExtension.SUBSCRIPT_STYLE_HTML_OPEN, "<span class=\"text-sub\">").set(SubscriptExtension.SUBSCRIPT_STYLE_HTML_CLOSE, "</span>"));
     }
     public ComboSubscriptSpecTest(@NotNull SpecExample example) {

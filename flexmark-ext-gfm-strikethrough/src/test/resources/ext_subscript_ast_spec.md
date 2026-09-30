@@ -72,7 +72,7 @@ Document[0, 5]
 ````````````````````````````````
 
 
-```````````````````````````````` example Subscript Extension: 6
+```````````````````````````````` example(Subscript Extension: 6) options(commonmark-0.28)
 ~~~foo~~~
 .
 <p><sub><sub><sub>foo</sub></sub></sub></p>

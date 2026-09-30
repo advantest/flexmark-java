@@ -2236,7 +2236,7 @@ in item
         <tr><th> Element       </th><th> Abbreviation    </th><th> Expansion                                               </th></tr>
       </thead>
       <tbody>
-        <tr><td> Abbreviation  </td><td> <code>.abbreviation</code> </td><td> <code>*[]:</code>                                                 </td></tr>
+        <tr><td> Abbreviation  </td><td> <code>.abbreviation</code> </td><td> <code>*[]: </code>                                                 </td></tr>
         <tr><td> Code fence    </td><td> <code>.codefence</code>    </td><td> ``` ... ```                                       </td></tr>
         <tr><td> Explicit link </td><td> <code>.link</code>         </td><td> <code>[]()</code>                                                  </td></tr>
       </tbody>
@@ -3364,7 +3364,7 @@ in item
         <tr md-pos="87-180"><th md-pos="88-103"> Element       </th><th md-pos="104-121"> Abbreviation    </th><th md-pos="122-179"> Expansion                                               </th></tr>
       </thead>
       <tbody>
-        <tr md-pos="279-372"><td md-pos="280-295"> Abbreviation  </td><td md-pos="296-313"> <code md-pos="298-311">.abbreviation</code> </td><td md-pos="314-371"> <code md-pos="316-321">*[]:</code>                                                 </td></tr>
+        <tr md-pos="279-372"><td md-pos="280-295"> Abbreviation  </td><td md-pos="296-313"> <code md-pos="298-311">.abbreviation</code> </td><td md-pos="314-371"> <code md-pos="316-321">*[]: </code>                                                 </td></tr>
         <tr md-pos="375-468"><td md-pos="376-391"> Code fence    </td><td md-pos="392-409"> <code md-pos="394-404">.codefence</code>    </td><td md-pos="410-467"> ``` ... ```                                       </td></tr>
         <tr md-pos="471-564"><td md-pos="472-487"> Explicit link </td><td md-pos="488-505"> <code md-pos="490-495">.link</code>         </td><td md-pos="506-563"> <code md-pos="508-512">[]()</code>                                                  </td></tr>
       </tbody>

@@ -71,7 +71,7 @@ Document[0, 5]
 ````````````````````````````````
 
 
-```````````````````````````````` example Gfm Strikethrough Extension: 6
+```````````````````````````````` example(Gfm Strikethrough Extension: 6) options(commonmark-0.28)
 ~~~foo~~~
 .
 <p><del><sub>foo</sub></del></p>
@@ -266,7 +266,7 @@ Document[0, 5]
 ````````````````````````````````
 
 
-```````````````````````````````` example Subscript Extension: 6
+```````````````````````````````` example(Subscript Extension: 6) options(commonmark-0.28)
 ~~~foo~~~
 .
 <p><del><sub>foo</sub></del></p>

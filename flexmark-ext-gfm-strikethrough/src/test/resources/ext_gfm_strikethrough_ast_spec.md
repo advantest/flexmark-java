@@ -70,7 +70,7 @@ Document[0, 5]
 ````````````````````````````````
 
 
-```````````````````````````````` example Gfm Strikethrough Extension: 6
+```````````````````````````````` example(Gfm Strikethrough Extension: 6) options(commonmark-0.28)
 ~~~foo~~~
 .
 <p>~<del>foo</del>~</p>

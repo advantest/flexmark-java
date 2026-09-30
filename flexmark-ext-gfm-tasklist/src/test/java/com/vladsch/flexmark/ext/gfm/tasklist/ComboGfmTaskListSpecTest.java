@@ -25,6 +25,7 @@ public class ComboGfmTaskListSpecTest extends RendererSpecTest {
 
     final private static Map<String, DataHolder> optionsMap = new HashMap<>();
     static {
+        optionsMap.put("item-at-code-indent", new MutableDataSet().set(Parser.LISTS_NO_ITEM_AT_CODE_INDENT, false));
         optionsMap.put("no-suffix-content", new MutableDataSet().set(Parser.LISTS_ITEM_CONTENT_AFTER_SUFFIX, true));
         optionsMap.put("marker-space", new MutableDataSet().set(Parser.LISTS_ITEM_MARKER_SPACE, true));
         optionsMap.put("src-pos-lines", new MutableDataSet().set(HtmlRenderer.SOURCE_POSITION_PARAGRAPH_LINES, true));

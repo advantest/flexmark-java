@@ -1301,7 +1301,7 @@ Document[0, 152]
 
 Treat content as starting after the suffix.
 
-```````````````````````````````` example(Source Position Attribute: 7) options(no-suffix-content)
+```````````````````````````````` example(Source Position Attribute: 7) options(no-suffix-content, item-at-code-indent)
 * [ ] item
   * [ ] item 2
     * [ ] item 2
