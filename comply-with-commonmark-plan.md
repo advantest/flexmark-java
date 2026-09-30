@@ -29,7 +29,8 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
 ## Status
 
 - **Task 0 — done and reviewed.** Tag `commonmark-profile-machinery-fixed`. Full test suite green.
-- **Task A — next**, scoped to CommonMark 0.29 only.
+- **Task A — done and reviewed.** Tag `commonmark-0.29-spec-tests`. Full test suite green.
+- **Task B29 — next**: the actual CommonMark 0.29 implementation.
 
 ---
 
@@ -60,20 +61,37 @@ Confirmed by evidence, not assumed:
   comparison while the CommonMark half uses the **family**. Using the family for both would have changed
   `MULTI_MARKDOWN` and `PEGDOWN*` behaviour, which Task 0 must not do.
 
-## Task A — Spec files, harness, red tests for CommonMark 0.29 only
+## Task A — Per-example tests for CommonMark 0.29 only (DONE, tests only)
 
-Branch `feat/commonmark-spec-test-harness`. **Scope: CommonMark 0.29 only.** Completing the example
-coverage for 0.26 is a separate task. Tasks for versions above 0.29 are added later, one version at a
-time.
+**Scope: CommonMark 0.29 only.** Completing the example coverage for 0.26 is a separate task. Tasks for
+versions above 0.29 are added later, one version at a time.
 
-| # | Commit                                                                  | Content |
-| - | ----------------------------------------------------------------------- | ------- |
-| 1 | `test(specs): add spec conformance harness`                               | Productionises the throwaway harness (analysis §8). Per-example pass/fail against a spec resource. Pitfalls: `→`(U+2192)→tab, `PERCENT_ENCODE_URLS=true`. |
-| 2 | `test(core): enable 0.29 spec test with known-failures baseline`          | Removes the `ResourceLocation.NULL` stub from `FullOrigSpec029CoreTest`. `spec.0.29.txt` already exists in `flexmark-test-specs`; no new spec resource needed. |
+| # | Commit                                                                        | Content |
+| - | ------------------------------------------------------------------------------ | ------- |
+| 1 | `test(core): cover CommonMark 0.29 spec per example with known-failures baseline` | `ComboOrigSpec029CoreTest`: one test per example of the unmodified `spec.0.29.txt` (649 examples). |
+| 2 | `test(core): harden the CommonMark 0.29 known-failures baseline`                 | Review round 1 improvements; review in `review-taskA-spec029-tests.md`. |
 
-Expected end state (measured, from the analysis): **0.29 → 20 failures**, recorded as a shrink-only
-baseline so CI stays green while the count can only decrease. The exact failing example numbers are
-produced *by the harness*, not assumed.
+The separately planned "spec conformance harness" commit was dropped. flexmark already has the needed
+mechanism: the per-example `FAIL` option makes `RenderingTestCase` expect a `ComparisonFailure`, so a
+listed example passes while it renders incorrectly and **fails as soon as it renders correctly**. That is
+exactly the shrink-only ratchet of decision 4, so no new machinery was written.
+
+Design points:
+
+- The upstream `spec.0.29.txt` stays pristine. `FAIL` is injected into the test data, not into the file.
+- The baseline lives in `flexmark-core-test/src/test/resources/spec.0.29.known-failures.txt`, keyed by
+  the spec's global example number, with the rule that entries may only be removed.
+- `FullOrigSpec029CoreTest` deliberately **stays disabled**. It is the final zero-failures gate, enabled
+  when the baseline is empty.
+
+Measured end state: **20 of 649 examples fail**, matching the analysis. Proven, not assumed: empty
+baseline → 20 failures; full baseline → 0 failures; removing a single entry → exactly that one failure.
+Because a wrongly aimed entry would itself trip the ratchet, the run with 0 failures proves all 20
+entries land exactly on the 20 failing examples.
+
+The 20 failures by section: code spans (7), link reference definitions (4), links (3), fenced code
+blocks (2), lists (2), emphasis (2). The cluster comments in the baseline file are a provisional reading
+of the example sources, **not** verified root causes — confirm the cause before fixing.
 
 Deferred, not part of Task A:
 
