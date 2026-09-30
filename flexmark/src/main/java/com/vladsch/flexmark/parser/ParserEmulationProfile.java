@@ -482,6 +482,9 @@ public enum ParserEmulationProfile implements MutableDataSetter {
             } else if (this == COMMONMARK_0_28) {
                 // set 0.28 parsing rule options
                 // IMPORTANT: 0.28/0.29 differences
+            } else if (this == COMMONMARK_0_29) {
+                // set 0.29 parsing rule options
+                dataHolder.set(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES, true);
             }
         }
 

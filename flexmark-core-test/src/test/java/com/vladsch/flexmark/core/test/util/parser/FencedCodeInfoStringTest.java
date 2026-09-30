@@ -7,6 +7,7 @@ import com.vladsch.flexmark.util.data.DataHolder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * CommonMark 0.29 (#119, #505): info strings of backtick fences cannot contain backticks, info strings of
@@ -52,6 +53,16 @@ public class FencedCodeInfoStringTest {
     public void infoStringIsTrimmedOfTabsIn029() {
         assertEquals("<pre><code class=\"language-aa\">foo\n</code></pre>\n",
                 render(ParserEmulationProfile.COMMONMARK_0_29, "```\taa\t \nfoo\n```\n"));
+    }
+
+    @Test
+    public void optionIsOffByDefaultAndOnlyEnabledByThe029Profile() {
+        assertFalse(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(null));
+        for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
+            boolean expected = profile == ParserEmulationProfile.COMMONMARK_0_29;
+            assertEquals("profile " + profile, expected,
+                    Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(profile.getProfileOptions()));
+        }
     }
 }
 

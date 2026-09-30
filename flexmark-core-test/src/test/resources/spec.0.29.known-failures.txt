@@ -16,11 +16,6 @@
 # (https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt, section [0.29]).
 # Note that example 108 sits in the "Fenced code blocks" section of the spec but is a code span case.
 
-# --- Cluster 1: info strings of fenced code blocks (spec issue #119)
-# Backticks are disallowed in info strings after BACKTICK fences only. Both backticks and tildes are
-# allowed in info strings after TILDE fences.
-116  # backticks in the info string of a tilde fence
-
 # --- Cluster 2: code spans (spec issues #532, #569, and the normalization simplification)
 # Line endings inside a code span are converted to spaces. If the result both begins and ends with a
 # space but does not consist entirely of spaces, one space is stripped from each end. Interior space is

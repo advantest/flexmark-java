@@ -101,6 +101,12 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> STRONG_WRAPS_EMPHASIS = new DataKey<>("STRONG_WRAPS_EMPHASIS", false);
 
     /**
+     * FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * the info string of a tilde code fence may contain backticks and tildes, backtick fences still disallow backticks
+     */
+    final public static DataKey<Boolean> FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES = new DataKey<>("FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES", false);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);

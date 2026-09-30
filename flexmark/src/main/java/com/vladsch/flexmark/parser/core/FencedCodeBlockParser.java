@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 public class FencedCodeBlockParser extends AbstractBlockParser {
 
     final private static Pattern OPENING_FENCE = Pattern.compile("^`{3,}(?!.*`)|^~{3,}(?!.*~)");
+    final private static Pattern OPENING_FENCE_TILDE_INFO_ANY = Pattern.compile("^`{3,}(?!.*`)|^~{3,}");
     final private static Pattern CLOSING_FENCE = Pattern.compile("^(?:`{3,}|~{3,})(?=[ \t]*$)");
 
     final private FencedCodeBlock block = new FencedCodeBlock();
@@ -177,8 +178,11 @@ public class FencedCodeBlockParser extends AbstractBlockParser {
     }
 
     private static class BlockFactory extends AbstractBlockParserFactory {
+        final private Pattern openingFence;
+
         private BlockFactory(DataHolder options) {
             super(options);
+            openingFence = Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(options) ? OPENING_FENCE_TILDE_INFO_ANY : OPENING_FENCE;
         }
 
         @Override
@@ -188,7 +192,7 @@ public class FencedCodeBlockParser extends AbstractBlockParser {
             Matcher matcher;
             if (state.getIndent() < 4) {
                 BasedSequence trySequence = line.subSequence(nextNonSpace, line.length());
-                if ((matcher = OPENING_FENCE.matcher(trySequence)).find()) {
+                if ((matcher = openingFence.matcher(trySequence)).find()) {
                     int fenceLength = matcher.group(0).length();
                     char fenceChar = matcher.group(0).charAt(0);
                     FencedCodeBlockParser blockParser = new FencedCodeBlockParser(state.getProperties(), fenceChar, fenceLength, state.getIndent(), nextNonSpace);
