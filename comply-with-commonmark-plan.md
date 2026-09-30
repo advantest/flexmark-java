@@ -39,7 +39,10 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
 - **Task B30 — done.** All clusters done (B30.1 was a 0.29 leftover, fixed earlier), plus two latent gaps no spec
   example covers: HTML declarations (#620) and VT/FF in tags (#618). `COMMONMARK_LATEST` is now
   `COMMONMARK_0_30`, 0.30 is the **default**, `spec.txt` tracks 0.30 and the known-failures baseline is retired.
-  Review: `review-B30.md`. Next: Task 0.31.2.
+  Review: `review-B30.md`.
+- **Task A312 — done (measurement only).** `spec.0.31.2.txt` added (652 examples, 2024-01-28), the gap under the
+  default configuration is **3 of 652** examples. The substantial work is in the **latent** gaps, not the failing
+  examples. Next: Task B312.
 
 ---
 
@@ -224,7 +227,8 @@ review sub-agent (max 2 rounds) with a `review-B30.*.md`, and the known-failures
 zero. Per the rule established at the end of B29, the **new behaviour becomes the `DataKey` default** and
 `COMMONMARK_0_29` and older profiles opt out of it in `ParserEmulationProfile`.
 
-Still to be created, as they do not exist yet:
+Created as part of this task (they did not exist before):
+
 
 - the `COMMONMARK_0_30` enum constant and its `setIn` / `getOptions` wiring,
 - `FullOrigSpec030CoreTest` (profile applied) and a default-options variant, registered in
@@ -241,18 +245,138 @@ fix because the formatter re-emitted syntax that no longer parsed.
 
 ## Open questions
 
-Two decisions are needed **before** Task B30 starts:
+Both questions that preceded Task B30 have been decided and implemented:
 
-1. **Implement the three latent gaps** (declarations not all-caps, hex entity length, VT/FF after tag
-   names)? No spec example forces them, so the shrink-only baseline cannot enforce them and they need
-   hand-written tests outside the pristine spec files. They are all small and all genuine
-   non-compliance.
-2. **Is the entity length fix (B30.1) a 0.29 leftover or 0.30 work?** It was mandated by 0.29 (#487) but
-   only 0.30 added an example that catches it. This decides whether it is gated by a `COMMONMARK_0_30`
-   option or treated as a plain bug fix that also corrects `COMMONMARK_0_29`.
+1. **The three latent gaps are implemented**, each with hand-written tests, because no spec example forces
+   them. This established the standing rule: where the spec's own examples do not cover a spec change, we
+   write our own tests — the goal is full compliance, not merely passing the supplied examples.
+2. **The entity length fix was a 0.29 leftover** and was treated as a plain bug fix rather than a gated
+   `COMMONMARK_0_30` option, so it also corrects `COMMONMARK_0_29` and the default configuration. Profiles
+   0.26 to 0.28 keep the old 8-digit limit, which their own spec versions mandate.
 
 Otherwise raise a question only if a recorded decision turns out to be contradicted by the code or the
 specification (decision 7).
+
+## Task A312 — Measure the CommonMark 0.31.2 gap (DONE, tests only)
+
+`spec.0.31.2.txt` is vendored pristine (652 examples, version `0.31.2`, date 2024-01-28, LF line endings).
+`ComboOrigSpec0312CoreTest` runs the **default** configuration against it with the usual shrink-only
+`spec.0.31.2.known-failures.txt` baseline and the `FAIL` ratchet.
+
+0.31.2 and 0.31.1 are packaging-only releases; all normative change comes from **0.31**. The changelog has
+exactly four normative items, and only two of them are covered by an example:
+
+| Changelog item                                     | Normative? | Example        |
+|----------------------------------------------------|------------|----------------|
+| Add symbols to Unicode punctuation                 | yes        | 354            |
+| Remove the restrictive limitation on inline comments | yes      | 625, 626       |
+| Remove `source` from the HTML block type 6 tag list | yes       | none — latent  |
+| Add `search` to the HTML block type 6 tag list      | yes       | none — latent  |
+
+Everything else in [0.31] is editorial: link and typo fixes, "compact" → "collapsed", the removal of "first"
+before "link label", and tooling entries. The Unicode whitespace definition was reworded but not changed,
+and flexmark's `UNICODE_WHITESPACE_CHAR` already matches it exactly.
+
+## Task B312 — CommonMark 0.31.2 implementation (planned)
+
+Only three examples fail, but **this is not a small task**: the punctuation cluster has by far the widest
+blast radius of any change in this whole effort, and the genuinely important defects are latent.
+
+| #      | Cluster                | Examples | Change | Classes | Risk |
+|--------|------------------------|----------|--------|---------|------|
+| B312.1 | HTML comment grammar   | 625, 626 | Comment text may contain `--`; `<!-->` and `<!--->` are complete empty comments. | `Parsing.ST_HTMLCOMMENT` | low |
+| B312.2 | Block tag list         | none     | `search` joins the type 6 tag list, `source` leaves it. | `Parser.HTML_BLOCK_TAGS`, `HtmlDeepParser.BLOCK_TAGS` | low |
+| B312.3 | Symbols are Unicode punctuation | 354 | Unicode `S*` (Sm, Sc, Sk, So) counts as punctuation for the emphasis flanking rules. | `Parsing.ST_PUNCTUATION*`, `InlineParserImpl.scanDelimiters` | **medium-high** |
+
+Order: B312.1 → B312.2 → B312.3. The first two are independent and cheap; B312.3 is last because it is the
+only one that can disturb every extension which processes delimiters.
+
+### Confirmed root causes
+
+- **B312.1** — `Parsing.ST_HTMLCOMMENT` is `<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->`, which forbids `--` inside
+  the text. Block-level comments (HTML block type 2) are **already correct**; only the inline rule is wrong.
+  `HTML_TAG` is built from this at `Parsing.java:482` and is **cached**, so the cache key must include the
+  new flag.
+- **B312.2** — `Parser.HTML_BLOCK_TAGS` (`Parser.java:208+`) still lists `source` and lacks `search`. Probed:
+  `<search>*foo*` is wrongly a paragraph, `<source>*foo*` is wrongly a raw HTML block. Note the list also
+  contains `math`, which **no** CommonMark version lists — a pre-existing deviation, out of scope here but
+  worth recording. `HtmlDeepParser.BLOCK_TAGS` is a second, independent hard-coded list with the same defect;
+  it only applies when `HTML_BLOCK_DEEP_PARSER` is enabled, which is off by default, but it must be fixed too.
+- **B312.3** — two independent defects, both needed:
+  1. `ST_PUNCTUATION`, `ST_PUNCTUATION_OPEN`, `ST_PUNCTUATION_CLOSE` and `ST_PUNCTUATION_ONLY` cover only
+     `\p{Pc}\p{Pd}\p{Pe}\p{Pf}\p{Pi}\p{Po}\p{Ps}` plus ASCII — the whole `S` group is missing.
+  2. `InlineParserImpl.scanDelimiters` derives the characters before and after a delimiter run from a single
+     UTF-16 `char`, so **supplementary code points are never classified correctly**. This is a latent
+     **0.30-and-earlier** bug as well: 217 supplementary `P*` code points are already misclassified today.
+
+Measured on JDK 21 (Unicode 15.0), flexmark misses roughly **7,978** code points that 0.31.2 treats as
+punctuation — 930 Sm, 56 Sc, 118 Sk and 2,731 So in the BMP, plus 3,926 supplementary. The spec's own
+examples detect only the BMP currency symbols, via example 354. Emoji (`a*😀*b`) and all mathematical and
+modifier symbols are undetected by the spec suite yet clearly in scope.
+
+### Latent gaps — no failing example, so the baseline cannot enforce them
+
+Each needs hand-written tests, per the standing rule.
+
+| Gap                                            | Evidence                                                                    | Belongs to |
+|------------------------------------------------|-----------------------------------------------------------------------------|------------|
+| `search` missing from the type 6 tag list       | `<search>*foo*` is a paragraph; must start a block and interrupt a paragraph | 0.31       |
+| `source` still in the type 6 tag list           | `<source>*foo*` becomes a raw HTML block; must not                           | 0.31       |
+| Supplementary code points misclassified         | `scanDelimiters` reads one `char`; 217 supplementary `P*` already wrong      | **0.30 too** |
+| Symbols outside the BMP currency set            | Sm/Sk/So untested by the spec suite; emoji and maths symbols affected        | 0.31       |
+| DEL (U+007F) not excluded from link destinations | `EXCLUDED_0_TO_SPACE` is `\u0000-\u0020`; `[a](b<DEL>c)` still links         | 0.30, **unconfirmed** |
+
+The DEL item is deliberately marked unconfirmed: the spec text excludes U+007F, but it was **not** verified
+that the reference implementations actually reject it. Confirm against commonmark.js before acting on it.
+
+### Method and open points
+
+Unchanged: TDD red first, one commit per concern, full suite green, a review sub-agent (max 2 rounds) with a
+`review-B312.md`, and the baseline shrinking to zero. New behaviour becomes the `DataKey` default and
+`COMMONMARK_0_30` and older opt out — note this means extending the existing opt-out condition to
+`this != COMMONMARK_0_31_2 && this != COMMONMARK_0_30` for the 0.30 keys.
+
+Proposed keys: `HTML_COMMENT_ANY_TEXT` (B312.1), `HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE` (B312.2),
+`UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` (B312.3), each defaulting to the 0.31.2 behaviour.
+
+Finally, as for 0.30: add `COMMONMARK_0_31_2` with its wiring, advance `COMMONMARK_LATEST` and `spec.txt`,
+add `FullOrigSpec0312CoreTest` and a default-options variant, retire the baseline and `ComboOrigSpec0312CoreTest`,
+update `VERSION.md`, and tag the milestone.
+
+Two points need a decision before B312.3 starts:
+
+1. **Is the supplementary-code-point fix gated or a plain bug fix?** It is wrong under 0.30 as well, so by the
+   precedent set for the entity length it should be an **ungated bug fix** that also corrects the older
+   profiles. Recommended.
+2. **Should `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` (the open/close variants) include symbols?** These are
+   a flexmark extension point beyond the spec, so the spec does not answer it.
+
+---
+
+## Follow-up tasks (not blocking any version milestone)
+
+### Task F1 — verify the exactness of the Unicode case folding (open)
+
+B30.3 matches link labels with `Escaping.caseFold`, which lower-cases each code point, upper-cases the
+string and lower-cases each code point again. That is a **Java approximation of Unicode full case folding,
+not an implementation of it**. It handles the cases the spec cares about in practice (U+1E9E ẞ, ß,
+ligatures, final sigma), and all 652 examples of `spec.0.30.txt` pass.
+
+Measured against the current `CaseFolding.txt` (C and F entries), **163 of 1606 entries fold differently**.
+They fall into three groups, only one of which can actually be wrong:
+
+| Group                                                  | Harmful? |
+|--------------------------------------------------------|----------|
+| Different representative, same equivalence class (e.g. the Cherokee block) | no — both sides fold identically, so matching still succeeds |
+| U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE           | possibly — needs checking |
+| Characters newer than the JDK's Unicode version        | possibly — depends on the JDK in use |
+
+**To do:** determine which of the 163 deviations genuinely break label matching (as opposed to merely
+choosing a different representative, which is harmless), then decide between implementing real full case
+folding driven by `CaseFolding.txt` and documenting the approximation as acceptable. Whatever is decided,
+the limitation is already recorded in `VERSION.md` and `review-B30.md`.
+
+No spec example detects this, so the shrink-only baseline cannot enforce it; it needs hand-written tests.
 
 ## Constraints I am operating under
 
@@ -274,4 +398,8 @@ Spec coverage (whole-file tests apply the profile shown, all run in `CoreRendere
 | 0.30 | `FullOrigSpec030CoreTest`           | 652      | `COMMONMARK_0_30`   | passes                          |
 | 0.30 | `FullSpec030DefaultOptionsCoreTest` | 652      | none (defaults)     | passes                          |
 | 0.30 | `FullOrigSpecCoreTest`              | 652      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
+| 0.31.2 | `ComboOrigSpec0312CoreTest`       | 652      | none (defaults)     | passes with a 3-entry shrink-only baseline (354, 625, 626) |
+
+`FullSpec029DefaultOptionsCoreTest` still passes under the 0.30 defaults: none of the four 0.30 changes
+alters the rendering of any 0.29 example, so the older default-options test remains a valid regression guard.
 
