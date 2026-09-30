@@ -17,6 +17,7 @@ import org.junit.runners.Suite;
         DelimiterProcessorTest.class,
         HtmlRendererTest.class,
         ParserTest.class,
+        ParserEmulationProfileTest.class,
         LinkDestinationParserTest.class,
         PathologicalTestSuite.class,
         SpecialInputTest.class,
