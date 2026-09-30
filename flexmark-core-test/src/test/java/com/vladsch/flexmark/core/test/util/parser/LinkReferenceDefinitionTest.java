@@ -125,11 +125,11 @@ public class LinkReferenceDefinitionTest {
         Document document = Parser.builder(options).build().parse(markdown);
 
         Reference reference = (Reference) document.getFirstChild();
-        assertEquals("[foo]", reference.getReference().toString());
-        assertEquals(0, reference.getReference().getStartOffset());
+        assertEquals("foo", reference.getReference().toString());
+        assertEquals(1, reference.getReference().getStartOffset());
         assertEquals("/url", reference.getUrl().toString());
         assertEquals(7, reference.getUrl().getStartOffset());
-        assertEquals("\"t\"", reference.getTitle().toString());
+        assertEquals("t", reference.getTitle().toString());
         assertEquals("\"", reference.getTitleOpeningMarker().toString());
         assertEquals(12, reference.getTitleOpeningMarker().getStartOffset());
         assertSame(document.getChars().getBaseSequence(), reference.getUrl().getBaseSequence());
@@ -140,7 +140,7 @@ public class LinkReferenceDefinitionTest {
         assertEquals(16, heading.getText().getStartOffset());
         assertEquals("===", heading.getClosingMarker().toString());
         assertEquals(20, heading.getClosingMarker().getStartOffset());
-        assertEquals("bar\n===\n", heading.getChars().toString());
+        assertEquals("bar\n===", heading.getChars().toString());
         assertEquals(16, heading.getStartOffset());
         assertSame(document.getChars().getBaseSequence(), heading.getText().getBaseSequence());
         assertTrue(reference.getEndOffset() <= heading.getStartOffset());

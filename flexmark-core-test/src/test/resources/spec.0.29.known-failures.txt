@@ -15,12 +15,6 @@
 # The clusters are the 0.29 changes that cause them, taken from the CommonMark changelog
 # (https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt, section [0.29]).
 
-# --- Cluster 5: link reference definitions (spec issues #454, #395, #469)
-# Setext heading after reference link definitions; a definition whose reference is never used; a space
-# is required before the title.
-184
-185
-
 # --- Cluster 6: list items indented 4 or more spaces (spec issue #497)
 # Such lines are continuation lines when not blank, and indented code blocks otherwise. Also drops the
 # vestigial "not separated by more than one blank line" restriction (#543).

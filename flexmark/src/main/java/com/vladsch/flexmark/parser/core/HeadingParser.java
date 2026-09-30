@@ -6,6 +6,7 @@ import com.vladsch.flexmark.ast.util.Parsing;
 import com.vladsch.flexmark.parser.InlineParser;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.block.*;
+import com.vladsch.flexmark.parser.internal.InlineParserImpl;
 import com.vladsch.flexmark.util.ast.Block;
 import com.vladsch.flexmark.util.ast.BlockContent;
 import com.vladsch.flexmark.util.data.DataHolder;
@@ -16,8 +17,10 @@ import com.vladsch.flexmark.util.sequence.mappers.SpecialLeadInStartsWithCharsHa
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -194,8 +197,29 @@ public class HeadingParser extends AbstractBlockParser {
                         // setext heading line
                         int level = matcher.group(0).charAt(0) == '=' ? 1 : 2;
 
+                        boolean replaceParagraph = true;
+                        List<BasedSequence> paragraphLines = matchedBlockParser.getParagraphLines();
+                        List<Integer> paragraphIndents = matchedBlockParser.getParagraphEolLengths();
+
+                        if (options.setextAfterReferenceDefinitions) {
+                            int definitionLines = getReferenceDefinitionLines(state, paragraph, paragraphLines);
+                            if (definitionLines == paragraphLines.size()) {
+                                // nothing but definitions, the underline is paragraph text
+                                return BlockStart.none();
+                            } else if (definitionLines > 0) {
+                                // the paragraph keeps the definitions, the heading takes the remaining lines
+                                int lineCount = paragraphLines.size();
+                                paragraphLines = new ArrayList<>(paragraphLines.subList(definitionLines, lineCount));
+                                paragraphIndents = new ArrayList<>(paragraphIndents.subList(definitionLines, lineCount));
+                                BlockContent paragraphContent = matchedBlockParser.getBlockParser().getBlockContent();
+                                paragraphContent.getLines().subList(definitionLines, lineCount).clear();
+                                paragraphContent.getLineIndents().subList(definitionLines, lineCount).clear();
+                                replaceParagraph = false;
+                            }
+                        }
+
                         BlockContent content = new BlockContent();
-                        content.addAll(matchedBlockParser.getParagraphLines(), matchedBlockParser.getParagraphEolLengths());
+                        content.addAll(paragraphLines, paragraphIndents);
                         BasedSequence headingText = content.getContents().trim();
                         BasedSequence closingMarker = line.trim();
 
@@ -204,9 +228,8 @@ public class HeadingParser extends AbstractBlockParser {
                         headingParser.block.setClosingMarker(closingMarker);
                         headingParser.block.setCharsFromContent();
 
-                        return BlockStart.of(headingParser)
-                                .atIndex(line.length())
-                                .replaceActiveBlockParser();
+                        BlockStart blockStart = BlockStart.of(headingParser).atIndex(line.length());
+                        return replaceParagraph ? blockStart.replaceActiveBlockParser() : blockStart;
                     } else {
                         return BlockStart.none();
                     }
@@ -217,11 +240,28 @@ public class HeadingParser extends AbstractBlockParser {
         }
     }
 
+    /**
+     * @return number of leading lines of the paragraph which are link reference definitions, {@code 0} if none
+     */
+    private static int getReferenceDefinitionLines(ParserState state, BasedSequence paragraph, List<BasedSequence> lines) {
+        if (!(state.getInlineParser() instanceof InlineParserImpl)) return 0;
+
+        int length = ((InlineParserImpl) state.getInlineParser()).getReferenceDefinitionsLength(paragraph);
+        int consumed = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            if (consumed >= length) return consumed == length ? i : 0;
+            consumed += lines.get(i).length();
+        }
+
+        return consumed == length ? lines.size() : 0;
+    }
+
     static class HeadingOptions {
         final boolean noAtxSpace;
         final boolean noEmptyHeadingWithoutSpace;
         final boolean noLeadSpace;
         final boolean canInterruptItemParagraph;
+        final boolean setextAfterReferenceDefinitions;
         final int setextMarkerLength;
 
         public HeadingOptions(DataHolder options) {
@@ -229,6 +269,7 @@ public class HeadingParser extends AbstractBlockParser {
             this.noEmptyHeadingWithoutSpace = Parser.HEADING_NO_EMPTY_HEADING_WITHOUT_SPACE.get(options);
             this.noLeadSpace = Parser.HEADING_NO_LEAD_SPACE.get(options);
             this.canInterruptItemParagraph = Parser.HEADING_CAN_INTERRUPT_ITEM_PARAGRAPH.get(options);
+            this.setextAfterReferenceDefinitions = Parser.HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS.get(options);
             this.setextMarkerLength = Parser.HEADING_SETEXT_MARKER_LENGTH.get(options);
         }
     }

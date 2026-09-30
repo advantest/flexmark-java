@@ -141,6 +141,13 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE = new DataKey<>("REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE", false);
 
     /**
+     * HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * link reference definitions at the start of a paragraph are not part of the text of a setext heading which
+     * ends the paragraph, and an underline following a paragraph which consists only of definitions is not a heading
+     */
+    final public static DataKey<Boolean> HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS = new DataKey<>("HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS", false);
+
+    /**
      * LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING default false, when true makes parsing CommonMark Spec 0.29 compliant:
      * a link title in parentheses may contain a ( only if it is backslash-escaped
      */

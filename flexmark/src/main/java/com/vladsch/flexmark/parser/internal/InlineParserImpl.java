@@ -268,6 +268,35 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
      * @return number of characters were parsed as a reference from the start of the sequence, {@code 0} if none
      */
     protected int parseReference(Block block, BasedSequence s) {
+        return parseReference(block, s, true);
+    }
+
+    /**
+     * Determine how much of the start of a paragraph's content consists of link reference definitions. Nothing is
+     * added to the reference repository and no nodes are created.
+     *
+     * @param content content of the paragraph, may consist of multiple lines
+     * @return number of characters from the start of the content up to the end of the last definition, {@code 0} if
+     * the content does not start with a definition
+     */
+    public int getReferenceDefinitionsLength(BasedSequence content) {
+        int consumed = 0;
+        BasedSequence remaining = content;
+
+        while (true) {
+            int leadingSpaces = remaining.countLeading(CharPredicate.SPACE_TAB);
+            if (leadingSpaces > 3 || remaining.length() <= 3 + leadingSpaces || remaining.charAt(leadingSpaces) != '[') break;
+
+            int pos = parseReference(null, remaining.subSequence(leadingSpaces), false);
+            if (pos == 0) break;
+            consumed += leadingSpaces + pos;
+            remaining = remaining.subSequence(leadingSpaces + pos);
+        }
+
+        return consumed;
+    }
+
+    private int parseReference(Block block, BasedSequence s, boolean addReference) {
         this.input = s;
         this.index = 0;
         BasedSequence dest;
@@ -331,13 +360,15 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
             return 0;
         }
 
-        Reference reference = new Reference(rawLabel, dest, title);
+        if (addReference) {
+            Reference reference = new Reference(rawLabel, dest, title);
 
-        // NOTE: whether first or last reference is kept is defined by the repository modify behavior setting
-        // for CommonMark this is set in the initializeDocument() function of the inline parser
-        referenceRepository.put(normalizedLabel, reference);
+            // NOTE: whether first or last reference is kept is defined by the repository modify behavior setting
+            // for CommonMark this is set in the initializeDocument() function of the inline parser
+            referenceRepository.put(normalizedLabel, reference);
 
-        block.insertBefore(reference);
+            block.insertBefore(reference);
+        }
 
         return index - startIndex;
     }
