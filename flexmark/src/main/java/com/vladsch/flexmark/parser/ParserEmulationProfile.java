@@ -310,6 +310,9 @@ public enum ParserEmulationProfile implements MutableDataSetter {
             else if (this == COMMONMARK_0_28) {
                 // IMPORTANT: implement 0.29 as defaults with 0.28 as changes
             }
+            else if (this == COMMONMARK_0_29) {
+                return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this).setNoItemAtCodeIndent(true);
+            }
             return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this);
         }
 
@@ -492,7 +495,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                 dataHolder.set(Parser.REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE, true);
                 dataHolder.set(Parser.HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS, true);
                 dataHolder.set(Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING, true);
-                dataHolder.set(Parser.LISTS_NO_ITEM_AT_CODE_INDENT, true);
+                // Parser.LISTS_NO_ITEM_AT_CODE_INDENT is a list option, set by getOptions()
             }
         }
 

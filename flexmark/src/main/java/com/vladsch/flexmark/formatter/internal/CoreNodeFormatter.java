@@ -682,9 +682,26 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
     private static final String CODE_INDENT_SPACES = "    ";
     private static final Pattern LIST_ITEM_LIKE_START = Pattern.compile("^(?:[*+-]|[0-9]{1,9}[.)])(?:[ \t]|$)");
 
-    private static boolean startsLineLikeListItem(Text node) {
-        Node previous = node.getPrevious();
-        return (previous instanceof SoftLineBreak || previous instanceof HardLineBreak) && LIST_ITEM_LIKE_START.matcher(node.getChars()).find();
+    private boolean startsLineLikeListItem(Text node) {
+        Node first = node;
+        while (first.getPrevious() == null && first.getParent() instanceof TextBase) first = first.getParent();
+
+        Node previous = first.getPrevious();
+        boolean lineBreakKept = previous instanceof SoftLineBreak && (formatterOptions.keepSoftLineBreaks || formatterOptions.rightMargin > 0)
+                || previous instanceof HardLineBreak && formatterOptions.keepHardLineBreaks;
+
+        if (!lineBreakKept || !LIST_ITEM_LIKE_START.matcher(node.getChars()).find()) return false;
+
+        // only lines that were indented by code indent in the source can be continuations that look like items
+        BasedSequence base = node.getChars().getBaseSequence();
+        int columns = 0;
+        for (int i = node.getStartOffset(); i > 0; i--) {
+            char c = base.charAt(i - 1);
+            if (c == ' ') columns++;
+            else if (c == '\t') columns += 4;
+            else break;
+        }
+        return columns >= listOptions.getCodeIndent();
     }
 
     private void render(Text node, NodeFormatterContext context, MarkdownWriter markdown) {

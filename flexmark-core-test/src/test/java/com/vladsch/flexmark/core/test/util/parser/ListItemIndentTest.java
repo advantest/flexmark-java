@@ -171,4 +171,40 @@ public class ListItemIndentTest {
             assertEquals("formatted: [" + formatted + "]", render(ParserEmulationProfile.COMMONMARK_0_29, markdown), render(ParserEmulationProfile.COMMONMARK_0_29, formatted));
         }
     }
+
+    private static String format(DataHolder options, String markdown) {
+        return Formatter.builder(options).build().render(Parser.builder(options).build().parse(markdown));
+    }
+
+    @Test
+    public void formatterOnlyIndentsContinuationLinesThatWereIndentedIn029() {
+        DataHolder options = options(ParserEmulationProfile.COMMONMARK_0_29);
+        assertEquals("foo\n2. bar\n", format(options, "foo\n2. bar\n"));
+        assertEquals("- a\n  2. b\n\n", format(options, "- a\n  2. b\n"));
+        assertEquals("- d\n  - e\n\n", format(options, "- d\n    - e\n"));
+    }
+
+    @Test
+    public void formatterRoundTripWithoutKeepingSoftLineBreaksAndWithWrappingIn029() {
+        String markdown = "- x\n  - a\n   - b\n    - c\n     - d\n      - e\n";
+        DataHolder joined = options(ParserEmulationProfile.COMMONMARK_0_29).toMutable().set(Formatter.KEEP_SOFT_LINE_BREAKS, false).toImmutable();
+        DataHolder wrapped = options(ParserEmulationProfile.COMMONMARK_0_29).toMutable().set(Formatter.RIGHT_MARGIN, 40).toImmutable();
+        String expected = render(ParserEmulationProfile.COMMONMARK_0_29, markdown);
+        assertEquals(expected.replaceAll("\\s+", " "), render(ParserEmulationProfile.COMMONMARK_0_29, format(joined, markdown)).replaceAll("\\s+", " "));
+        assertEquals(expected.replaceAll("\\s+", " "), render(ParserEmulationProfile.COMMONMARK_0_29, format(wrapped, markdown)).replaceAll("\\s+", " "));
+    }
+
+    @Test
+    public void otherEmulationFamiliesIgnoreTheOption() {
+        for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
+            if (profile.family == ParserEmulationProfile.COMMONMARK) continue;
+            DataHolder plain = options(profile);
+            DataHolder enabled = plain.toMutable().set(Parser.LISTS_NO_ITEM_AT_CODE_INDENT, true).toImmutable();
+            for (String markdown : new String[] { SPEC_282, SPEC_283 }) {
+                assertEquals("profile " + profile,
+                        HtmlRenderer.builder(plain).build().render(Parser.builder(plain).build().parse(markdown)),
+                        HtmlRenderer.builder(enabled).build().render(Parser.builder(enabled).build().parse(markdown)));
+            }
+        }
+    }
 }

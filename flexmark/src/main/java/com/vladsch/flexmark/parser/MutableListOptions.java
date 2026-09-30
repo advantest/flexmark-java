@@ -45,6 +45,7 @@ public class MutableListOptions extends ListOptions {
     public @NotNull MutableListOptions setNumberedItemMarkerSuffixed(boolean numberedItemMarkerSuffixed) { this.numberedItemMarkerSuffixed = numberedItemMarkerSuffixed; return this; }
     public @NotNull MutableListOptions setOrderedItemDotOnly(boolean orderedItemDotOnly) { this.orderedItemDotOnly = orderedItemDotOnly; return this; }
     public @NotNull MutableListOptions setOrderedListManualStart(boolean orderedListManualStart) { this.orderedListManualStart = orderedListManualStart; return this; }
+    public @NotNull MutableListOptions setNoItemAtCodeIndent(boolean noItemAtCodeIndent) { this.noItemAtCodeIndent = noItemAtCodeIndent; return this; }
     // int setters
     public @NotNull MutableListOptions setCodeIndent(int codeIndent) { this.codeIndent = codeIndent; return this; }
     public @NotNull MutableListOptions setItemIndent(int itemIndent) { this.itemIndent = itemIndent; return this; }
