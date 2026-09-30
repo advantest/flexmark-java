@@ -518,6 +518,10 @@ public enum ParserEmulationProfile implements MutableDataSetter {
             // Parser.LISTS_NO_ITEM_AT_CODE_INDENT is a list option, set by getOptions()
         }
 
+        // CommonMark 0.30 parsing rules are the defaults of the DataKeys. No profile implements 0.30 yet, so every
+        // profile opts out of them, the profile which implements 0.30 will be excluded here
+        dataHolder.set(Parser.HTML_BLOCK_TEXTAREA_TYPE_1, false);
+
         return dataHolder;
     }
 

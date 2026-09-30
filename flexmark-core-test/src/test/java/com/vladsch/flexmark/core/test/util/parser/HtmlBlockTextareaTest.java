@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.core.test.util.parser;
 
+import com.vladsch.flexmark.formatter.Formatter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
@@ -93,7 +94,7 @@ public class HtmlBlockTextareaTest {
     @Test
     public void closingTagOfTextareaEndsOtherTypeOneBlocks() {
         assert030("<pre>\n*a*\n</textarea>\n<p><em>b</em></p>\n", "<pre>\n*a*\n</textarea>\n\n*b*\n");
-        assertPre030("<pre>\n*a*\n</textarea>\n<p><em>b</em></p>\n", "<pre>\n*a*\n</textarea>\n\n*b*\n");
+        // before 0.30 only the end of the pre block is an end tag, the rest of the document is raw\n        assertPre030("<pre>\n*a*\n</textarea>\n\n*b*\n", "<pre>\n*a*\n</textarea>\n\n*b*\n");
     }
 
     @Test
@@ -110,5 +111,11 @@ public class HtmlBlockTextareaTest {
     public void textareaInsideABlockQuote() {
         assert030("<blockquote>\n<textarea>\n*a*\n\n*b*\n</textarea>\n</blockquote>\n",
                 "> <textarea>\n> *a*\n>\n> *b*\n> </textarea>\n");
+    }
+
+    @Test
+    public void formatterKeepsTheRawBlockUnchanged() {
+        String markdown = "foo\n\n<textarea>\n\n*foo*\n\n_bar_\n\n</textarea>\n\nbaz\n";
+        assertEquals(markdown, Formatter.builder().build().render(Parser.builder().build().parse(markdown)));
     }
 }

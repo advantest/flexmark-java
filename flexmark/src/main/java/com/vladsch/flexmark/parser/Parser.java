@@ -161,6 +161,13 @@ public class Parser implements IParse {
      * a link title in parentheses may contain a ( only if it is backslash-escaped
      */
     final public static DataKey<Boolean> LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING = new DataKey<>("LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING", true);
+
+    /**
+     * HTML_BLOCK_TEXTAREA_TYPE_1 default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_29:
+     * a line starting with &lt;textarea starts an HTML block of type 1, like pre, script and style. The block
+     * is not ended by a blank line but by a line containing an end tag of one of these tags, including &lt;/textarea&gt;
+     */
+    final public static DataKey<Boolean> HTML_BLOCK_TEXTAREA_TYPE_1 = new DataKey<>("HTML_BLOCK_TEXTAREA_TYPE_1", true);
     /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */

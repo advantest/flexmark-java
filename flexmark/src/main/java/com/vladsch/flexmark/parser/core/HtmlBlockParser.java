@@ -52,12 +52,13 @@ public class HtmlBlockParser extends AbstractBlockParser {
             }
 
             String blockTags = sb.toString();
+            String rawTags = Parser.HTML_BLOCK_TEXTAREA_TYPE_1.get(options) ? "script|pre|style|textarea" : "script|pre|style";
 
             this.BLOCK_PATTERNS = new Pattern[][] {
                     { null, null }, // not used (no type 0)
                     {
-                            Pattern.compile("^<(?:script|pre|style)(?:\\s|>|$)", Pattern.CASE_INSENSITIVE),
-                            Pattern.compile("</(?:script|pre|style)>", Pattern.CASE_INSENSITIVE)
+                            Pattern.compile("^<(?:" + rawTags + ")(?:\\s|>|$)", Pattern.CASE_INSENSITIVE),
+                            Pattern.compile("</(?:" + rawTags + ")>", Pattern.CASE_INSENSITIVE)
                     },
                     {
                             Pattern.compile("^" + HTML_COMMENT_OPEN),
