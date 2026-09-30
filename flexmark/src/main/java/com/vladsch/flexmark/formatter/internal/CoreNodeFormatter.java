@@ -903,7 +903,6 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
                 ResolvedLink resolvedLink = context.resolveLink(LinkType.LINK, node.getUrl(), false);
                 markdown.appendNonTranslating(resolvedLink.getPageRef());
             } else {
-                markdown.append(node.getUrlOpeningMarker());
                 markdown.appendNonTranslating(node.getPageRef());
             }
 

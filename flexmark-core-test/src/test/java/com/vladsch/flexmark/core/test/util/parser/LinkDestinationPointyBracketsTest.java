@@ -109,4 +109,12 @@ public class LinkDestinationPointyBracketsTest {
         assertSame(document.getChars().getBaseSequence(), link.getUrl().getBaseSequence());
         assertEquals("b c", markdown.substring(link.getUrl().getStartOffset(), link.getUrl().getEndOffset()));
     }
+
+    @Test
+    public void formatterKeepsPointyBracketsOfDestinationWithSpaceIn029() {
+        DataHolder options = ParserEmulationProfile.COMMONMARK_0_29.getProfileOptions().toImmutable();
+        String markdown = "[a](<b c> \"t\") and ![i](<d e.png>) and [r][ref]\n\n[ref]: <f g> \"t\"\n";
+        String formatted = Formatter.builder(options).build().render(Parser.builder(options).build().parse(markdown));
+        assertEquals(markdown.trim(), formatted.trim());
+    }
 }
