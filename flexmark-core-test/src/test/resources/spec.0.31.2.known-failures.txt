@@ -1,0 +1,20 @@
+# Known failures of flexmark-java against the unmodified CommonMark spec 0.31.2 (spec.0.31.2.txt), measured with the
+# DEFAULT configuration (no emulation profile applied, i.e. the CommonMark 0.30 behaviour).
+#
+# One entry per line: the example number as in the spec ("Example N"), then a comment.
+# Listed examples are run with the FAIL option by ComboOrigSpec0312CoreTest: they pass while they still
+# render incorrectly and FAIL as soon as they render correctly.
+#
+# RULES: entries may only be REMOVED, never added, as 0.31.2 support is implemented. When an example
+# starts to pass, its test fails until its entry is deleted here. When this file is empty,
+# enable a full-spec 0.31.2 test and delete this file together with the FAIL handling in the test.
+#
+# A failing test is named "<Section>: <n-th example within that section>", not by the global number used
+# here. The entries below carry that name to make the mapping easy. A listed example whose test
+# reports anything other than a ComparisonFailure has started to crash rather than to mis-render.
+#
+# The cluster labels are PROVISIONAL until confirmed by the implementation of the respective 0.31 change
+# (https://github.com/commonmark/commonmark-spec/blob/0.31.2/changelog.txt, section [0.31]).
+354 # Emphasis and strong emphasis: 5 - [unicode symbols] $, £, € must count as Unicode punctuation for flanking
+625 # Raw HTML: 13                     - [comment] comment text may contain "--" (HTML comment restriction removed)
+626 # Raw HTML: 14                     - [comment] <!--> and <!---> are complete (empty) comments
