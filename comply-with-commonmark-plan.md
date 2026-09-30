@@ -22,6 +22,7 @@ the analysis was written. Measured failure counts are unchanged and remain valid
 | 6 | Commit first, review later. Treat the branch as one or more pull requests. |
 | 7 | Confirm each decision by test before implementing it. If a decision turns out to be wrong, stop and ask. |
 | 8 | Review sub-agent after Task 0 and after every larger task or new version. Apply the improvements, record review and declined suggestions in Markdown. **Max 2 review rounds per task.** |
+| 9 | **The parser preserves the raw source text.** flexmark must keep exact source tracking, because FluentMark and other tools depend on it. Text normalization therefore happens at **render** time, never by rewriting node text while parsing. A change that alters AST *structure* — which delimiters pair up, how blocks nest — still belongs in the parser, because it does not rewrite source text. |
 
 Decision 7 already paid off: decision 1 of the analysis (`COMMONMARK_0_26` `endOnDoubleBlank` is a bug)
 was **confirmed** against the 0.25 → 0.26 specification diff before the fix was written.
