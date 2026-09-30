@@ -549,6 +549,19 @@ public class Escaping {
         else return Escaping.collapseWhitespace(s.toString(), true);
     }
 
+    /**
+     * Normalize the link reference id
+     *
+     * @param s           sequence containing the link reference id
+     * @param changeCase  if true then reference will be case folded or lower cased
+     * @param unicodeCaseFold if true the case is folded, otherwise it is only lower cased
+     * @return normalized link reference id
+     */
+    @NotNull
+    public static String normalizeReference(@NotNull CharSequence s, boolean changeCase, boolean unicodeCaseFold) {
+        return normalizeReference(s, changeCase);
+    }
+
     @Nullable
     private static String encode(char c) {
         switch (c) {
