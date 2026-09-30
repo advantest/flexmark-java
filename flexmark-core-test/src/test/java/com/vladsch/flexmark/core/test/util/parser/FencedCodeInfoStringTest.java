@@ -1,9 +1,14 @@
 package com.vladsch.flexmark.core.test.util.parser;
 
+import com.vladsch.flexmark.ast.FencedCodeBlock;
+import com.vladsch.flexmark.formatter.Formatter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.format.options.CodeFenceMarker;
 import com.vladsch.flexmark.util.data.DataHolder;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -42,7 +47,7 @@ public class FencedCodeInfoStringTest {
     }
 
     @Test
-    public void backtickFenceInfoCannotContainBackticksInAnyProfile() {
+    public void backtickFenceInfoCannotContainBackticksInPre029And029Profiles() {
         for (ParserEmulationProfile profile : new ParserEmulationProfile[] {
                 ParserEmulationProfile.COMMONMARK_0_28, ParserEmulationProfile.COMMONMARK_0_29}) {
             assertEquals("profile " + profile, "<p><code>aa</code>\nfoo</p>\n", render(profile, "``` aa ```\nfoo\n"));
@@ -64,5 +69,26 @@ public class FencedCodeInfoStringTest {
                     Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(profile.getProfileOptions()));
         }
     }
+
+    @Test
+    public void infoStringOfTildeFenceIsKeptWhole() {
+        DataHolder options = ParserEmulationProfile.COMMONMARK_0_29.getProfileOptions().toImmutable();
+        Node document = Parser.builder(options).build().parse(TILDE_FENCE_WITH_BACKTICKS);
+        FencedCodeBlock block = (FencedCodeBlock) document.getFirstChild();
+        assertEquals("aa ``` ~~~", block.getInfo().toString());
+    }
+
+    @Test
+    public void formatterKeepsTildeFenceWhenInfoHasBackticksEvenIfBackticksAreRequested() {
+        MutableDataSet options = new MutableDataSet(ParserEmulationProfile.COMMONMARK_0_29.getProfileOptions());
+        options.set(Formatter.FENCED_CODE_MARKER_TYPE, CodeFenceMarker.BACK_TICK);
+        DataHolder immutable = options.toImmutable();
+        Node document = Parser.builder(immutable).build().parse(TILDE_FENCE_WITH_BACKTICKS);
+        String formatted = Formatter.builder(immutable).build().render(document);
+        assertEquals(TILDE_FENCE_WITH_BACKTICKS_HTML, render(ParserEmulationProfile.COMMONMARK_0_29, formatted));
+    }
 }
+
+
+
 

@@ -438,6 +438,8 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
             case ANY:
                 break;
             case BACK_TICK:
+                // a backtick fence cannot have backticks in its info string, keep the original tilde fence
+                if (node.getInfo().indexOf('`') >= 0) break;
                 openingMarkerChar = '`';
                 closingMarkerChar = openingMarkerChar;
                 break;
