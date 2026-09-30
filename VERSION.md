@@ -126,17 +126,20 @@ aliases `COMMONMARK_0_29`. All 649 examples of the unmodified 0.29 specification
 
 ### Breaking changes
 
-Rendering output of code that applies no emulation profile is unchanged: every new 0.29 option below
-defaults to the pre-0.29 behaviour. The resolved value of `Parser.PARSER_EMULATION_PROFILE` changed.
+**flexmark-java now parses as CommonMark 0.29 by default**, without applying any profile. The nine 0.29 options
+listed under Changes default to the 0.29 behaviour and are turned off by every other profile and family:
+`COMMONMARK_0_26`, `COMMONMARK_0_27`, `COMMONMARK_0_28`, the `COMMONMARK` family sentinel, `GITHUB` and the
+non-CommonMark families (FIXED_INDENT, KRAMDOWN, MARKDOWN, MULTI_MARKDOWN, PEGDOWN and variants) keep their
+previous parsing behaviour when their profile is applied. Code which needs the pre-0.29 behaviour and applies
+no profile must now apply `COMMONMARK_0_28` (or an older profile) explicitly, for example
+`new MutableDataSet().setFrom(ParserEmulationProfile.COMMONMARK_0_28)`.
 
 * **Breaking:** `ParserEmulationProfile.COMMONMARK_LATEST` now resolves to `COMMONMARK_0_29`, previously
   `COMMONMARK_0_28`. Code comparing against it, or relying on the default of
   `Parser.PARSER_EMULATION_PROFILE`, now sees `COMMONMARK_0_29`. Code which applies `COMMONMARK_LATEST` as a
   profile, for example with `getProfileOptions()` or `getOptions()`, now gets all CommonMark 0.29 parsing
   behaviours. Code which needs the previous specification version should use
-  `ParserEmulationProfile.COMMONMARK_0_28` explicitly. The default of
-  the individual parser options is not advanced, the 0.29 behaviour is enabled only by applying
-  `COMMONMARK_0_29`, so parsing is unchanged unless that profile is applied.
+  `ParserEmulationProfile.COMMONMARK_0_28` explicitly.
 * **Breaking:** the default of `Parser.PARSER_EMULATION_PROFILE` is now `COMMONMARK_LATEST`, which
   aliases `COMMONMARK_0_29`, instead of the `COMMONMARK` family sentinel. External code testing the
   resolved profile with `Parser.PARSER_EMULATION_PROFILE.get(options) == ParserEmulationProfile.COMMONMARK`
@@ -147,8 +150,7 @@ defaults to the pre-0.29 behaviour. The resolved value of `Parser.PARSER_EMULATI
   flexmark-java were migrated accordingly.
 * **Breaking:** because `ListOptions` equality includes the emulation profile, a default `ListOptions`
   instance no longer equals `ParserEmulationProfile.COMMONMARK.getOptions()`. It equals
-  `ParserEmulationProfile.COMMONMARK_LATEST.getOptions()` except for `Parser.LISTS_NO_ITEM_AT_CODE_INDENT`,
-  which `COMMONMARK_0_29` enables and which defaults to `false`.
+  `ParserEmulationProfile.COMMONMARK_LATEST.getOptions()`.
 * **Breaking:** applying a CommonMark profile now writes all list options into the data holder, as the
   other profile families already did. A list option set before applying a CommonMark profile is therefore
   overwritten by the profile. Set such options after applying the profile.
@@ -161,8 +163,8 @@ defaults to the pre-0.29 behaviour. The resolved value of `Parser.PARSER_EMULATI
 ### Changes
 
 * Add: `ParserEmulationProfile.COMMONMARK_0_29` support. The following parser options make parsing
-  CommonMark 0.29 compliant. All default to `false`, which keeps the 0.28 behaviour, and are set to `true`
-  by the `COMMONMARK_0_29` profile:
+  CommonMark 0.29 compliant. All default to `true` and are set back to `false` by every other profile,
+  including `COMMONMARK_0_28`, which restores the 0.28 behaviour:
   * `Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES`: info string of a tilde fence may contain
     backticks.
   * `Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES`: code span normalization of 0.29.

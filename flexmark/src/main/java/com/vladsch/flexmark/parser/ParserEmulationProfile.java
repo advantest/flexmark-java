@@ -32,9 +32,9 @@ public enum ParserEmulationProfile implements MutableDataSetter {
      * advance is recorded in VERSION.md.
      * <p>
      * Currently {@link #COMMONMARK_0_29}, whose full specification test passes without failures. Advancing
-     * this alias changes the default of {@code Parser.PARSER_EMULATION_PROFILE} but not the defaults of the
-     * individual parser options: the CommonMark 0.29 behaviour is enabled only by applying
-     * {@link #COMMONMARK_0_29} explicitly, use {@link #COMMONMARK_0_28} to pin the previous version.
+     * this alias changes the default of {@code Parser.PARSER_EMULATION_PROFILE}. The DataKey defaults of the
+     * individual parser options follow the newest supported version, older profiles opt out of them, use
+     * {@link #COMMONMARK_0_28} to pin the previous version.
      */
     final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_29;
 

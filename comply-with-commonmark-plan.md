@@ -144,6 +144,10 @@ Per cluster: TDD red → green, one commit per cluster. Advance `COMMONMARK_LATE
 only when `FullOrigSpec029CoreTest` reports **zero** failures, add the `VERSION.md` entry, then a review
 sub-agent pass (max 2 rounds).
 
+Follow-up (done): the option defaults follow the newest supported spec (0.29 is the `DataKey` default) and older
+profiles opt out, so a plain `Parser.builder()` parses as 0.29. Rule for the next version: flip the new options'
+defaults and make `COMMONMARK_0_29` and older profiles set them back; see `review-B29-default-profile.md`.
+
 0.29 owns 6 of the 9 known clusters (analysis §6). Order — cheapest and least coupled first:
 info strings → entity/case-fold → code spans → link destinations `<>` → emphasis ÷3 →
 **list items indented 4+ last** (hardest; ~30 interacting list flags, affects every emulation family).
