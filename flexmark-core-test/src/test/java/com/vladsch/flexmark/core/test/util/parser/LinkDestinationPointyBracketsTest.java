@@ -117,4 +117,10 @@ public class LinkDestinationPointyBracketsTest {
         String formatted = Formatter.builder(options).build().render(Parser.builder(options).build().parse(markdown));
         assertEquals(markdown.trim(), formatted.trim());
     }
+
+    @Test
+    public void tabAndEmptyPointyBracketsIn029() {
+        assert029("<p><a href=\"b%09c\">a</a></p>\n", "[a](<b\tc>)\n");
+        assert029("<p><a href=\"\">a</a></p>\n", "[a](<>)\n");
+    }
 }
