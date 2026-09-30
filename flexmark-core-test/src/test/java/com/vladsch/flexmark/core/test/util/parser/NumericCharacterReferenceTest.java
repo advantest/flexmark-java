@@ -1,8 +1,10 @@
 package com.vladsch.flexmark.core.test.util.parser;
 
+import com.vladsch.flexmark.ast.util.TextCollectingVisitor;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
+import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import org.junit.Test;
@@ -117,6 +119,22 @@ public class NumericCharacterReferenceTest {
             DataHolder options = profile.getProfileOptions().toImmutable();
             assertEquals("profile " + profile, "<p>\uFFFD \uFFFD \uFFFD</p>\n", render(options, "&#98765432; &#x12345678; &#x1234567;\n"));
             assertEquals("profile " + profile, "<p>&amp;#987654321; &amp;#x123456789;</p>\n", render(options, "&#987654321; &#x123456789;\n"));
+        }
+    }
+
+    @Test
+    public void anyEnabled029OptionSelectsTheSevenSixDigitLimit() {
+        DataHolder options = ParserEmulationProfile.COMMONMARK_0_28.getProfileOptions()
+                .set(Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION, true).toImmutable();
+        assertEquals("<p>&amp;#98765432; &amp;#x1234567;</p>\n", render(options, "&#98765432; &#x1234567;\n"));
+    }
+
+    @Test
+    public void decodedEntityTextIsConsistentWithTheParser() {
+        for (ParserEmulationProfile profile : new ParserEmulationProfile[]{ParserEmulationProfile.COMMONMARK_0_28, ParserEmulationProfile.COMMONMARK_0_29}) {
+            DataHolder options = profile.getProfileOptions().toImmutable();
+            Node document = Parser.builder(options).build().parse("&#65; &#0000065; &#x41;\n");
+            assertEquals("profile " + profile, "A A A", new TextCollectingVisitor().collectAndGetText(document));
         }
     }
 }

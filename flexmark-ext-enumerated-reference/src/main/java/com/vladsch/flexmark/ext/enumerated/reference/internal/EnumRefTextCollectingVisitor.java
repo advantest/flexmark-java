@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.ext.enumerated.reference.internal;
 
+import com.vladsch.flexmark.util.sequence.Html5Entities;
 import com.vladsch.flexmark.ast.*;
 import com.vladsch.flexmark.ext.enumerated.reference.*;
 import com.vladsch.flexmark.util.ast.DoNotCollectText;
@@ -122,7 +123,7 @@ public class EnumRefTextCollectingVisitor {
     }
 
     private void visit(HtmlEntity node) {
-        out.add(node.getChars().unescape());
+        out.add(Html5Entities.entityToString(node.getChars().toString()));
     }
 
     private void visit(Text node) {

@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.docx.converter.internal;
 
+import com.vladsch.flexmark.util.sequence.Html5Entities;
 import com.vladsch.flexmark.ast.Text;
 import com.vladsch.flexmark.ast.*;
 import com.vladsch.flexmark.ast.util.ReferenceRepository;
@@ -808,7 +809,7 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
     }
 
     private void render(HtmlEntity node, DocxRendererContext docx) {
-        docx.addTextCreateR(node.getChars().unescape());
+        docx.addTextCreateR(Html5Entities.entityToString(node.getChars().toString()));
     }
 
     private void renderURL(BasedSequence urlSource, DocxRendererContext docx, String linkUrl, String linkText) {

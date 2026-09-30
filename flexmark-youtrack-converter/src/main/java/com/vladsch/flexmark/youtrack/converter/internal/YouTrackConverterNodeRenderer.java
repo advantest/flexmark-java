@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.youtrack.converter.internal;
 
+import com.vladsch.flexmark.util.sequence.Html5Entities;
 import com.vladsch.flexmark.ast.*;
 import com.vladsch.flexmark.ast.util.ReferenceRepository;
 import com.vladsch.flexmark.html.HtmlRenderer;
@@ -335,7 +336,7 @@ public class YouTrackConverterNodeRenderer implements NodeRenderer
     }
 
     private void render(HtmlEntity node, NodeRendererContext context, HtmlWriter html) {
-        html.raw(node.getChars().unescape());
+        html.raw(Html5Entities.entityToString(node.getChars().toString()));
     }
 
     private void render(AutoLink node, NodeRendererContext context, HtmlWriter html) {
