@@ -5,8 +5,14 @@ import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 
 public class ParserEmulationProfileTest {
@@ -52,6 +58,43 @@ public class ParserEmulationProfileTest {
                 ParserEmulationProfile.COMMONMARK_0_29,
         }) {
             assertSame(ParserEmulationProfile.COMMONMARK, profile.family);
+        }
+    }
+
+    /**
+     * COMMONMARK_LATEST must alias a concrete implemented version, never the COMMONMARK family sentinel.
+     */
+    @Test
+    public void commonMarkLatestAliasesAConcreteVersionProfile() {
+        assertNotSame(ParserEmulationProfile.COMMONMARK, ParserEmulationProfile.COMMONMARK_LATEST);
+        assertSame(ParserEmulationProfile.COMMONMARK, ParserEmulationProfile.COMMONMARK_LATEST.family);
+    }
+
+    @Test
+    public void commonMarkLatestIsTheDefaultEmulationProfile() {
+        assertSame(ParserEmulationProfile.COMMONMARK_LATEST, Parser.PARSER_EMULATION_PROFILE.get(null));
+    }
+
+    /**
+     * Advancing COMMONMARK_LATEST to a newer specification version is only allowed once that version's full
+     * specification test passes, and the default spec.txt resource must track it.
+     */
+    @Test
+    public void commonMarkLatestMatchesTheDefaultSpecificationResource() throws Exception {
+        assertSame("COMMONMARK_LATEST must be advanced together with spec.txt and VERSION.md",
+                ParserEmulationProfile.COMMONMARK_0_28, ParserEmulationProfile.COMMONMARK_LATEST);
+        assertArrayEquals("spec.txt must be a copy of the spec file of the version COMMONMARK_LATEST points at",
+                readSpecResource("/spec.0.28.txt"), readSpecResource("/spec.txt"));
+    }
+
+    private static byte[] readSpecResource(String name) throws Exception {
+        try (InputStream stream = ParserEmulationProfileTest.class.getResourceAsStream(name)) {
+            assertNotNull("missing specification resource " + name, stream);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = stream.read(buffer)) != -1) out.write(buffer, 0, read);
+            return out.toByteArray();
         }
     }
 }

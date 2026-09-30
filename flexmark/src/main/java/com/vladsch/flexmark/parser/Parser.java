@@ -107,7 +107,7 @@ public class Parser implements IParse {
 
     // the meat of differences in emulation
     final public static DataKey<Boolean> LIST_BLOCK_PARSER = new DataKey<>("LIST_BLOCK_PARSER", true);
-    final public static DataKey<ParserEmulationProfile> PARSER_EMULATION_PROFILE = new DataKey<>("PARSER_EMULATION_PROFILE", ParserEmulationProfile.COMMONMARK);
+    final public static DataKey<ParserEmulationProfile> PARSER_EMULATION_PROFILE = new DataKey<>("PARSER_EMULATION_PROFILE", ParserEmulationProfile.COMMONMARK_LATEST);
 
     // deep HTML block parsing
     final public static DataKey<Boolean> HTML_BLOCK_DEEP_PARSER = new DataKey<>("HTML_BLOCK_DEEP_PARSER", false);

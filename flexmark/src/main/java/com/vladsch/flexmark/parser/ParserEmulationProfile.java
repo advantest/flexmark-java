@@ -23,6 +23,16 @@ public enum ParserEmulationProfile implements MutableDataSetter {
 
     final public ParserEmulationProfile family;
 
+    /**
+     * The newest CommonMark specification version that this flexmark release actually implements.
+     * <p>
+     * This is an alias for a concrete versioned profile rather than a profile of its own, so that
+     * {@code ==} comparisons and serialized configuration always refer to an explicit version. It is
+     * advanced only when the corresponding full specification test passes without failures, and every
+     * advance is recorded in VERSION.md.
+     */
+    final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_28;
+
     ParserEmulationProfile(ParserEmulationProfile family) {
         this.family = family == null ? this : family;
     }
