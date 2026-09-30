@@ -292,6 +292,9 @@ public class DefinitionItemBlockParser extends AbstractBlockParser {
             ParserEmulationProfile emulationProfile = options.myParserEmulationProfile;
 
             int currentIndent = state.getIndent();
+            // NOTE: the FIXED_INDENT test is deliberately a *profile* comparison, not a family comparison. Using
+            //   .family would also match MULTI_MARKDOWN, PEGDOWN and PEGDOWN_STRICT (family FIXED_INDENT) and
+            //   change their behaviour. The COMMONMARK test is a family test so all versioned profiles match.
             int codeIndent = emulationProfile.family == COMMONMARK || emulationProfile == FIXED_INDENT ? options.codeIndent : options.itemIndent;
 
             if (currentIndent < codeIndent) {

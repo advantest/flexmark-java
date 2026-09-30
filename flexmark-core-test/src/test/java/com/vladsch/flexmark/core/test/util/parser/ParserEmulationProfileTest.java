@@ -1,5 +1,6 @@
 package com.vladsch.flexmark.core.test.util.parser;
 
+import com.vladsch.flexmark.parser.MutableListOptions;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.data.MutableDataSet;
@@ -49,9 +50,29 @@ public class ParserEmulationProfileTest {
         assertFalse(Parser.LISTS_END_ON_DOUBLE_BLANK.get(resolve(ParserEmulationProfile.COMMONMARK_0_26)));
     }
 
+    /**
+     * The complete set of list options written by setIn must equal the profile's own list options, not just
+     * the endOnDoubleBlank flag.
+     */
     @Test
-    public void versionedCommonMarkProfilesBelongToTheCommonMarkFamily() {
-        for (ParserEmulationProfile profile : new ParserEmulationProfile[]{
+    public void everyProfileResolvesAllOfItsListOptions() {
+        for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
+            assertEquals("profile " + profile + " must resolve all of its list options into the data holder",
+                    profile.getOptions(), new MutableListOptions(resolve(profile)));
+        }
+    }
+
+    /**
+     * Behaviour neutrality: the default list options (no profile configured) must be identical to the ones
+     * of the profile that is now the default, so explicitly applying it changes nothing.
+     */
+    @Test
+    public void defaultListOptionsEqualTheCommonMarkLatestProfileOptions() {
+        assertEquals(ParserEmulationProfile.COMMONMARK_LATEST.getOptions(), new MutableListOptions((com.vladsch.flexmark.util.data.DataHolder) null));
+    }
+
+    @Test
+    public void versionedCommonMarkProfilesBelongToTheCommonMarkFamily() {        for (ParserEmulationProfile profile : new ParserEmulationProfile[]{
                 ParserEmulationProfile.COMMONMARK_0_26,
                 ParserEmulationProfile.COMMONMARK_0_27,
                 ParserEmulationProfile.COMMONMARK_0_28,
