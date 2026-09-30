@@ -120,15 +120,23 @@
 
 ## Next
 
-CommonMark specification tracking. The implemented specification version is now named explicitly by
-`ParserEmulationProfile.COMMONMARK_LATEST`, which currently aliases `COMMONMARK_0_28`.
+CommonMark specification tracking. flexmark-java now supports CommonMark 0.29. The implemented
+specification version is named explicitly by `ParserEmulationProfile.COMMONMARK_LATEST`, which now
+aliases `COMMONMARK_0_29`. All 649 examples of the unmodified 0.29 specification render correctly.
 
 ### Breaking changes
 
-Rendering output is unchanged, but the resolved value of `Parser.PARSER_EMULATION_PROFILE` changed.
+Rendering output of code that applies no emulation profile is unchanged: every new 0.29 option below
+defaults to the pre-0.29 behaviour. The resolved value of `Parser.PARSER_EMULATION_PROFILE` changed.
 
+* **Breaking:** `ParserEmulationProfile.COMMONMARK_LATEST` now resolves to `COMMONMARK_0_29`, previously
+  `COMMONMARK_0_28`. Code comparing against it, or relying on the default of
+  `Parser.PARSER_EMULATION_PROFILE`, now sees `COMMONMARK_0_29`. Code which needs the previous
+  specification version should use `ParserEmulationProfile.COMMONMARK_0_28` explicitly. The default of
+  the individual parser options is not advanced, the 0.29 behaviour is enabled only by applying
+  `COMMONMARK_0_29`, so parsing is unchanged unless that profile is applied.
 * **Breaking:** the default of `Parser.PARSER_EMULATION_PROFILE` is now `COMMONMARK_LATEST`, which
-  aliases `COMMONMARK_0_28`, instead of the `COMMONMARK` family sentinel. External code testing the
+  aliases `COMMONMARK_0_29`, instead of the `COMMONMARK` family sentinel. External code testing the
   resolved profile with `Parser.PARSER_EMULATION_PROFILE.get(options) == ParserEmulationProfile.COMMONMARK`
   now gets `false` where it previously got `true`. The same applies to the versioned CommonMark profiles,
   which now resolve to themselves rather than to `COMMONMARK`. Replace such identity checks with a family
@@ -136,8 +144,9 @@ Rendering output is unchanged, but the resolved value of `Parser.PARSER_EMULATIO
   is correct for both the sentinel and every versioned CommonMark profile. All comparisons inside
   flexmark-java were migrated accordingly.
 * **Breaking:** because `ListOptions` equality includes the emulation profile, a default `ListOptions`
-  instance no longer equals `ParserEmulationProfile.COMMONMARK.getOptions()`. It now equals
-  `ParserEmulationProfile.COMMONMARK_LATEST.getOptions()`.
+  instance no longer equals `ParserEmulationProfile.COMMONMARK.getOptions()`. It equals
+  `ParserEmulationProfile.COMMONMARK_LATEST.getOptions()` except for `Parser.LISTS_NO_ITEM_AT_CODE_INDENT`,
+  which `COMMONMARK_0_29` enables and which defaults to `false`.
 * **Breaking:** applying a CommonMark profile now writes all list options into the data holder, as the
   other profile families already did. A list option set before applying a CommonMark profile is therefore
   overwritten by the profile. Set such options after applying the profile.
@@ -149,10 +158,28 @@ Rendering output is unchanged, but the resolved value of `Parser.PARSER_EMULATIO
 
 ### Changes
 
+* Add: `ParserEmulationProfile.COMMONMARK_0_29` support. The following parser options make parsing
+  CommonMark 0.29 compliant. All default to `false`, which keeps the 0.28 behaviour, and are set to `true`
+  by the `COMMONMARK_0_29` profile:
+  * `Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES`: info string of a tilde fence may contain
+    backticks.
+  * `Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES`: code span normalization of 0.29.
+  * `Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION`: the "multiple of 3" emphasis rule does not apply if both
+    delimiter runs are multiples of 3.
+  * `Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES` and
+    `Parser.LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET`: link destinations in pointy brackets.
+  * `Parser.REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE`, `Parser.HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS`
+    and `Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING`: link reference definitions and titles.
+  * `Parser.LISTS_NO_ITEM_AT_CODE_INDENT`: a line indented by the code indent cannot start a list item.
+    It is a list option, resolved by `ParserEmulationProfile.getOptions()`.
+* Add: `FullOrigSpec029CoreTest` and `ComboOrigSpec029CoreTest` test the unmodified `spec.0.29.txt`.
+  `flexmark-test-specs` `spec.txt` is now a copy of `spec.0.29.txt`, and the tests using it apply
+  `COMMONMARK_LATEST`.
 * Add: `ParserEmulationProfile.COMMONMARK_LATEST`, an alias for the newest CommonMark specification
   version that this release actually implements. It is the new default of
   `Parser.PARSER_EMULATION_PROFILE`. It will be advanced only when the full specification test of the
-  next version passes without failures, and every advance will be noted here. `COMMONMARK` keeps its
+  next version passes without failures, and every advance is noted here (advanced to `COMMONMARK_0_29` in
+  this release). `COMMONMARK` keeps its
   existing role as the CommonMark family sentinel reported by `ParserEmulationProfile.family`, so code
   comparing against the family is unaffected.
 * Fix: versioned CommonMark profiles resolved `Parser.PARSER_EMULATION_PROFILE` to the `COMMONMARK`

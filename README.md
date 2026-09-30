@@ -7,7 +7,7 @@
 [![Java CI with Maven](https://github.com/advantest/flexmark-java/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/advantest/flexmark-java/actions/workflows/ci.yml)
 
 
-**flexmark-java** is a Java implementation of **[CommonMark (spec 0.28)]** parser using the
+**flexmark-java** is a Java implementation of **[CommonMark (spec 0.29)]** parser using the
 blocks first, inlines after Markdown parsing architecture.
 
 Its strengths are speed, flexibility, Markdown source element based AST with details of the
@@ -352,10 +352,11 @@ If you find a discrepancy please open an issue so it can be addressed.
 Major processor families are implemented and some family members also:
 
 * [ ] [Jekyll]
-* [CommonMark] for latest implemented spec, currently [CommonMark (spec 0.28)]
+* [CommonMark] for latest implemented spec, currently [CommonMark (spec 0.29)]
   * [ ] [League/CommonMark]
   * [CommonMark (spec 0.27)] for specific version compatibility
   * [CommonMark (spec 0.28)] for specific version compatibility
+  * [CommonMark (spec 0.29)] for specific version compatibility
   * [GitHub] Comments
 * [Markdown.pl][Markdown]
   * [ ] [Php Markdown Extra]
@@ -611,6 +612,7 @@ BSD (2-clause) licensed, see [LICENSE.txt] file.
 [CommonMark]: https://commonmark.org
 [CommonMark (spec 0.27)]: https://spec.commonmark.org/0.27
 [CommonMark (spec 0.28)]: https://spec.commonmark.org/0.28
+[CommonMark (spec 0.29)]: https://spec.commonmark.org/0.29
 [DocxConverter Sample]: flexmark-java-samples/src/com/vladsch/flexmark/java/samples/DocxConverterCommonMark.java
 [Extensions.java]: flexmark-profile-pegdown/src/main/java/com/vladsch/flexmark/profile/pegdown/Extensions.java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
