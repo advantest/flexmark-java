@@ -18,7 +18,6 @@
 # --- Cluster 5: link reference definitions (spec issues #454, #395, #469)
 # Setext heading after reference link definitions; a definition whose reference is never used; a space
 # is required before the title.
-170
 184
 185
 

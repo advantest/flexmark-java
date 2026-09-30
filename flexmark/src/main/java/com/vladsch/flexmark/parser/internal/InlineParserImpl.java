@@ -300,7 +300,7 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
 
         int beforeTitle = index;
         spnl();
-        title = parseLinkTitle();
+        title = !options.referenceDefinitionTitleRequiresSpace || index > beforeTitle ? parseLinkTitle() : null;
         if (title == null) {
             // rewind before spaces
             index = beforeTitle;

@@ -134,6 +134,18 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET = new DataKey<>("LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET", false);
 
     /**
+     * REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * the title of a link reference definition must be separated from its destination by whitespace,
+     * <code>[foo]: &lt;bar&gt;(baz)</code> is not a definition
+     */
+    final public static DataKey<Boolean> REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE = new DataKey<>("REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE", false);
+
+    /**
+     * LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * a link title in parentheses may contain a ( only if it is backslash-escaped
+     */
+    final public static DataKey<Boolean> LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING = new DataKey<>("LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING", false);
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);

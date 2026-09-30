@@ -17,6 +17,7 @@ public class InlineParserOptions {
     final public boolean useHardcodedLinkAddressParser;
     final public boolean linkTextPriorityOverLinkRef;
     final public boolean linkDestinationNotStartingWithPointyBracket;
+    final public boolean referenceDefinitionTitleRequiresSpace;
 
     public InlineParserOptions(DataHolder options) {
         matchLookaheadFirst = Parser.MATCH_NESTED_LINK_REFS_FIRST.get(options);
@@ -33,5 +34,6 @@ public class InlineParserOptions {
         linksAllowMatchedParentheses = Parser.LINKS_ALLOW_MATCHED_PARENTHESES.get(options);
         linkTextPriorityOverLinkRef = Parser.LINK_TEXT_PRIORITY_OVER_LINK_REF.get(options);
         linkDestinationNotStartingWithPointyBracket = Parser.LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET.get(options);
+        referenceDefinitionTitleRequiresSpace = Parser.REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE.get(options);
     }
 }

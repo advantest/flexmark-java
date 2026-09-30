@@ -37,12 +37,13 @@ public class Parsing {
             '|' +
             "\\((" + ST_ESCAPED_CHAR + "|[^)\\x00])*\\))";
     final private static Pattern ST_LINK_TITLE = Pattern.compile("^" + ST_LINK_TITLE_STRING);
+    final private static Pattern ST_LINK_TITLE_029 = Pattern.compile("^(?:\"(" + ST_ESCAPED_CHAR + "|[^\"\\x00])*\"" + '|' + "'(" + ST_ESCAPED_CHAR + "|[^'\\x00])*'" + '|' + "\\((" + ST_ESCAPED_CHAR + "|[^()\\x00])*\\))");
     final public String EOL = ST_EOL;
     final public String ESCAPED_CHAR = ST_ESCAPED_CHAR;
     final public Pattern LINK_LABEL = ST_LINK_LABEL;
     final public Pattern LINK_DESTINATION_ANGLES;
     final public String LINK_TITLE_STRING = ST_LINK_TITLE_STRING;
-    final public Pattern LINK_TITLE = ST_LINK_TITLE;
+    final public Pattern LINK_TITLE;
     final public Pattern LINK_DESTINATION;
     final public Pattern LINK_DESTINATION_MATCHED_PARENS;
     final public Pattern LINK_DESTINATION_MATCHED_PARENS_NOSP;
@@ -403,6 +404,7 @@ public class Parsing {
         }
 
         // init flag based patterns
+        this.LINK_TITLE = Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING.get(options) ? ST_LINK_TITLE_029 : ST_LINK_TITLE;
         this.LINK_DESTINATION_ANGLES = Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES.get(options) ? ST_LINK_DESTINATION_ANGLES_029 : spaceInLinkUrl ? ST_LINK_DESTINATION_ANGLES_SPC : ST_LINK_DESTINATION_ANGLES_NO_SPC;
         this.ENTITY_HERE = intellijDummyIdentifier ? ST_ENTITY_HERE_IDI : ST_ENTITY_HERE_NO_IDI;
 
