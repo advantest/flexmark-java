@@ -49,6 +49,7 @@ public class SupplementaryCodePointDelimiterTest {
             DataHolder options = profile == null ? new MutableDataSet().toImmutable() : profile.getProfileOptions().toImmutable();
             assertEquals(String.valueOf(profile), "<p>" + expected + "</p>\n", render(options, markdown));
         }
+
     }
 
     // `*` before punctuation and after a letter is not left-flanking: it cannot open
@@ -69,6 +70,22 @@ public class SupplementaryCodePointDelimiterTest {
     // `_` preceded by punctuation is only left-flanking: it opens
     private void underscoreOpensAfterPunctuation(String p) {
         assertPara(p + "<em>foo</em>", p + "_foo_");
+    }
+
+    // `*` preceded by whitespace and followed by punctuation, or surrounded by punctuation, is left-flanking: it opens
+    private void starOpensAfterWhitespaceOrPunctuation(String p) {
+        assertPara("x <em>" + p + "foo</em>", "x *" + p + "foo*");
+        assertPara(p + "<em>" + p + "foo</em>", p + "*" + p + "foo*");
+    }
+
+    @Test
+    public void bmpStarOpensAfterWhitespaceOrPunctuation() {
+        starOpensAfterWhitespaceOrPunctuation(BMP_PUNCT);
+    }
+
+    @Test
+    public void supplementaryStarOpensAfterWhitespaceOrPunctuation() {
+        starOpensAfterWhitespaceOrPunctuation(SUPP_PUNCT);
     }
 
     @Test
