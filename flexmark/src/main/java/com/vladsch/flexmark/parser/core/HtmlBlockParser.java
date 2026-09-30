@@ -52,12 +52,14 @@ public class HtmlBlockParser extends AbstractBlockParser {
             }
 
             String blockTags = sb.toString();
+            // CommonMark 0.30: a tag name ends at space, tab, end of line, > or />, vertical tab and form feed are not whitespace
+            String tagEnd = Parser.HTML_TAG_WHITESPACE_NO_VT_FF.get(options) ? "[ \\t]" : "\\s";
             String rawTags = Parser.HTML_BLOCK_TEXTAREA_TYPE_1.get(options) ? "script|pre|style|textarea" : "script|pre|style";
 
             this.BLOCK_PATTERNS = new Pattern[][] {
                     { null, null }, // not used (no type 0)
                     {
-                            Pattern.compile("^<(?:" + rawTags + ")(?:\\s|>|$)", Pattern.CASE_INSENSITIVE),
+                            Pattern.compile("^<(?:" + rawTags + ")(?:" + tagEnd + "|>|$)", Pattern.CASE_INSENSITIVE),
                             Pattern.compile("</(?:" + rawTags + ")>", Pattern.CASE_INSENSITIVE)
                     },
                     {
@@ -77,11 +79,11 @@ public class HtmlBlockParser extends AbstractBlockParser {
                             Pattern.compile("\\]\\]>")
                     },
                     {
-                            Pattern.compile("^</?(?:" + Parsing.XML_NAMESPACE + "(?:" + blockTags + "))(?:\\s|[/]?[>]|$)", Pattern.CASE_INSENSITIVE),
+                            Pattern.compile("^</?(?:" + Parsing.XML_NAMESPACE + "(?:" + blockTags + "))(?:" + tagEnd + "|[/]?[>]|$)", Pattern.CASE_INSENSITIVE),
                             null // terminated by blank line
                     },
                     {
-                            Pattern.compile("^(?:" + parsing.OPENTAG + '|' + parsing.CLOSETAG + ")\\s*$", Pattern.CASE_INSENSITIVE),
+                            Pattern.compile("^(?:" + parsing.OPENTAG + '|' + parsing.CLOSETAG + ")" + tagEnd + "*$", Pattern.CASE_INSENSITIVE),
                             null // terminated by blank line
                     }
             };

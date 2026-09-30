@@ -367,6 +367,11 @@ public class Parsing {
                 || LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING.get(options));
     }
 
+    // CommonMark 0.30: whitespace in a tag is space, tab and line ending, Java \s also matches vertical tab and form feed
+    private static String htmlTagWhitespace(String pattern, boolean noVtFf) {
+        return noVtFf ? pattern.replace("\\s", "[ \\t\\r\\n]") : pattern;
+    }
+
     public Parsing(DataHolder options) {
         this.options = options;
         this.CODE_BLOCK_INDENT = Parser.CODE_BLOCK_INDENT.get(options); // make sure this is consistent with lists settings
@@ -384,6 +389,7 @@ public class Parsing {
 
         boolean legacyEntityLimit = hasLegacyEntityLimit(options);
         boolean htmlDeclarationAsciiLetter = Parser.HTML_DECLARATION_ASCII_LETTER.get(options);
+        boolean htmlTagNoVtFf = Parser.HTML_TAG_WHITESPACE_NO_VT_FF.get(options);
 
         if (intellijDummyIdentifier) {
             this.ADDITIONAL_CHARS = ST_ADDITIONAL_CHARS_IDI;
@@ -405,8 +411,8 @@ public class Parsing {
             this.ATTRIBUTEVALUE = ST_ATTRIBUTEVALUE_IDI;
             this.ATTRIBUTEVALUESPEC = ST_ATTRIBUTEVALUESPEC_IDI;
             this.ATTRIBUTE = ST_ATTRIBUTE_IDI;
-            this.OPENTAG = allowNameSpace ? ST_NS_OPENTAG_IDI : ST_OPENTAG_IDI;
-            this.CLOSETAG = allowNameSpace ? ST_NS_CLOSETAG_IDI : ST_CLOSETAG_IDI;
+            this.OPENTAG = htmlTagWhitespace(allowNameSpace ? ST_NS_OPENTAG_IDI : ST_OPENTAG_IDI, htmlTagNoVtFf);
+            this.CLOSETAG = htmlTagWhitespace(allowNameSpace ? ST_NS_CLOSETAG_IDI : ST_CLOSETAG_IDI, htmlTagNoVtFf);
         } else {
             this.ADDITIONAL_CHARS = ST_ADDITIONAL_CHARS_NO_IDI;
             this.EXCLUDED_0_TO_SPACE = ST_EXCLUDED_0_TO_SPACE_NO_IDI;
@@ -427,8 +433,8 @@ public class Parsing {
             this.ATTRIBUTEVALUE = ST_ATTRIBUTEVALUE_NO_IDI;
             this.ATTRIBUTEVALUESPEC = ST_ATTRIBUTEVALUESPEC_NO_IDI;
             this.ATTRIBUTE = ST_ATTRIBUTE_NO_IDI;
-            this.OPENTAG = allowNameSpace ? ST_NS_OPENTAG_NO_IDI : ST_OPENTAG_NO_IDI;
-            this.CLOSETAG = allowNameSpace ? ST_NS_CLOSETAG_NO_IDI : ST_CLOSETAG_NO_IDI;
+            this.OPENTAG = htmlTagWhitespace(allowNameSpace ? ST_NS_OPENTAG_NO_IDI : ST_OPENTAG_NO_IDI, htmlTagNoVtFf);
+            this.CLOSETAG = htmlTagWhitespace(allowNameSpace ? ST_NS_CLOSETAG_NO_IDI : ST_CLOSETAG_NO_IDI, htmlTagNoVtFf);
         }
 
         // init flag based patterns
@@ -473,7 +479,7 @@ public class Parsing {
                             (htmlForTranslator ? "|(?:" + translationAutolinkTagPattern + ")" : "") +
                             ")>"));
 
-            this.HTML_TAG = getCachedPattern(htmlDeclarationAsciiLetter ? "HTML_TAG_030" : "HTML_TAG", patternTypeFlags.withHtmlTranslator(), entry -> Pattern.compile('^' + ("(?:" + OPENTAG + "|" + CLOSETAG + "|" + HTMLCOMMENT
+            this.HTML_TAG = getCachedPattern("HTML_TAG" + (htmlDeclarationAsciiLetter ? "_DECLARATION_030" : "") + (htmlTagNoVtFf ? "_WS_030" : ""), patternTypeFlags.withHtmlTranslator(), entry -> Pattern.compile('^' + ("(?:" + OPENTAG + "|" + CLOSETAG + "|" + HTMLCOMMENT
                     + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA +
                     (htmlForTranslator ? "|<(?:" + translationHtmlInlineTagPattern + ")>|</(?:" + translationHtmlInlineTagPattern + ")>" : "") + ")"), Pattern.CASE_INSENSITIVE));
 

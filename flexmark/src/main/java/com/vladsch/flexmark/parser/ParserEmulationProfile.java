@@ -523,6 +523,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
         dataHolder.set(Parser.HTML_BLOCK_TEXTAREA_TYPE_1, false);
         dataHolder.set(Parser.REFERENCE_LABEL_UNICODE_CASE_FOLD, false);
         dataHolder.set(Parser.HTML_DECLARATION_ASCII_LETTER, false);
+        dataHolder.set(Parser.HTML_TAG_WHITESPACE_NO_VT_FF, false);
 
         return dataHolder;
     }

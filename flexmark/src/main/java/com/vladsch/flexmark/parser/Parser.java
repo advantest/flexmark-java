@@ -184,6 +184,13 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> HTML_DECLARATION_ASCII_LETTER = new DataKey<>("HTML_DECLARATION_ASCII_LETTER", true);
 
     /**
+     * HTML_TAG_WHITESPACE_NO_VT_FF default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30:
+     * whitespace in HTML tags is spaces, tabs and up to one line ending, vertical tab and form feed are not whitespace. Applies to open and closing tags
+     * of inline HTML and to the tag name terminators of HTML block starts of types 1, 6 and 7
+     */
+    final public static DataKey<Boolean> HTML_TAG_WHITESPACE_NO_VT_FF = new DataKey<>("HTML_TAG_WHITESPACE_NO_VT_FF", true);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);
