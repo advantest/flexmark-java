@@ -148,13 +148,13 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS = new DataKey<>("HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS", true);
 
     /**
-     * LISTS_NO_ITEM_AT_CODE_INDENT default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * LISTS_NO_ITEM_AT_CODE_INDENT default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every other profile, including COMMONMARK_0_26 to COMMONMARK_0_28, in ParserEmulationProfile.getOptions():
      * a line indented {@link #LISTS_CODE_INDENT} or more columns, relative to the content of its container, cannot
      * start a list item, even when it is indented less than the content of the preceding list item. It is then
      * a continuation line of a paragraph or else an indented code block.
      * Only applies to the CommonMark parser family.
      */
-    final public static DataKey<Boolean> LISTS_NO_ITEM_AT_CODE_INDENT = new DataKey<>("LISTS_NO_ITEM_AT_CODE_INDENT", false);
+    final public static DataKey<Boolean> LISTS_NO_ITEM_AT_CODE_INDENT = new DataKey<>("LISTS_NO_ITEM_AT_CODE_INDENT", true);
 
     /**
      * LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every other profile, including COMMONMARK_0_26 to COMMONMARK_0_28:

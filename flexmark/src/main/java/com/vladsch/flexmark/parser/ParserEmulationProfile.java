@@ -58,6 +58,15 @@ public enum ParserEmulationProfile implements MutableDataSetter {
     final public static DataKey<Integer> PEGDOWN_EXTENSIONS = new DataKey<>("PEGDOWN_EXTENSIONS", PegdownExtensions.ALL);
 
     public MutableListOptions getOptions(DataHolder dataHolder) {
+        MutableListOptions options = createOptions(dataHolder);
+        if (this != COMMONMARK_0_29) {
+            // CommonMark 0.29 list rules are the defaults, every other profile keeps the previous behaviour
+            options.setNoItemAtCodeIndent(false);
+        }
+        return options;
+    }
+
+    private MutableListOptions createOptions(DataHolder dataHolder) {
         if (family == FIXED_INDENT) {
             if (this == MULTI_MARKDOWN) {
                 return new MutableListOptions().setParserEmulationFamily(this)
@@ -316,7 +325,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                 // IMPORTANT: implement 0.29 as defaults with 0.28 as changes
             }
             else if (this == COMMONMARK_0_29) {
-                return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this).setNoItemAtCodeIndent(true);
+                // IMPORTANT: 0.29 list rules are the defaults of the list options, older profiles opt out
             }
             return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this);
         }

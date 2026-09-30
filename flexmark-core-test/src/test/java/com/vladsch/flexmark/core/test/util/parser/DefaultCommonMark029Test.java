@@ -70,4 +70,9 @@ public class DefaultCommonMark029Test {
     public void linkTitleParenthesesNoUnescapedOpening() {
         check("[a](/u (b(c))\n", "<p>[a](/u (b(c))</p>\n", "<p><a href=\"/u\" title=\"b(c\">a</a></p>\n");
     }
+
+    @Test
+    public void noListItemAtCodeIndent() {
+        check("- a\n - b\n  - c\n   - d\n    - e\n", "<ul>\n<li>a</li>\n<li>b</li>\n<li>c</li>\n<li>d\n- e</li>\n</ul>\n", "<ul>\n<li>a</li>\n<li>b</li>\n<li>c</li>\n<li>d</li>\n<li>e</li>\n</ul>\n");
+    }
 }
