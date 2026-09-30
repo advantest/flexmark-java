@@ -81,6 +81,7 @@
         <module>flexmark-all</module>
         <module>flexmark-osgi</module>
         <module>flexmark-docx-converter</module>
+        <module>flexmark-coverage-report</module>
     </modules>
 
     <properties>
