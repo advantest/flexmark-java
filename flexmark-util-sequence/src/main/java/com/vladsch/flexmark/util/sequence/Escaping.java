@@ -23,7 +23,7 @@ public class Escaping {
                     .replace("]", "\\]") +
             "]";
 
-    final private static String ENTITY = "&(?:#x[a-f0-9]{1,8}|#[0-9]{1,8}|[a-z][a-z0-9]{1,31});";
+    final private static String ENTITY = "&(?:#x[a-f0-9]{1,6}|#[0-9]{1,7}|[a-z][a-z0-9]{1,31});";
 
     final private static Pattern BACKSLASH_ONLY = Pattern.compile("[\\\\]");
 

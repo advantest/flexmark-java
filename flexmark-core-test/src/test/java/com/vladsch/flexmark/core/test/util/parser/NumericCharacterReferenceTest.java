@@ -104,4 +104,19 @@ public class NumericCharacterReferenceTest {
         assertPara("<code>&amp;#87654321;</code>", "`&#87654321;`\n");
         assertPara("<code>&amp;#x1234567;</code>", "`&#x1234567;`\n");
     }
+
+    @Test
+    public void profilesBefore029KeepTheEightDigitLimit() {
+        ParserEmulationProfile[] pre029 = {
+                ParserEmulationProfile.COMMONMARK_0_26,
+                ParserEmulationProfile.COMMONMARK_0_27,
+                ParserEmulationProfile.COMMONMARK_0_28,
+        };
+
+        for (ParserEmulationProfile profile : pre029) {
+            DataHolder options = profile.getProfileOptions().toImmutable();
+            assertEquals("profile " + profile, "<p>\uFFFD \uFFFD \uFFFD</p>\n", render(options, "&#98765432; &#x12345678; &#x1234567;\n"));
+            assertEquals("profile " + profile, "<p>&amp;#987654321; &amp;#x123456789;</p>\n", render(options, "&#987654321; &#x123456789;\n"));
+        }
+    }
 }

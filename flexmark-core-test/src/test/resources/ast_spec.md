@@ -7613,21 +7613,21 @@ the REPLACEMENT CHARACTER (`U+FFFD`).  For security reasons,
 the code point `U+0000` will also be replaced by `U+FFFD`.
 
 ```````````````````````````````` example Entity and numeric character references: 2
-&#35; &#1234; &#992; &#98765432; &#0;
+&#35; &#1234; &#992; &#9876543; &#0;
 .
 <p># Ӓ Ϡ � �</p>
 .
-Document[0, 38]
-  Paragraph[0, 38]
+Document[0, 37]
+  Paragraph[0, 37]
     HtmlEntity[0, 5] "&#35;"
     Text[5, 6] chars:[5, 6, " "]
     HtmlEntity[6, 13] "&#1234;"
     Text[13, 14] chars:[13, 14, " "]
     HtmlEntity[14, 20] "&#992;"
     Text[20, 21] chars:[20, 21, " "]
-    HtmlEntity[21, 32] "&#98765432;"
-    Text[32, 33] chars:[32, 33, " "]
-    HtmlEntity[33, 37] "&#0;"
+    HtmlEntity[21, 31] "&#9876543;"
+    Text[31, 32] chars:[31, 32, " "]
+    HtmlEntity[32, 36] "&#0;"
 ````````````````````````````````
 
 

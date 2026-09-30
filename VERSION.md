@@ -201,7 +201,13 @@ backticks or tildes, and the formatter, which reads `LISTS_NO_ITEM_AT_CODE_INDEN
   The option was previously discarded by the defect above, so rendering output is unchanged.
 * Fix: `flexmark-ext-definition` compared the emulation profile against the `COMMONMARK` family
   sentinel, which only worked because of the defect above. It now compares the family explicitly.
-
+* Fix: flexmark now enforces the CommonMark 0.29 length limits of numeric character references: at most 7
+  decimal or 6 hexadecimal digits, counting leading zeros. Longer sequences such as `&#87654321;` or
+  `&#x1234567;` are no longer character references and stay literal text, where they used to render as
+  U+FFFD (the limit used to be 8 digits). This is a bug fix, not a gated option, so it also applies to the
+  default configuration and `COMMONMARK_0_29`. `COMMONMARK_0_26` to `COMMONMARK_0_28` and the other profiles,
+  which turn off all 0.29 parsing options, keep the 8 digit limit of their specifications for references in
+  text. Link destinations, titles and info strings are unescaped without options and always use the 0.29 limits.
 ## 0.64.8
 
 * Update: `flexmark-ext-emoji` to latest references from [emoji-cross-reference] based on latest

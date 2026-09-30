@@ -3,6 +3,7 @@ package com.vladsch.flexmark.ast.util;
 import com.vladsch.flexmark.ast.*;
 import com.vladsch.flexmark.util.ast.*;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
+import com.vladsch.flexmark.util.sequence.Html5Entities;
 import com.vladsch.flexmark.util.sequence.builder.SequenceBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -102,7 +103,7 @@ public class TextCollectingVisitor {
     }
 
     private void visit(HtmlEntity node) {
-        out.add(node.getChars().unescape());
+        out.add(Html5Entities.entityToString(node.getChars().toString()));
     }
 
     private void visit(Text node) {

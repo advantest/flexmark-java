@@ -155,8 +155,11 @@ public class Parsing {
     final private static String ST_DECLARATION_IDI = "<![A-Z" + ST_ADDITIONAL_CHARS_IDI + "]+\\s+[^>]*>";
     final private static String ST_DECLARATION_NO_IDI = "<![A-Z" + ST_ADDITIONAL_CHARS_NO_IDI + "]+\\s+[^>]*>";
 
-    final private static String ST_ENTITY_IDI = "&(?:#x[a-f0-9" + ST_ADDITIONAL_CHARS_IDI + "]{1,8}|#[0-9]{1,8}|[a-z" + ST_ADDITIONAL_CHARS_IDI + "][a-z0-9" + ST_ADDITIONAL_CHARS_IDI + "]{1,31});";
-    final private static String ST_ENTITY_NO_IDI = "&(?:#x[a-f0-9" + ST_ADDITIONAL_CHARS_NO_IDI + "]{1,8}|#[0-9]{1,8}|[a-z" + ST_ADDITIONAL_CHARS_NO_IDI + "][a-z0-9" + ST_ADDITIONAL_CHARS_NO_IDI + "]{1,31});";
+    final private static String ST_ENTITY_IDI = "&(?:#x[a-f0-9" + ST_ADDITIONAL_CHARS_IDI + "]{1,6}|#[0-9]{1,7}|[a-z" + ST_ADDITIONAL_CHARS_IDI + "][a-z0-9" + ST_ADDITIONAL_CHARS_IDI + "]{1,31});";
+    final private static String ST_ENTITY_NO_IDI = "&(?:#x[a-f0-9" + ST_ADDITIONAL_CHARS_NO_IDI + "]{1,6}|#[0-9]{1,7}|[a-z" + ST_ADDITIONAL_CHARS_NO_IDI + "][a-z0-9" + ST_ADDITIONAL_CHARS_NO_IDI + "]{1,31});";
+    // CommonMark before 0.29 (and emulation profiles not based on 0.29) allow up to 8 digits in numeric character references
+    final private static String ST_ENTITY_LEGACY_IDI = ST_ENTITY_IDI.replace("{1,6}|#[0-9]{1,7}", "{1,8}|#[0-9]{1,8}");
+    final private static String ST_ENTITY_LEGACY_NO_IDI = ST_ENTITY_NO_IDI.replace("{1,6}|#[0-9]{1,7}", "{1,8}|#[0-9]{1,8}");
 
     final private static String ST_IN_BRACES_W_SP_IDI = "\\{\\{(?:[^{}\\\\" + ST_EXCLUDED_0_TO_SPACE_IDI + "]| |\t)*\\}\\}";
     final private static String ST_IN_BRACES_W_SP_NO_IDI = "\\{\\{(?:[^{}\\\\" + ST_EXCLUDED_0_TO_SPACE_NO_IDI + "]| |\t)*\\}\\}";
@@ -192,6 +195,8 @@ public class Parsing {
 
     final private static Pattern ST_ENTITY_HERE_IDI = Pattern.compile('^' + ST_ENTITY_IDI, Pattern.CASE_INSENSITIVE);
     final private static Pattern ST_ENTITY_HERE_NO_IDI = Pattern.compile('^' + ST_ENTITY_NO_IDI, Pattern.CASE_INSENSITIVE);
+    final private static Pattern ST_ENTITY_HERE_LEGACY_IDI = Pattern.compile('^' + ST_ENTITY_LEGACY_IDI, Pattern.CASE_INSENSITIVE);
+    final private static Pattern ST_ENTITY_HERE_LEGACY_NO_IDI = Pattern.compile('^' + ST_ENTITY_LEGACY_NO_IDI, Pattern.CASE_INSENSITIVE);
 
     final public String ADDITIONAL_CHARS;
     final public String EXCLUDED_0_TO_SPACE;
@@ -342,6 +347,22 @@ public class Parsing {
         return patternMap.computeIfAbsent(cachedTypeFlags, factory);
     }
 
+    /**
+     * CommonMark 0.29 limits numeric character references to 7 decimal and 6 hex digits. Emulation profiles that are not
+     * based on 0.29 switch off every 0.29 parsing option and keep the earlier limit of 8 digits.
+     */
+    private static boolean hasLegacyEntityLimit(DataHolder options) {
+        return !(FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(options)
+                || CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES.get(options)
+                || EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION.get(options)
+                || LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES.get(options)
+                || LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET.get(options)
+                || REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE.get(options)
+                || HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS.get(options)
+                || LISTS_NO_ITEM_AT_CODE_INDENT.get(options)
+                || LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING.get(options));
+    }
+
     public Parsing(DataHolder options) {
         this.options = options;
         this.CODE_BLOCK_INDENT = Parser.CODE_BLOCK_INDENT.get(options); // make sure this is consistent with lists settings
@@ -357,6 +378,8 @@ public class Parsing {
         this.listsOrderedItemDotOnly = Boolean.TRUE.equals(patternTypeFlags.listsOrderedItemDotOnly);
         this.allowNameSpace = Boolean.TRUE.equals(patternTypeFlags.allowNameSpace);
 
+        boolean legacyEntityLimit = hasLegacyEntityLimit(options);
+
         if (intellijDummyIdentifier) {
             this.ADDITIONAL_CHARS = ST_ADDITIONAL_CHARS_IDI;
             this.EXCLUDED_0_TO_SPACE = ST_EXCLUDED_0_TO_SPACE_IDI;
@@ -370,7 +393,7 @@ public class Parsing {
             this.IN_MATCHED_PARENS_W_SP = ST_IN_MATCHED_PARENS_W_SP_IDI;
             this.IN_BRACES_W_SP = ST_IN_BRACES_W_SP_IDI;
             this.DECLARATION = ST_DECLARATION_IDI;
-            this.ENTITY = ST_ENTITY_IDI;
+            this.ENTITY = legacyEntityLimit ? ST_ENTITY_LEGACY_IDI : ST_ENTITY_IDI;
             this.TAGNAME = ST_TAGNAME_IDI;
             this.ATTRIBUTENAME = ST_ATTRIBUTENAME_IDI;
             this.UNQUOTEDVALUE = ST_UNQUOTEDVALUE_IDI;
@@ -392,7 +415,7 @@ public class Parsing {
             this.IN_MATCHED_PARENS_W_SP = ST_IN_MATCHED_PARENS_W_SP_NO_IDI;
             this.IN_BRACES_W_SP = ST_IN_BRACES_W_SP_NO_IDI;
             this.DECLARATION = ST_DECLARATION_NO_IDI;
-            this.ENTITY = ST_ENTITY_NO_IDI;
+            this.ENTITY = legacyEntityLimit ? ST_ENTITY_LEGACY_NO_IDI : ST_ENTITY_NO_IDI;
             this.TAGNAME = ST_TAGNAME_NO_IDI;
             this.ATTRIBUTENAME = ST_ATTRIBUTENAME_NO_IDI;
             this.UNQUOTEDVALUE = ST_UNQUOTEDVALUE_NO_IDI;
@@ -406,7 +429,9 @@ public class Parsing {
         // init flag based patterns
         this.LINK_TITLE = Parser.LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING.get(options) ? ST_LINK_TITLE_029 : ST_LINK_TITLE;
         this.LINK_DESTINATION_ANGLES = Parser.LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES.get(options) ? ST_LINK_DESTINATION_ANGLES_029 : spaceInLinkUrl ? ST_LINK_DESTINATION_ANGLES_SPC : ST_LINK_DESTINATION_ANGLES_NO_SPC;
-        this.ENTITY_HERE = intellijDummyIdentifier ? ST_ENTITY_HERE_IDI : ST_ENTITY_HERE_NO_IDI;
+        this.ENTITY_HERE = intellijDummyIdentifier
+                ? (legacyEntityLimit ? ST_ENTITY_HERE_LEGACY_IDI : ST_ENTITY_HERE_IDI)
+                : (legacyEntityLimit ? ST_ENTITY_HERE_LEGACY_NO_IDI : ST_ENTITY_HERE_NO_IDI);
 
         // init dynamic patterns
         synchronized (cachedPatterns) {

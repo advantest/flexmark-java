@@ -18,6 +18,7 @@ import com.vladsch.flexmark.util.html.Attributes;
 import com.vladsch.flexmark.util.misc.CharPredicate;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
 import com.vladsch.flexmark.util.sequence.Escaping;
+import com.vladsch.flexmark.util.sequence.Html5Entities;
 import com.vladsch.flexmark.util.sequence.Range;
 import org.jetbrains.annotations.NotNull;
 
@@ -614,7 +615,7 @@ public class CoreNodeRenderer implements NodeRenderer {
     @SuppressWarnings("MethodMayBeStatic")
     void render(HtmlEntity node, NodeRendererContext context, HtmlWriter html) {
         if (context.getHtmlOptions().unescapeHtmlEntities) {
-            html.text(node.getChars().unescape());
+            html.text(Html5Entities.entityToString(node.getChars().toString()));
         } else {
             html.raw(node.getChars().unescapeNoEntities());
         }
