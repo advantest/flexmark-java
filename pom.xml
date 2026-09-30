@@ -90,6 +90,7 @@
         <!-- Don't automatically publish artifacts to Central, we might want to inspect them first. -->
         <nexus.staging.autoRelease>false</nexus.staging.autoRelease>
         <slf4j.version>2.0.18</slf4j.version>
+        <jacoco.version>0.8.15</jacoco.version>
     </properties>
 
     <build>
@@ -115,6 +116,36 @@
                     </requireJavaVersion>
                   </rules>
                 </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!-- Measures how much of the code the tests reach. The measurement runs with every
+               build and does not judge the result: how the value has to develop is not decided
+               yet, so nothing fails because of it. Every module writes its own report to
+               target/site/jacoco/index.html, because every module is a library of its own and is
+               used without the others.
+
+               The agent is passed to the tests through the argLine property, which surefire picks
+               up on its own. A module that sets that property itself therefore runs without the
+               agent and measures nothing. -->
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${jacoco.version}</version>
+            <executions>
+              <execution>
+                <id>prepare-coverage-measurement</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report-coverage</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
               </execution>
             </executions>
           </plugin>
