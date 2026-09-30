@@ -401,19 +401,37 @@ character. Per the standing rule, B312.3 must ship with hand-written tests well 
 
 These tests belong in the same commit series as B312.3 and depend on Task F2.
 
-### Task F4 — exclude DEL (U+007F) from link destinations and autolinks (open, UNCONFIRMED)
+### Task F4 — DEL (U+007F) in link destinations and autolinks (CLOSED — no change, reference divergence)
 
-`Parsing.EXCLUDED_0_TO_SPACE` is `\u0000-\u0020`, which excludes the C0 controls and space but **not** U+007F.
-Probes show `[a](b<DEL>c)` and `<http://a<DEL>b>` both still produce links. The CommonMark definition of ASCII
-control characters (0.30 onwards) includes U+007F, so the spec text says these should not be links.
+**Resolved: do not change the code.** The spec text and the reference implementation disagree, and flexmark
+already matches the reference implementation.
 
-**This is explicitly unconfirmed and must be verified before any code is changed.** It was *not* checked
-whether commonmark.js and the other reference implementations actually reject U+007F here; the spec text and
-the reference behaviour may diverge, and no spec example of any version covers it. Verify against
-commonmark.js first. If the references do reject it, treat this as an ungated bug fix like Task F2 and add
-hand-written tests, since no example enforces it.
+The 0.31.2 spec defines an ASCII control character as `U+0000–1F` **or `U+007F`** (line 330), and says a raw
+link destination "does not include ASCII control characters or space" (line 7496); an absolute URI in an
+autolink likewise excludes them (line 8768). Read literally, `[a](b<DEL>c)` and `<http://a<DEL>b>` should not
+be links.
+
+commonmark.js does **not** honour that:
+
+| Site                                       | commonmark.js                                                    | Excludes U+007F? |
+|--------------------------------------------|------------------------------------------------------------------|------------------|
+| `reAutolink`                                | `/^<[A-Za-z][A-Za-z0-9.+-]{1,31}:[^<>\x00-\x20]*>/i`             | no               |
+| `parseLinkDestination`, unbracketed         | hand-rolled loop breaking only on `reWhitespaceChar` and parens   | no               |
+| `reLinkDestinationBraces`                   | `/^(?:<(?:[^<>\n\\\x00]|\\.)*>)/`                                 | no               |
+
+The unbracketed destination loop does not exclude **any** control character — only whitespace and unbalanced
+parentheses stop it. flexmark's `EXCLUDED_0_TO_SPACE` (`\u0000-\u0020`) is therefore already *stricter* than
+the reference for C0 controls, and equally permissive for U+007F.
+
+No spec example of any version covers U+007F here, so nothing enforces the stricter reading. Changing flexmark
+to follow the literal spec text would make it diverge from commonmark.js and from every implementation that
+matches it, and would break the "same output as the reference" property that the whole spec suite rests on.
+
+**Reopen only if** a future spec version adds an example that forces the stricter behaviour, or commonmark.js
+changes to implement its own spec text.
 
 ### Task F1 — verify the exactness of the Unicode case folding (open)
+
 
 B30.3 matches link labels with `Escaping.caseFold`, which lower-cases each code point, upper-cases the
 string and lower-cases each code point again. That is a **Java approximation of Unicode full case folding,
