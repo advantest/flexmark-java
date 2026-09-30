@@ -1,0 +1,42 @@
+# Known failures of flexmark-java against the unmodified CommonMark spec 0.29 (spec.0.29.txt).
+#
+# One entry per line: the example number as in the spec ("Example N"), then a comment.
+# The comments and the grouping into clusters are a provisional reading of the example sources, not
+# verified root causes. Confirm the cause before implementing a fix.
+# Listed examples are run with the FAIL option by ComboOrigSpec029CoreTest: they pass while they still
+# render incorrectly and FAIL as soon as they render correctly.
+#
+# RULES: entries may only be REMOVED, never added, as 0.29 support is implemented. When an example
+# starts to pass, its test fails until its entry is deleted here. When this file is empty,
+# enable FullOrigSpec029CoreTest and delete this file together with the FAIL handling in the test.
+
+# --- Code spans: stripping of one leading/trailing space, line endings converted to spaces
+331  # code span with inner backticks and padding spaces
+332  # single leading space is kept
+334  # space-only code spans
+335  # line ending inside code span becomes a space
+336  # trailing space before line ending
+337  # line ending inside code span becomes a space
+637  # line ending inside code span becomes a space
+
+# --- Fenced code blocks: info string of backtick fences
+108  # backtick fence info string may not contain backticks
+116  # backtick in info string of tilde fence
+# --- Link reference definitions: title/destination on separate lines, setext heading vs. definition
+164  # destination and title on their own lines
+170  # <destination> followed directly by text
+184  # definition inside paragraph before setext underline
+185  # definition followed by setext underline
+
+# --- Lists: indentation rules of list items
+282  # sublist indentation up to 3 spaces
+283  # indented ordered list items
+
+# --- Emphasis: rule of 3 for runs of *
+415  # foo***bar***baz
+416  # foo******bar*********baz
+
+# --- Links: <...> link destinations
+486  # spaces in <destination>
+490  # backslash-escaped > in <destination>
+491  # unmatched < in destination
