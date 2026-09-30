@@ -177,6 +177,13 @@ public class Parser implements IParse {
      */
     final public static DataKey<Boolean> HTML_BLOCK_TEXTAREA_TYPE_1 = new DataKey<>("HTML_BLOCK_TEXTAREA_TYPE_1", true);
     /**
+     * HTML_DECLARATION_ASCII_LETTER default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30:
+     * a declaration is <! an ASCII letter of any case, zero or more characters other than > and >, the whitespace after the name is not required.
+     * Applies to inline HTML and to HTML blocks of type 4
+     */
+    final public static DataKey<Boolean> HTML_DECLARATION_ASCII_LETTER = new DataKey<>("HTML_DECLARATION_ASCII_LETTER", true);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);

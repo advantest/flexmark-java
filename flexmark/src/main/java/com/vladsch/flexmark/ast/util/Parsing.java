@@ -184,6 +184,10 @@ public class Parsing {
 
     final private static String ST_OPENTAG_IDI = "<" + ST_TAGNAME_IDI + ST_ATTRIBUTE_IDI + "*" + "\\s*/?>";
     final private static String ST_OPENTAG_NO_IDI = "<" + ST_TAGNAME_NO_IDI + ST_ATTRIBUTE_NO_IDI + "*" + "\\s*/?>";
+    // CommonMark 0.30: <! an ASCII letter, anything but >, >
+    final private static String ST_DECLARATION_030_IDI = "<![A-Za-z" + ST_ADDITIONAL_CHARS_IDI + "][^>]*>";
+    final private static String ST_DECLARATION_030_NO_IDI = "<![A-Za-z" + ST_ADDITIONAL_CHARS_NO_IDI + "][^>]*>";
+
     final private static String ST_NS_OPENTAG_IDI = "<" + XML_NAMESPACE + ST_TAGNAME_IDI + ST_ATTRIBUTE_IDI + "*" + "\\s*/?>";
     final private static String ST_NS_OPENTAG_NO_IDI = "<" + XML_NAMESPACE + ST_TAGNAME_NO_IDI + ST_ATTRIBUTE_NO_IDI + "*" + "\\s*/?>";
 
@@ -379,6 +383,7 @@ public class Parsing {
         this.allowNameSpace = Boolean.TRUE.equals(patternTypeFlags.allowNameSpace);
 
         boolean legacyEntityLimit = hasLegacyEntityLimit(options);
+        boolean htmlDeclarationAsciiLetter = Parser.HTML_DECLARATION_ASCII_LETTER.get(options);
 
         if (intellijDummyIdentifier) {
             this.ADDITIONAL_CHARS = ST_ADDITIONAL_CHARS_IDI;
@@ -392,7 +397,7 @@ public class Parsing {
             this.IN_MATCHED_PARENS_NOSP = ST_IN_MATCHED_PARENS_NOSP_IDI;
             this.IN_MATCHED_PARENS_W_SP = ST_IN_MATCHED_PARENS_W_SP_IDI;
             this.IN_BRACES_W_SP = ST_IN_BRACES_W_SP_IDI;
-            this.DECLARATION = ST_DECLARATION_IDI;
+            this.DECLARATION = htmlDeclarationAsciiLetter ? ST_DECLARATION_030_IDI : ST_DECLARATION_IDI;
             this.ENTITY = legacyEntityLimit ? ST_ENTITY_LEGACY_IDI : ST_ENTITY_IDI;
             this.TAGNAME = ST_TAGNAME_IDI;
             this.ATTRIBUTENAME = ST_ATTRIBUTENAME_IDI;
@@ -414,7 +419,7 @@ public class Parsing {
             this.IN_MATCHED_PARENS_NOSP = ST_IN_MATCHED_PARENS_NOSP_NO_IDI;
             this.IN_MATCHED_PARENS_W_SP = ST_IN_MATCHED_PARENS_W_SP_NO_IDI;
             this.IN_BRACES_W_SP = ST_IN_BRACES_W_SP_NO_IDI;
-            this.DECLARATION = ST_DECLARATION_NO_IDI;
+            this.DECLARATION = htmlDeclarationAsciiLetter ? ST_DECLARATION_030_NO_IDI : ST_DECLARATION_NO_IDI;
             this.ENTITY = legacyEntityLimit ? ST_ENTITY_LEGACY_NO_IDI : ST_ENTITY_NO_IDI;
             this.TAGNAME = ST_TAGNAME_NO_IDI;
             this.ATTRIBUTENAME = ST_ATTRIBUTENAME_NO_IDI;
@@ -468,7 +473,7 @@ public class Parsing {
                             (htmlForTranslator ? "|(?:" + translationAutolinkTagPattern + ")" : "") +
                             ")>"));
 
-            this.HTML_TAG = getCachedPattern("HTML_TAG", patternTypeFlags.withHtmlTranslator(), entry -> Pattern.compile('^' + ("(?:" + OPENTAG + "|" + CLOSETAG + "|" + HTMLCOMMENT
+            this.HTML_TAG = getCachedPattern(htmlDeclarationAsciiLetter ? "HTML_TAG_030" : "HTML_TAG", patternTypeFlags.withHtmlTranslator(), entry -> Pattern.compile('^' + ("(?:" + OPENTAG + "|" + CLOSETAG + "|" + HTMLCOMMENT
                     + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA +
                     (htmlForTranslator ? "|<(?:" + translationHtmlInlineTagPattern + ")>|</(?:" + translationHtmlInlineTagPattern + ")>" : "") + ")"), Pattern.CASE_INSENSITIVE));
 

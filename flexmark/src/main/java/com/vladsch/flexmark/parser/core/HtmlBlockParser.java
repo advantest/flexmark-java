@@ -69,7 +69,7 @@ public class HtmlBlockParser extends AbstractBlockParser {
                             Pattern.compile("\\?>")
                     },
                     {
-                            Pattern.compile("^<![A-Z]"),
+                            Pattern.compile(Parser.HTML_DECLARATION_ASCII_LETTER.get(options) ? "^<![A-Za-z]" : "^<![A-Z]"),
                             Pattern.compile(">")
                     },
                     {
