@@ -1379,6 +1379,10 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
         return super.clone();
     }
 
+    private static String codePointString(int codePoint) {
+        return codePoint < Character.MIN_SUPPLEMENTARY_CODE_POINT ? String.valueOf((char) codePoint) : new String(Character.toChars(codePoint));
+    }
+
     /**
      * Scan a sequence of characters with code delimiterChar, and return information about the number of delimiters
      * and whether they are positioned such that they can open and/or close emphasis or strong emphasis.
@@ -1401,10 +1405,11 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
             return null;
         }
 
-        String before = startIndex == 0 ? SequenceUtils.EOL : String.valueOf(input.charAt(startIndex - 1));
+        // classify whole code points: a supplementary character is a surrogate pair, not two characters
+        String before = startIndex == 0 ? SequenceUtils.EOL : codePointString(Character.codePointBefore(input, startIndex));
 
         char charAfter = peek();
-        String after = charAfter == SequenceUtils.NUL ? SequenceUtils.EOL : String.valueOf(charAfter);
+        String after = charAfter == SequenceUtils.NUL ? SequenceUtils.EOL : codePointString(Character.codePointAt(input, index));
 
         // We could be more lazy here, in most cases we don't need to do every match case.
         boolean beforeIsPunctuation;

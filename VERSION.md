@@ -238,6 +238,10 @@ backticks or tildes, and the formatter, which reads `LISTS_NO_ITEM_AT_CODE_INDEN
   which turn off all 0.29 parsing options, keep the 8 digit limit of their specifications for references in
   text, selected when none of the nine 0.29 parsing options is enabled. Link destinations, titles and info strings
   are unescaped without options and always use the 0.29 limits.
+* Fix: emphasis delimiter flanking is now classified per Unicode code point instead of per UTF-16 character, so
+  supplementary characters such as U+10100 (punctuation) or U+1D400 (letter) next to a * or _ run are
+  handled correctly; before, their surrogate halves were classified as neither punctuation nor whitespace. This is
+  an ungated bug fix that applies to all profiles, including the older ones.
 ## 0.64.8
 
 * Update: `flexmark-ext-emoji` to latest references from [emoji-cross-reference] based on latest
