@@ -105,6 +105,11 @@ public class LinkReferenceDefinitionTest {
     }
 
     @Test
+    public void setextHeadingAfterDefinitionInContainersIn029() {
+        assert029("<blockquote>\n<h1>bar</h1>\n</blockquote>\n<p><a href=\"/url\">foo</a></p>\n", "> [foo]: /url\n> bar\n> ===\n\n[foo]\n");
+        assert029("<ul>\n<li>\n<h1>bar</h1>\n</li>\n</ul>\n<p><a href=\"/url\">foo</a></p>\n", "- [foo]: /url\n  bar\n  ===\n\n[foo]\n");
+    }
+    @Test
     public void parenthesizedTitleWithUnescapedOpeningParenthesisIn029() {
         assert029("<p>[foo]: /url (ti(tle)</p>\n<p>[foo]</p>\n", "[foo]: /url (ti(tle)\n\n[foo]\n");
         assert029("<p><a href=\"/url\" title=\"ti(tle\">foo</a></p>\n", "[foo]: /url (ti\\(tle)\n\n[foo]\n");
