@@ -35,8 +35,11 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
   removed once the milestone was reached). `COMMONMARK_LATEST` is now `COMMONMARK_0_29`, 0.29 is the **default**
   parsing behaviour, and the known-failures baseline is retired. Reviews: `review-B29-finalization.md`,
   `review-B29-default-profile.md`.
-- **Task A30 — done (measurement only).** `spec.0.30.txt` added, `ComboOrigSpec030CoreTest` measures the gap:
-  **3 of 652 examples fail**. Next: Task B30.
+- **Task A30 — done (measurement only).** `spec.0.30.txt` added, the gap was 3 of 652 examples.
+- **Task B30 — done.** All clusters done (B30.1 was a 0.29 leftover, fixed earlier), plus two latent gaps no spec
+  example covers: HTML declarations (#620) and VT/FF in tags (#618). `COMMONMARK_LATEST` is now
+  `COMMONMARK_0_30`, 0.30 is the **default**, `spec.txt` tracks 0.30 and the known-failures baseline is retired.
+  Review: `review-B30.md`. Next: Task 0.31.2.
 
 ---
 
@@ -172,7 +175,19 @@ Proven the same way as for 0.29: empty baseline → 3 failures, populated baseli
 typos, tooling. Only three changelog items change rendering, and three more are latent (no spec example
 forces them, see below).
 
-## Task B30 — CommonMark 0.30 implementation
+## Task B30 — CommonMark 0.30 implementation (DONE)
+
+Done. Outcome: new options `Parser.HTML_BLOCK_TEXTAREA_TYPE_1` (B30.2), `REFERENCE_LABEL_UNICODE_CASE_FOLD` (B30.3),
+`HTML_DECLARATION_ASCII_LETTER` (#620) and `HTML_TAG_WHITESPACE_NO_VT_FF` (#618), all default `true` and set to
+`false` by every profile except `COMMONMARK_0_30`. The case fold is a Java approximation, not full Unicode
+`CaseFolding.txt`.
+
+### Latent gaps (no 0.30 example covers them, hand-written tests instead)
+
+| Gap                             | Status | Tests                     |
+|---------------------------------|--------|---------------------------|
+| HTML declarations (#620)        | done   | `HtmlDeclarationTest`     |
+| VT/FF not tag whitespace (#618) | done   | `HtmlTagWhitespaceTest`   |
 
 Three clusters, each independent. All are **small**; 0.30 is far cheaper than 0.29 was.
 
@@ -256,5 +271,7 @@ Spec coverage (whole-file tests apply the profile shown, all run in `CoreRendere
 | 0.28 | `FullOrigSpec028CoreTest`           | 624      | `COMMONMARK_0_28`   | passes                          |
 | 0.29 | `FullOrigSpec029CoreTest`           | 649      | `COMMONMARK_0_29`   | passes                          |
 | 0.29 | `FullSpec029DefaultOptionsCoreTest` | 649      | none (defaults)     | passes                          |
-| 0.29 | `FullOrigSpecCoreTest`              | 649      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
-| 0.30 | `ComboOrigSpec030CoreTest`          | 652      | none (defaults)     | **3 known failures** (Task B30) |
+| 0.30 | `FullOrigSpec030CoreTest`           | 652      | `COMMONMARK_0_30`   | passes                          |
+| 0.30 | `FullSpec030DefaultOptionsCoreTest` | 652      | none (defaults)     | passes                          |
+| 0.30 | `FullOrigSpecCoreTest`              | 652      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
+

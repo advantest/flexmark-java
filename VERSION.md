@@ -120,9 +120,38 @@
 
 ## Next
 
-CommonMark specification tracking. flexmark-java now supports CommonMark 0.29. The implemented
-specification version is named explicitly by `ParserEmulationProfile.COMMONMARK_LATEST`, which now
-aliases `COMMONMARK_0_29`. All 649 examples of the unmodified 0.29 specification render correctly.
+CommonMark specification tracking. flexmark-java now supports CommonMark 0.30 (and 0.29 before it). The
+implemented specification version is named explicitly by `ParserEmulationProfile.COMMONMARK_LATEST`, which now
+aliases `COMMONMARK_0_30`. All 652 examples of the unmodified 0.30 specification render correctly, both with
+`COMMONMARK_0_30` applied and with no options at all. `spec.txt` of `flexmark-test-specs` now tracks 0.30.
+
+### CommonMark 0.30
+
+**Breaking:** flexmark-java now parses as CommonMark 0.30 by default and `COMMONMARK_LATEST` is
+`COMMONMARK_0_30`. A new profile `COMMONMARK_0_30` was added. Code which needs the 0.29 behaviour must apply
+`COMMONMARK_0_29` explicitly. `COMMONMARK_0_29` keeps all nine 0.29 options; the four new 0.30 options below
+are turned off by `COMMONMARK_0_29` and every older profile and family. The nine 0.29 options are turned off by
+every profile except `COMMONMARK_0_29` and `COMMONMARK_0_30`.
+
+* Add: `Parser.HTML_BLOCK_TEXTAREA_TYPE_1` (default `true`): `<textarea>` starts an HTML block of type 1, like
+  `pre`, `script` and `style`, so its content is passed through raw and the block ends at `</textarea>`.
+* Add: `Parser.REFERENCE_LABEL_UNICODE_CASE_FOLD` (default `true`): link reference labels are matched by Unicode
+  case folding instead of lower-casing, so `[ẞ]` matches `[SS]`. Only the lookup key is normalized, the label
+  source text is untouched. **This is an approximation**: case folding is implemented in
+  `Escaping.caseFold` as lower-casing each code point, `toUpperCase(Locale.ROOT)`, then lower-casing each code
+  point again, it is not a table of the Unicode `CaseFolding.txt`. Compared with the latest `CaseFolding.txt`
+  (C and F entries) 163 of 1606 entries differ: U+0130, the Cherokee letters (same equivalence class, other
+  representative) and characters newer than the Unicode version of the running JDK.
+* Add: `Parser.HTML_DECLARATION_ASCII_LETTER` (default `true`): an HTML declaration is `<!` followed by ASCII
+  letters of any case and needs no whitespace before its content (inline raw HTML and block type 4).
+* Add: `Parser.HTML_TAG_WHITESPACE_NO_VT_FF` (default `true`): vertical tab and form feed are no longer
+  whitespace inside HTML open and closing tags.
+* Fix: the tests which asserted that only `COMMONMARK_0_29` keeps a 0.29 option now also accept 0.30.
+
+### CommonMark 0.29
+
+The notes below describe the 0.29 work, which remains part of this release.
+The 0.29 specification has 649 examples, all of which render correctly with COMMONMARK_0_29.
 
 ### Breaking changes
 
