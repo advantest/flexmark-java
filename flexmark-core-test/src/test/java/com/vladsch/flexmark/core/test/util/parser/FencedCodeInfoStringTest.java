@@ -61,10 +61,11 @@ public class FencedCodeInfoStringTest {
     }
 
     @Test
-    public void optionIsOnByDefaultAndOnlyKeptByThe029Profile() {
+    public void optionIsOnByDefaultAndOnlyKeptByThe029And030Profiles() {
         assertTrue(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(null));
         for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
-            boolean expected = profile == ParserEmulationProfile.COMMONMARK_0_29;
+            boolean expected = profile == ParserEmulationProfile.COMMONMARK_0_29
+                    || profile == ParserEmulationProfile.COMMONMARK_0_30;
             assertEquals("profile " + profile, expected,
                     Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(profile.getProfileOptions()));
         }

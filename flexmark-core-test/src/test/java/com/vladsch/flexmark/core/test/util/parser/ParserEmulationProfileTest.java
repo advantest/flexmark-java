@@ -81,6 +81,7 @@ public class ParserEmulationProfileTest {
                 ParserEmulationProfile.COMMONMARK_0_27,
                 ParserEmulationProfile.COMMONMARK_0_28,
                 ParserEmulationProfile.COMMONMARK_0_29,
+                ParserEmulationProfile.COMMONMARK_0_30,
         }) {
             assertSame(ParserEmulationProfile.COMMONMARK, profile.family);
         }
@@ -107,9 +108,9 @@ public class ParserEmulationProfileTest {
     @Test
     public void commonMarkLatestMatchesTheDefaultSpecificationResource() throws Exception {
         assertSame("COMMONMARK_LATEST must be advanced together with spec.txt and VERSION.md",
-                ParserEmulationProfile.COMMONMARK_0_29, ParserEmulationProfile.COMMONMARK_LATEST);
+                ParserEmulationProfile.COMMONMARK_0_30, ParserEmulationProfile.COMMONMARK_LATEST);
         assertArrayEquals("spec.txt must be a copy of the spec file of the version COMMONMARK_LATEST points at",
-                readSpecResource("/spec.0.29.txt"), readSpecResource("/spec.txt"));
+                readSpecResource("/spec.0.30.txt"), readSpecResource("/spec.txt"));
     }
 
     private static byte[] readSpecResource(String name) throws Exception {

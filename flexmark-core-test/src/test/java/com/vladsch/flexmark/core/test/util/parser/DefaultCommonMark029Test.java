@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * A parser built without applying any profile parses as CommonMark 0.29, the profiles for older versions opt out.
+ * A parser built without applying any profile parses as CommonMark 0.30, which keeps all 0.29 rules. The profiles for older versions opt out.
  * One representative input for every option that differs between 0.28 and 0.29.
  */
 public class DefaultCommonMark029Test {
