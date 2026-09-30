@@ -31,7 +31,9 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
 
 - **Task 0 — done and reviewed.** Tag `commonmark-profile-machinery-fixed`. Full test suite green.
 - **Task A — done and reviewed.** Tag `commonmark-0.29-spec-tests`. Full test suite green.
-- **Task B29 — next**: the actual CommonMark 0.29 implementation.
+- **Task B29 — done.** All six clusters done (tags `commonmark-0.29-*`). `COMMONMARK_LATEST` is now `COMMONMARK_0_29`,
+  `FullOrigSpec029CoreTest` and the per-example `ComboOrigSpec029CoreTest` (649 examples) pass, the known-failures
+  baseline is retired. Review: `review-B29-finalization.md`. Next: 0.30.
 
 ---
 
@@ -99,7 +101,7 @@ Deferred, not part of Task A:
 - 0.26 example coverage (`FullOrigSpec026CoreTest`) — separate task.
 - `spec.0.31.2.txt` and the 0.30 / 0.31.2 test classes — added with their own version tasks.
 
-## Task B29 — CommonMark 0.29 implementation, split into six clusters
+## Task B29 — CommonMark 0.29 implementation, split into six clusters (DONE)
 
 Each cluster is one 0.29 change, taken from the CommonMark changelog, section `[0.29]`
 (<https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt>). The clusters are
@@ -108,14 +110,14 @@ independent except where noted, and each ends with an empty section of
 
 Ordered smallest and most isolated first, so the delegation loop is validated on a cheap cluster:
 
-| #     | Cluster                            | Examples                  | 0.29 change | Risk |
-| ----- | ---------------------------------- | ------------------------- | ----------- | ---- |
-| B29.1 | Info strings of fenced code blocks | 116                       | Backticks disallowed in info strings after **backtick** fences only; both backticks and tildes allowed after **tilde** fences (#119). Info string is trimmed of all whitespace, not only spaces (#505). | low |
-| B29.2 | Code spans                         | 108, 331–337, 637         | Line endings become spaces; strip one space from each end only if the content is **not** entirely spaces (#569); never collapse interior space (#532). | medium |
-| B29.3 | Emphasis, rule of three            | 415, 416                  | Interior delimiter runs match if **both** run lengths are multiples of 3 (#528). | medium |
-| B29.4 | Link destinations in `<...>`       | 486, 490, 491             | Spaces allowed again inside `<...>`, reverting 0.24 (#503); a destination may not begin with `<` unless inside `<...>` (#538). | medium |
-| B29.5 | Link reference definitions         | 164, 170, 184, 185        | Setext heading after definitions (#395); unused definition (#454); space required before the title (#469). | medium |
-| B29.6 | List items indented 4+ spaces      | 282, 283                  | Such lines are continuation lines when not blank, indented code otherwise (#497); drops the vestigial "not separated by more than one blank line" restriction (#543). | **high** |
+| #     | Cluster                            | Examples                  | 0.29 change | Risk | Tag |
+| ----- | ---------------------------------- | ------------------------- | ----------- | ---- | --- |
+| B29.1 | Info strings of fenced code blocks | 116                       | Backticks disallowed in info strings after **backtick** fences only; both backticks and tildes allowed after **tilde** fences (#119). Info string is trimmed of all whitespace, not only spaces (#505). | low | DONE `commonmark-0.29-info-strings` |
+| B29.2 | Code spans                         | 108, 331–337, 637         | Line endings become spaces; strip one space from each end only if the content is **not** entirely spaces (#569); never collapse interior space (#532). | medium | DONE `commonmark-0.29-code-spans` |
+| B29.3 | Emphasis, rule of three            | 415, 416                  | Interior delimiter runs match if **both** run lengths are multiples of 3 (#528). | medium | DONE `commonmark-0.29-emphasis-rule-of-3` |
+| B29.4 | Link destinations in `<...>`       | 486, 490, 491             | Spaces allowed again inside `<...>`, reverting 0.24 (#503); a destination may not begin with `<` unless inside `<...>` (#538). | medium | DONE `commonmark-0.29-link-destinations` |
+| B29.5 | Link reference definitions         | 164, 170, 184, 185        | Setext heading after definitions (#395); unused definition (#454); space required before the title (#469). | medium | DONE `commonmark-0.29-link-reference-definitions` |
+| B29.6 | List items indented 4+ spaces      | 282, 283                  | Such lines are continuation lines when not blank, indented code otherwise (#497); drops the vestigial "not separated by more than one blank line" restriction (#543). | **high** | DONE `commonmark-0.29-list-item-indent` |
 
 Clusters 4 and 5 both touch link destination parsing, so 4 runs before 5.
 
