@@ -293,12 +293,14 @@ public enum ParserEmulationProfile implements MutableDataSetter {
 
         if (family == COMMONMARK) {
             if (this == COMMONMARK_0_26) {
-                return new MutableListOptions((DataHolder) null).setEndOnDoubleBlank(true);
+                // NOTE: CommonMark 0.26 removed the "two blank lines end a list" rule, so it is not enabled here.
+                //   See the 0.25 to 0.26 changes at https://spec.commonmark.org/0.26/changes.html
+                return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this);
             }
             else if (this == COMMONMARK_0_28) {
                 // IMPORTANT: implement 0.29 as defaults with 0.28 as changes
-                //return new MutableListOptions((DataHolder) null).setEndOnDoubleBlank(true);
             }
+            return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this);
         }
 
         // default CommonMark
@@ -460,13 +462,17 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                         .set(Parser.HTML_BLOCK_DEEP_PARSE_INDENTED_CODE_INTERRUPTS, false)
                 ;
             }
-        } else if (this == COMMONMARK_0_26 || this == COMMONMARK_0_27) {
-            // set previous parsing rule options
-            dataHolder.set(Parser.STRONG_WRAPS_EMPHASIS, true);
-            dataHolder.set(Parser.LINKS_ALLOW_MATCHED_PARENTHESES, false);
-        } else if (this == COMMONMARK_0_28) {
-            // set 0.28 parsing rule options
-            // IMPORTANT: 0.28/0.29 differences
+        } else if (family == COMMONMARK) {
+            getOptions(dataHolder).setIn(dataHolder);
+
+            if (this == COMMONMARK_0_26 || this == COMMONMARK_0_27) {
+                // set previous parsing rule options
+                dataHolder.set(Parser.STRONG_WRAPS_EMPHASIS, true);
+                dataHolder.set(Parser.LINKS_ALLOW_MATCHED_PARENTHESES, false);
+            } else if (this == COMMONMARK_0_28) {
+                // set 0.28 parsing rule options
+                // IMPORTANT: 0.28/0.29 differences
+            }
         }
 
         return dataHolder;

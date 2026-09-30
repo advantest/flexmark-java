@@ -113,7 +113,7 @@ public class DefinitionItemBlockParser extends AbstractBlockParser {
             return null;
         }
 
-        if (!hasContent || options.myParserEmulationProfile == COMMONMARK && contentOffset > options.newItemCodeIndent) {
+        if (!hasContent || options.myParserEmulationProfile.family == COMMONMARK && contentOffset > options.newItemCodeIndent) {
             // If this line is blank or has a code block, default to 1 space after marker
             contentOffset = 1;
         }
@@ -289,10 +289,10 @@ public class DefinitionItemBlockParser extends AbstractBlockParser {
                 return BlockStart.none();
             }
 
-            ParserEmulationProfile emulationFamily = options.myParserEmulationProfile;
+            ParserEmulationProfile emulationProfile = options.myParserEmulationProfile;
 
             int currentIndent = state.getIndent();
-            int codeIndent = emulationFamily == COMMONMARK || emulationFamily == FIXED_INDENT ? options.codeIndent : options.itemIndent;
+            int codeIndent = emulationProfile.family == COMMONMARK || emulationProfile == FIXED_INDENT ? options.codeIndent : options.itemIndent;
 
             if (currentIndent < codeIndent) {
                 ItemData itemData = parseItemMarker(options, state, state.getActiveBlockParser() instanceof ParagraphParser);
