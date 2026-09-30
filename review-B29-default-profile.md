@@ -25,3 +25,9 @@ and every other profile and family opts out. Reviewed by a `code-review` sub-age
 * Resolving the keys from `PARSER_EMULATION_PROFILE` inside the parser components (finding 3). Setting the
   profile key alone never applied a profile's options in this code base; that is the pre-existing model and the
   premise of this task. Changing it would be a separate design change. It is documented in VERSION.md instead.
+
+## Round 2: full-spec coverage
+
+Reviewed FullSpec029DefaultOptionsCoreTest, FullOrigSpec026CoreTest and the docs. No leakage of profile options in the
+default test, 0.26 does not pass vacuously (it fails under the 0.29 profile). One finding, line-ending churn in the
+plan document, was applied. Result: 0.26 passes all 618 examples, no known-failures baseline was needed.

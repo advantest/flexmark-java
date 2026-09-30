@@ -181,8 +181,10 @@ backticks or tildes, and the formatter, which reads `LISTS_NO_ITEM_AT_CODE_INDEN
   * `Parser.LISTS_NO_ITEM_AT_CODE_INDENT`: a line indented by the code indent cannot start a list item.
     It is a list option, resolved by `ParserEmulationProfile.getOptions()`.
 * Add: `FullOrigSpec029CoreTest` and `ComboOrigSpec029CoreTest` test the unmodified `spec.0.29.txt`.
-  `flexmark-test-specs` `spec.txt` is now a copy of `spec.0.29.txt`, and the tests using it apply
-  `COMMONMARK_LATEST`.
+  `flexmark-test-specs` `spec.txt` now tracks the 0.29 spec (previously 0.28) and is a copy of
+  `spec.0.29.txt`, and the tests using it apply `COMMONMARK_LATEST`.
+* Add: `FullSpec029DefaultOptionsCoreTest` runs the whole 0.29 spec with no profile applied, and
+  `FullOrigSpec026CoreTest` runs the whole 0.26 spec with `COMMONMARK_0_26`.
 * Add: `ParserEmulationProfile.COMMONMARK_LATEST`, an alias for the newest CommonMark specification
   version that this release actually implements. It is the new default of
   `Parser.PARSER_EMULATION_PROFILE`. It will be advanced only when the full specification test of the

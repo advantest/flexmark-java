@@ -168,3 +168,14 @@ code or the specification (decision 7).
 - Never silently regenerate extension spec resource files (analysis §7.4 guardrail 3).
 - **I cannot query your Copilot plan usage** — no tool exposes it. I will track my own consumption and stop
   at the agreed scope boundary; please tell me if you see the limit approaching sooner.
+
+Spec coverage (whole-file tests apply the profile shown, all run in `CoreRendererTestSuite`):
+
+| Spec | Test class                          | Examples | Profile applied     | Status                          |
+|------|-------------------------------------|----------|---------------------|---------------------------------|
+| 0.26 | `FullOrigSpec026CoreTest`           | 618      | `COMMONMARK_0_26`   | passes                          |
+| 0.27 | `FullOrigSpec027CoreTest`           | 622      | `COMMONMARK_0_27`   | passes                          |
+| 0.28 | `FullOrigSpec028CoreTest`           | 624      | `COMMONMARK_0_28`   | passes                          |
+| 0.29 | `FullOrigSpec029CoreTest`           | 649      | `COMMONMARK_0_29`   | passes                          |
+| 0.29 | `FullSpec029DefaultOptionsCoreTest` | 649      | none (defaults)     | passes                          |
+| 0.29 | `FullOrigSpecCoreTest`              | 649      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
