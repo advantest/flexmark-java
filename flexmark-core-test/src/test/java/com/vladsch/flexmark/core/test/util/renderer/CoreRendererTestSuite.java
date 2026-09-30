@@ -10,6 +10,8 @@ import org.junit.runners.Suite;
         CoreCompatibilityTestSuite.class,
         ComboIssuesSpecTest.class,
         FullOrigSpecCoreTest.class,
+        FullSpec029DefaultOptionsCoreTest.class,
+        FullOrigSpec026CoreTest.class,
         FullOrigSpec027CoreTest.class,
         FullOrigSpec028CoreTest.class,
         FullOrigSpec029CoreTest.class,
