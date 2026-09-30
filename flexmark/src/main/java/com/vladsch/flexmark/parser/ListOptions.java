@@ -32,6 +32,7 @@ public class ListOptions implements MutableDataSetter {
     protected boolean orderedItemDotOnly;
     protected boolean orderedListManualStart;
     protected boolean itemContentAfterSuffix;
+    protected boolean noItemAtCodeIndent;
     protected @NotNull String itemPrefixChars;
     protected int codeIndent;
     protected int itemIndent;
@@ -64,6 +65,7 @@ public class ListOptions implements MutableDataSetter {
         orderedItemDotOnly = Parser.LISTS_ORDERED_ITEM_DOT_ONLY.get(options);
         orderedListManualStart = Parser.LISTS_ORDERED_LIST_MANUAL_START.get(options);
         itemContentAfterSuffix = Parser.LISTS_ITEM_CONTENT_AFTER_SUFFIX.get(options);
+        noItemAtCodeIndent = Parser.LISTS_NO_ITEM_AT_CODE_INDENT.get(options);
         itemPrefixChars = Parser.LISTS_ITEM_PREFIX_CHARS.get(options);
 
         codeIndent = Parser.LISTS_CODE_INDENT.get(options);
@@ -94,6 +96,7 @@ public class ListOptions implements MutableDataSetter {
         orderedItemDotOnly = other.isOrderedItemDotOnly();
         orderedListManualStart = other.isOrderedListManualStart();
         itemContentAfterSuffix = other.isItemContentAfterSuffix();
+        noItemAtCodeIndent = other.isNoItemAtCodeIndent();
         itemPrefixChars = other.getItemPrefixChars();
 
         codeIndent = other.getCodeIndent();
@@ -214,6 +217,7 @@ public class ListOptions implements MutableDataSetter {
         options.set(Parser.LISTS_NEW_ITEM_CODE_INDENT, newItemCodeIndent);
         options.set(Parser.LISTS_ITEM_MARKER_SUFFIXES, itemMarkerSuffixes);
         options.set(Parser.LISTS_ITEM_CONTENT_AFTER_SUFFIX, itemContentAfterSuffix);
+        options.set(Parser.LISTS_NO_ITEM_AT_CODE_INDENT, noItemAtCodeIndent);
         options.set(Parser.LISTS_ITEM_PREFIX_CHARS, itemPrefixChars);
 
         return options;
@@ -285,6 +289,10 @@ public class ListOptions implements MutableDataSetter {
 
     public boolean isItemContentAfterSuffix() {
         return itemContentAfterSuffix;
+    }
+
+    public boolean isNoItemAtCodeIndent() {
+        return noItemAtCodeIndent;
     }
 
     @NotNull
@@ -626,6 +634,7 @@ public class ListOptions implements MutableDataSetter {
         if (newItemCodeIndent != that.newItemCodeIndent) return false;
         if (itemMarkerSuffixes != that.itemMarkerSuffixes) return false;
         if (itemContentAfterSuffix != that.itemContentAfterSuffix) return false;
+        if (noItemAtCodeIndent != that.noItemAtCodeIndent) return false;
         if (!itemPrefixChars.equals(that.itemPrefixChars)) return false;
         return itemInterrupt.equals(that.itemInterrupt);
     }
@@ -652,6 +661,7 @@ public class ListOptions implements MutableDataSetter {
         result = 31 * result + (orderedItemDotOnly ? 1 : 0);
         result = 31 * result + (orderedListManualStart ? 1 : 0);
         result = 31 * result + (itemContentAfterSuffix ? 1 : 0);
+        result = 31 * result + (noItemAtCodeIndent ? 1 : 0);
         result = 31 * result + itemPrefixChars.hashCode();
         result = 31 * result + codeIndent;
         result = 31 * result + itemIndent;

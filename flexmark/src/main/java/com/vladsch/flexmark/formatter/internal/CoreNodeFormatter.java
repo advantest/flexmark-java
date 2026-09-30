@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.vladsch.flexmark.formatter.FormatterUtils.LIST_ITEM_SPACING;
 import static com.vladsch.flexmark.formatter.FormatterUtils.isLastOfItem;
@@ -678,7 +679,20 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
         }
     }
 
+    private static final String CODE_INDENT_SPACES = "    ";
+    private static final Pattern LIST_ITEM_LIKE_START = Pattern.compile("^(?:[*+-]|[0-9]{1,9}[.)])(?:[ \t]|$)");
+
+    private static boolean startsLineLikeListItem(Text node) {
+        Node previous = node.getPrevious();
+        return (previous instanceof SoftLineBreak || previous instanceof HardLineBreak) && LIST_ITEM_LIKE_START.matcher(node.getChars()).find();
+    }
+
     private void render(Text node, NodeFormatterContext context, MarkdownWriter markdown) {
+        if (listOptions.isNoItemAtCodeIndent() && !context.isTransformingText() && startsLineLikeListItem(node)) {
+            // a continuation line that looks like a list item must stay indented as code or it would become an item
+            markdown.pushOptions().preserveSpaces().append(CODE_INDENT_SPACES).popOptions();
+        }
+
         if (formatterOptions.keepSoftLineBreaks) {
             markdown.append(node.getChars());
         } else {
