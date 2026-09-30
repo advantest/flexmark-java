@@ -477,8 +477,8 @@ public class CoreNodeRenderer implements NodeRenderer {
             while (first instanceof Text && first.getChars().isEmpty()) first = first.getNext();
             Node last = node.getLastChild();
             while (last instanceof Text && last.getChars().isEmpty()) last = last.getPrevious();
-            // the parser adds no soft break child for a trailing line ending, so there is nothing to strip
-            boolean endsWithLineEnding = text.charAt(length - 1) != ' ';
+            // the parser adds no soft break child for a trailing line ending: it is stripped or rendered as a space
+            boolean endsWithLineEnding = length > 0 && (text.charAt(length - 1) == '\n' || text.charAt(length - 1) == '\r');
             for (Node child : node.getChildren()) {
                 boolean stripStart = strip && child == first;
                 boolean stripEnd = strip && !endsWithLineEnding && child == last;
@@ -491,6 +491,7 @@ public class CoreNodeRenderer implements NodeRenderer {
                     context.render(child);
                 }
             }
+            if (endsWithLineEnding && !strip) html.text(" ");
         } else {
             StringBuilder sb = new StringBuilder(length);
             int start = strip ? 1 : 0;

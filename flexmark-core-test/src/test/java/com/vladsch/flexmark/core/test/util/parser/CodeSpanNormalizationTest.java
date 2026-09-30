@@ -107,6 +107,9 @@ public class CodeSpanNormalizationTest {
         assertEquals("<p><code>foo\nbar</code></p>\n", render(options, "``\nfoo\nbar\n``\n"));
         assertEquals("<p><code>foo  bar</code></p>\n", render(options, "` foo  bar `\n"));
         assertEquals("<p><code> </code></p>\n", render(options, "` `\n"));
+        assertEquals("<p><code>a </code></p>\n", render(options, "`a\n`\n"));
+        assertEquals("<p><code> </code></p>\n", render(options, "`\n`\n"));
+        assertEquals("<p><code>a</code></p>\n", render(options, "`\na\n`\n"));
     }
 
     @Test
