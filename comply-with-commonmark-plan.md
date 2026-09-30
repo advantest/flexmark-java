@@ -31,13 +31,14 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
 
 - **Task 0 — done and reviewed.** Tag `commonmark-profile-machinery-fixed`. Full test suite green.
 - **Task A — done and reviewed.** Tag `commonmark-0.29-spec-tests`. Full test suite green.
-- **Task B29 — done.** All six clusters done (tags `commonmark-0.29-*`). `COMMONMARK_LATEST` is now `COMMONMARK_0_29`,
-  `FullOrigSpec029CoreTest` and the per-example `ComboOrigSpec029CoreTest` (649 examples) pass, the known-failures
-  baseline is retired. Review: `review-B29-finalization.md`. Next: 0.30.
+- **Task B29 — done.** All six clusters done, tag `commonmark-0.29.0-compliant` (the intermediate cluster tags were
+  removed once the milestone was reached). `COMMONMARK_LATEST` is now `COMMONMARK_0_29`, 0.29 is the **default**
+  parsing behaviour, and the known-failures baseline is retired. Reviews: `review-B29-finalization.md`,
+  `review-B29-default-profile.md`.
+- **Task A30 — done (measurement only).** `spec.0.30.txt` added, `ComboOrigSpec030CoreTest` measures the gap:
+  **3 of 652 examples fail**. Next: Task B30.
 
 ---
-
-## Task 0 — Profile machinery fixes + rename (behaviour-neutral)
 
 ## Task 0 — Profile machinery fixes + `COMMONMARK_LATEST` (DONE, behaviour-neutral)
 
@@ -157,10 +158,87 @@ the Unicode punctuation set.
 
 ---
 
+## Task A30 — Measure the CommonMark 0.30 gap (DONE, tests only)
+
+| # | Commit                                                    | Content |
+| - | --------------------------------------------------------- | ------- |
+| 1 | `test(specs): add the pristine CommonMark 0.30 specification` | `spec.0.30.txt` from `commonmark-spec` tag `0.30`, byte-exact, `version: 0.30`, 652 examples. |
+| 2 | `test(core): measure the CommonMark 0.30 gap`                | `ComboOrigSpec030CoreTest` (one test per example, **default configuration, no profile applied**) plus `spec.0.30.known-failures.txt`. |
+
+Measured against the current default (0.29) behaviour: **3 of 652 examples fail** — 28, 171, 539.
+Proven the same way as for 0.29: empty baseline → 3 failures, populated baseline → 0 failures.
+
+0.30 is overwhelmingly an **editorial** release — moved sections, reworded character-group definitions,
+typos, tooling. Only three changelog items change rendering, and three more are latent (no spec example
+forces them, see below).
+
+## Task B30 — CommonMark 0.30 implementation
+
+Three clusters, each independent. All are **small**; 0.30 is far cheaper than 0.29 was.
+
+| #     | Cluster        | Examples | 0.30 change | Classes | Risk |
+| ----- | -------------- | -------- | ----------- | ------- | ---- |
+| B30.1 | Entity length  | 28       | Numeric character references are limited to 7 decimal / 6 hex digits; longer ones stay literal (#575). | `Parsing` (`ST_ENTITY_*`) | low |
+| B30.2 | `textarea` HTML block | 171 | `textarea` joins `script`, `style`, `pre` as a **type 1** literal HTML block, so it may contain blank lines (#657, #667). | `HtmlBlockParser`, `Parsing` | low |
+| B30.3 | Unicode case fold of link labels | 539 | Label matching needs real Unicode case folding: `[ẞ]` must match `[SS]`. Lower-casing alone is not enough (#582). | `Escaping.normalizeReference` | low |
+
+Confirmed root causes, not assumed — each was checked against the normative 0.30 text and the flexmark code:
+
+- **B30.1** is really a **leftover 0.29 item** (#487 limited the lengths in 0.29). `Parsing` still uses
+  `#[0-9]{1,8}` and `#x[a-f0-9]{1,8}`, so 0.29 never fully complied; its own example passed by luck
+  because it used 9 digits. The hex case is wrong too but **no spec example covers it**.
+- **B30.2**: flexmark currently treats `<textarea>` as a type 7 block, so it ends at the first blank line.
+- **B30.3**: `normalizeReference` only calls `toLowerCase()`; U+1E9E lower-cases to `ß`, not `ss`.
+  Probes show `[ß]`/`[SS]` is also wrong. Fold via `toUpperCase().toLowerCase()`, and normalise **only the
+  lookup key**, never the node text — decision 9.
+
+### Latent gaps — no failing example, so the baseline cannot enforce them
+
+Read from the normative text and confirmed by probes. **Needs a decision (see Open questions).**
+
+| Gap | Evidence | Classes |
+| --- | -------- | ------- |
+| HTML declarations need not be all-capital ASCII (#620) | `ST_DECLARATION_*` is `<![A-Z]+\s+[^>]*>`; `<!a>`, `<!DOCTYPE>` are neither inline raw HTML nor HTML blocks | `Parsing`, `HtmlBlockParser` |
+| Hex entity length (part of #575) | `&#x1234567;` renders U+FFFD, must stay literal | `Parsing` |
+| VT/FF no longer whitespace after a tag name (#618) | flexmark uses `\s`, so `<pre\v>` and `<div\f>` still start HTML blocks | `Parsing` |
+
+### Method
+
+Same as B29 and unchanged by 0.30's small size: TDD red first, one commit per concern, full suite green,
+review sub-agent (max 2 rounds) with a `review-B30.*.md`, and the known-failures baseline shrinking to
+zero. Per the rule established at the end of B29, the **new behaviour becomes the `DataKey` default** and
+`COMMONMARK_0_29` and older profiles opt out of it in `ParserEmulationProfile`.
+
+Still to be created, as they do not exist yet:
+
+- the `COMMONMARK_0_30` enum constant and its `setIn` / `getOptions` wiring,
+- `FullOrigSpec030CoreTest` (profile applied) and a default-options variant, registered in
+  `CoreRendererTestSuite`,
+- advancing `COMMONMARK_LATEST` to `COMMONMARK_0_30` and `spec.txt` to the 0.30 spec, **only** once the
+  baseline is empty, with the `VERSION.md` breaking-change note.
+
+Cluster order: B30.1 → B30.2 → B30.3. They do not interact; B30.3 is listed last because case folding is
+the only one with a plausible effect on extensions that resolve references (footnotes, abbreviations).
+B30.2 should check the **formatter** round-trip: three of the six 0.29 clusters needed an extra formatter
+fix because the formatter re-emitted syntax that no longer parsed.
+
+---
+
 ## Open questions
 
-None blocking Task A. Raise a question only if a recorded decision turns out to be contradicted by the
-code or the specification (decision 7).
+Two decisions are needed **before** Task B30 starts:
+
+1. **Implement the three latent gaps** (declarations not all-caps, hex entity length, VT/FF after tag
+   names)? No spec example forces them, so the shrink-only baseline cannot enforce them and they need
+   hand-written tests outside the pristine spec files. They are all small and all genuine
+   non-compliance.
+2. **Is the entity length fix (B30.1) a 0.29 leftover or 0.30 work?** It was mandated by 0.29 (#487) but
+   only 0.30 added an example that catches it. This decides whether it is gated by a `COMMONMARK_0_30`
+   option or treated as a plain bug fix that also corrects `COMMONMARK_0_29`.
+
+Otherwise raise a question only if a recorded decision turns out to be contradicted by the code or the
+specification (decision 7).
+
 ## Constraints I am operating under
 
 - **Never push.** Commits only, on my branches.
@@ -179,3 +257,4 @@ Spec coverage (whole-file tests apply the profile shown, all run in `CoreRendere
 | 0.29 | `FullOrigSpec029CoreTest`           | 649      | `COMMONMARK_0_29`   | passes                          |
 | 0.29 | `FullSpec029DefaultOptionsCoreTest` | 649      | none (defaults)     | passes                          |
 | 0.29 | `FullOrigSpecCoreTest`              | 649      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
+| 0.30 | `ComboOrigSpec030CoreTest`          | 652      | none (defaults)     | **3 known failures** (Task B30) |
