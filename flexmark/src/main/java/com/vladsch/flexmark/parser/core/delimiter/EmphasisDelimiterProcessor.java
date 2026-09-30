@@ -13,8 +13,14 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 public abstract class EmphasisDelimiterProcessor implements DelimiterProcessor {
     final private char delimiterChar;
     final private int multipleUse;
+    final private boolean multipleOfThreeExemption;
 
     protected EmphasisDelimiterProcessor(char delimiterChar, boolean strongWrapsEmphasis) {
+        this(delimiterChar, strongWrapsEmphasis, false);
+    }
+
+    protected EmphasisDelimiterProcessor(char delimiterChar, boolean strongWrapsEmphasis, boolean multipleOfThreeExemption) {
+        this.multipleOfThreeExemption = multipleOfThreeExemption;
         this.delimiterChar = delimiterChar;
         this.multipleUse = strongWrapsEmphasis ? 1 : 2;
     }
@@ -56,8 +62,9 @@ public abstract class EmphasisDelimiterProcessor implements DelimiterProcessor {
 
     @Override
     public int getDelimiterUse(DelimiterRun opener, DelimiterRun closer) {
-        // "multiple of 3" rule for internal delimiter runs
-        if ((opener.canClose() || closer.canOpen()) && (opener.length() + closer.length()) % 3 == 0) {
+        // "multiple of 3" rule for internal delimiter runs, since 0.29 not if both lengths are multiples of 3
+        if ((opener.canClose() || closer.canOpen()) && (opener.length() + closer.length()) % 3 == 0
+                && !(multipleOfThreeExemption && opener.length() % 3 == 0 && closer.length() % 3 == 0)) {
             return 0;
         }
 

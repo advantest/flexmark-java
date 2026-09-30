@@ -114,6 +114,13 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES = new DataKey<>("CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES", false);
 
     /**
+     * EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION default false, when true makes parsing CommonMark Spec 0.29 compliant:
+     * the "multiple of 3" rule for delimiter runs that can both open and close emphasis does not apply if the
+     * lengths of both runs are multiples of 3
+     */
+    final public static DataKey<Boolean> EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION = new DataKey<>("EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION", false);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);

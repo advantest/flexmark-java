@@ -1650,10 +1650,10 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
         Map<Character, DelimiterProcessor> map = new HashMap<>();
         //addDelimiterProcessors(Arrays.asList(new AsteriskDelimiterProcessor(), new UnderscoreDelimiterProcessor()), map);
         if (Parser.ASTERISK_DELIMITER_PROCESSOR.get(options)) {
-            addDelimiterProcessors(Collections.singletonList(new AsteriskDelimiterProcessor(Parser.STRONG_WRAPS_EMPHASIS.get(options))), map);
+            addDelimiterProcessors(Collections.singletonList(new AsteriskDelimiterProcessor(Parser.STRONG_WRAPS_EMPHASIS.get(options), Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION.get(options))), map);
         }
         if (Parser.UNDERSCORE_DELIMITER_PROCESSOR.get(options)) {
-            addDelimiterProcessors(Collections.singletonList(new UnderscoreDelimiterProcessor(Parser.STRONG_WRAPS_EMPHASIS.get(options))), map);
+            addDelimiterProcessors(Collections.singletonList(new UnderscoreDelimiterProcessor(Parser.STRONG_WRAPS_EMPHASIS.get(options), Parser.EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION.get(options))), map);
         }
 
         addDelimiterProcessors(delimiterProcessors, map);

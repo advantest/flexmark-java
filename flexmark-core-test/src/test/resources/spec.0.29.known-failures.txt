@@ -15,11 +15,6 @@
 # The clusters are the 0.29 changes that cause them, taken from the CommonMark changelog
 # (https://github.com/commonmark/commonmark-spec/blob/master/changelog.txt, section [0.29]).
 
-# --- Cluster 3: emphasis, the rule of three (spec issue #528)
-# Interior delimiter runs match if the lengths of BOTH runs are multiples of 3.
-415  # foo***bar***baz
-416  # foo******bar*********baz
-
 # --- Cluster 4: link destinations in pointy brackets (spec issues #503, #538, #473, #562)
 # Spaces are allowed again inside <...>, reverting a 0.24 change. A destination may not begin with <
 # unless it is inside <...>.
