@@ -31,6 +31,7 @@ public class Delimiter implements DelimiterRun {
     private Delimiter next;
 
     private int numDelims = 1;
+    private int originalNumDelims = 0;
 
     @Override
     public Delimiter getPrevious() {
@@ -55,6 +56,7 @@ public class Delimiter implements DelimiterRun {
     }
 
     public void setNumDelims(int numDelims) {
+        if (originalNumDelims == 0) originalNumDelims = numDelims;
         this.numDelims = numDelims;
     }
 
@@ -167,5 +169,10 @@ public class Delimiter implements DelimiterRun {
     @Override
     public int length() {
         return numDelims;
+    }
+
+    @Override
+    public int originalLength() {
+        return originalNumDelims == 0 ? numDelims : originalNumDelims;
     }
 }

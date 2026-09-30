@@ -64,6 +64,12 @@ public class EmphasisRuleOfThreeTest {
         assertPre029("<p>foo******bar*********baz</p>\n", "foo******bar*********baz\n");
     }
 
+    // the rule uses the original length of a run, not what is left of it after a partial match
+    @Test
+    public void ruleUsesOriginalRunLengthIn029() {
+        assert029("<p><strong>a</strong><em>b</em><em>c</em>*</p>\n", "**a***b**c**\n");
+    }
+
     // the cases which motivated the original rule keep working in every version
     @Test
     public void originalMotivatingCases() {

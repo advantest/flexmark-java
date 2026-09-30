@@ -26,4 +26,11 @@ public interface DelimiterRun {
      * @return the number of characters in this delimiter run (that are left for processing)
      */
     int length();
+
+    /**
+     * @return the number of characters this delimiter run had when it was scanned, before any were used up
+     */
+    default int originalLength() {
+        return length();
+    }
 }

@@ -63,8 +63,11 @@ public abstract class EmphasisDelimiterProcessor implements DelimiterProcessor {
     @Override
     public int getDelimiterUse(DelimiterRun opener, DelimiterRun closer) {
         // "multiple of 3" rule for internal delimiter runs, since 0.29 not if both lengths are multiples of 3
-        if ((opener.canClose() || closer.canOpen()) && (opener.length() + closer.length()) % 3 == 0
-                && !(multipleOfThreeExemption && opener.length() % 3 == 0 && closer.length() % 3 == 0)) {
+        // since 0.29 the lengths are those of the runs as scanned, not what is left of them
+        int openerLength = multipleOfThreeExemption ? opener.originalLength() : opener.length();
+        int closerLength = multipleOfThreeExemption ? closer.originalLength() : closer.length();
+        if ((opener.canClose() || closer.canOpen()) && (openerLength + closerLength) % 3 == 0
+                && !(multipleOfThreeExemption && openerLength % 3 == 0 && closerLength % 3 == 0)) {
             return 0;
         }
 
