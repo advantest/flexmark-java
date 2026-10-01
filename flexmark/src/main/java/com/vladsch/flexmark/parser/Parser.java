@@ -198,6 +198,15 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> HTML_COMMENT_ANY_TEXT = new DataKey<>("HTML_COMMENT_ANY_TEXT", true);
 
     /**
+     * UNICODE_PUNCTUATION_INCLUDES_SYMBOLS default true, makes parsing CommonMark Spec 0.31.2 compliant, set to false by every profile other than COMMONMARK_0_31_2:
+     * a Unicode punctuation character, as used by the left and right flanking delimiter run rules of emphasis, is ASCII punctuation or a character of the
+     * Unicode general categories P (Pc, Pd, Pe, Pf, Pi, Po, Ps) or S (Sc, Sk, Sm, So). Before 0.31 the S categories were not punctuation, so
+     * <code>*£*alpha</code> was emphasis. Applies to supplementary characters as well.
+     * Also applies when {@link #INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS} is on, that option only classifies punctuation as opening or closing
+     */
+    final public static DataKey<Boolean> UNICODE_PUNCTUATION_INCLUDES_SYMBOLS = new DataKey<>("UNICODE_PUNCTUATION_INCLUDES_SYMBOLS", true);
+
+    /**
      * HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE default true, makes parsing CommonMark Spec 0.31.2 compliant, set to false by every profile other than COMMONMARK_0_31_2:
      * the tag names starting an HTML block of type 6 contain {@code search} and no longer contain {@code source}.
      * <p>
