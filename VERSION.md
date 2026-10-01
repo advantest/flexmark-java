@@ -151,6 +151,21 @@ must apply `COMMONMARK_0_30` or older, or set `Parser.HTML_BLOCK_TAGS_SEARCH_NOT
 * Note: `Parser.HTML_BLOCK_TAGS` still contains `math`, which no CommonMark version lists. This is an older flexmark
   deviation and was left unchanged.
 
+**Breaking:** the default configuration now also treats Unicode symbols as punctuation for the emphasis flanking
+rules, as CommonMark 0.31.2 does: `*£*alpha` is no longer emphasis. Code which needs the previous rule must apply
+`COMMONMARK_0_30` or older, or set `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` to `false`.
+
+* Add: `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` (default `true`): a Unicode punctuation character is ASCII
+  punctuation or a character of the Unicode general categories `P` (`Pc`, `Pd`, `Pe`, `Pf`, `Pi`, `Po`, `Ps`) or `S`
+  (`Sc`, `Sk`, `Sm`, `So`). About 8,000 more code points, among them supplementary characters such as emoji. Turned
+  off by every profile except `COMMONMARK_0_31_2`. It also applies with `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS`,
+  so the set of punctuation characters does not depend on that option.
+* Note: extension delimiters follow the same flanking rules, so e.g. `~~`, `~`, `^`, `++` and `:` (emoji) next to a
+  symbol behave as they do next to ASCII punctuation: `a~~©x~~b` is no longer strikethrough and `€:+1:` is now an emoji.
+* Note: with `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on, the `PUNCTUATION_OPEN`, `PUNCTUATION_CLOSE` and
+  `PUNCTUATION_ONLY` patterns of `Parsing` contain a `&&` outside of a character class, which is a literal there, so
+  they only match ASCII characters. This older defect was left unchanged.
+
 ### CommonMark 0.30
 
 **Breaking:** flexmark-java now parses as CommonMark 0.30 by default and `COMMONMARK_LATEST` is
