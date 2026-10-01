@@ -139,6 +139,18 @@ set `Parser.HTML_COMMENT_ANY_TEXT` to `false`. `COMMONMARK_0_31_2` keeps all 0.3
   block.
 * Fix: `FullSpec029DefaultOptionsCoreTest` and `FullSpec030DefaultOptionsCoreTest` set
   `HTML_COMMENT_ANY_TEXT=false`, as the default is now the 0.31.2 comment rule.
+
+**Breaking:** the default configuration now also uses the CommonMark 0.31.2 tag names for HTML blocks of type 6:
+`<search>` starts a block and interrupts a paragraph, `<source>` no longer does. Code which needs the previous list
+must apply `COMMONMARK_0_30` or older, or set `Parser.HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE` to `false`.
+
+* Add: `Parser.HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE` (default `true`): `search` joins and `source` leaves the type 6
+  tag names. Turned off by every profile except `COMMONMARK_0_31_2`. It only selects the default value of
+  `Parser.HTML_BLOCK_TAGS`, a list set explicitly for `HTML_BLOCK_TAGS` is used exactly as given. With
+  `HTML_BLOCK_DEEP_PARSER` the built-in block tags of the deep parser follow the same flag.
+* Note: `Parser.HTML_BLOCK_TAGS` still contains `math`, which no CommonMark version lists. This is an older flexmark
+  deviation and was left unchanged.
+
 ### CommonMark 0.30
 
 **Breaking:** flexmark-java now parses as CommonMark 0.30 by default and `COMMONMARK_LATEST` is
