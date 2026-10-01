@@ -6631,6 +6631,43 @@ Document[0, 12]
 ````````````````````````````````
 
 
+```````````````````````````````` example(Directional punctuations: 10) options(directional-punctuation)
+a«_b_»c
+.
+<p>a«<em>b</em>»c</p>
+.
+Document[0, 7]
+  Paragraph[0, 7]
+    Text[0, 2] chars:[0, 2, "a«"]
+    Emphasis[2, 5] textOpen:[2, 3, "_"] text:[3, 4, "b"] textClose:[4, 5, "_"]
+      Text[3, 4] chars:[3, 4, "b"]
+    Text[5, 7] chars:[5, 7, "»c"]
+````````````````````````````````
+
+
+```````````````````````````````` example(Directional punctuations: 11) options(directional-punctuation)
+a*）b*
+.
+<p>a*）b*</p>
+.
+Document[0, 5]
+  Paragraph[0, 5]
+    Text[0, 5] chars:[0, 5, "a*）b*"]
+````````````````````````````````
+
+
+```````````````````````````````` example(Directional punctuations: 12) options(directional-punctuation)
+a*（b*
+.
+<p>a<em>（b</em></p>
+.
+Document[0, 5]
+  Paragraph[0, 5]
+    Text[0, 1] chars:[0, 1, "a"]
+    Emphasis[1, 5] textOpen:[1, 2, "*"] text:[2, 4, "（b"] textClose:[4, 5, "*"]
+      Text[2, 4] chars:[2, 4, "（b"]
+````````````````````````````````
+
 ## Soft-Breaks in code
 
 Multi-line code span in paragraph
