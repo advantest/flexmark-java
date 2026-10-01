@@ -754,6 +754,10 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
 
     private void render(HtmlCommentBlock node, NodeFormatterContext context, MarkdownWriter markdown) {
         // here we need to make it translating, it is a comment
+        if (isShortEmptyComment(node.getChars())) {
+            markdown.append(node.getChars().trim()).line();
+            return;
+        }
         BasedSequence text = node.getChars().trim().midSequence(4, -3);
         BasedSequence trimmedEOL = BasedSequence.EOL;
 
@@ -800,6 +804,10 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
 
     private void render(HtmlInnerBlockComment node, NodeFormatterContext context, MarkdownWriter markdown) {
         // here we need to make it translating, it is a comment
+        if (isShortEmptyComment(node.getChars())) {
+            markdown.append(node.getChars().trim());
+            return;
+        }
         BasedSequence text = node.getChars().trim().midSequence(4, -3);
         if (!context.isTransformingText() && formatterOptions.linkMarkerCommentPattern != null && formatterOptions.linkMarkerCommentPattern.matcher(text).matches()) {
             // if after ref then output nothing, the ref takes care of this
@@ -831,8 +839,18 @@ public class CoreNodeFormatter extends NodeRepositoryFormatter<ReferenceReposito
         }
     }
 
+    // CommonMark 0.31 <!--> and <!---> are complete comments without text, the <!-- and --> markers overlap
+    private static boolean isShortEmptyComment(BasedSequence chars) {
+        BasedSequence trimmed = chars.trim();
+        return trimmed.equals("<!-->") || trimmed.equals("<!--->");
+    }
+
     private void render(HtmlInlineComment node, NodeFormatterContext context, MarkdownWriter markdown) {
         // TODO: this really needs to be parsed but we won't do it
+        if (isShortEmptyComment(node.getChars())) {
+            markdown.append(node.getChars());
+            return;
+        }
         BasedSequence text = node.getChars().trim().midSequence(4, -3);
         if (!context.isTransformingText() && formatterOptions.linkMarkerCommentPattern != null && formatterOptions.linkMarkerCommentPattern.matcher(text).matches()) {
             markdown.append("<!--").append(String.valueOf(text.toMapped(SpaceMapper.toNonBreakSpace))).append("-->");
