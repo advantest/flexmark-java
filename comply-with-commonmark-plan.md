@@ -277,7 +277,7 @@ Everything else in [0.31] is editorial: link and typo fixes, "compact" → "coll
 before "link label", and tooling entries. The Unicode whitespace definition was reworded but not changed,
 and flexmark's `UNICODE_WHITESPACE_CHAR` already matches it exactly.
 
-## Task B312 — CommonMark 0.31.2 implementation (planned)
+## Task B312 — CommonMark 0.31.2 implementation (B312.1 to B312.3 done)
 
 Only three examples fail, but **this is not a small task**: the punctuation cluster has by far the widest
 blast radius of any change in this whole effort, and the genuinely important defects are latent.
@@ -286,7 +286,7 @@ blast radius of any change in this whole effort, and the genuinely important def
 |--------|------------------------|----------|--------|---------|------|
 | B312.1 | HTML comment grammar (DONE) | 625, 626 | Comment text may contain `--`; `<!-->` and `<!--->` are complete empty comments. | `Parsing.ST_HTMLCOMMENT` | low |
 | B312.2 | Block tag list (DONE)  | none     | `search` joins the type 6 tag list, `source` leaves it. | `Parser.HTML_BLOCK_TAGS`, `HtmlDeepParser.BLOCK_TAGS` | low |
-| B312.3 | Symbols are Unicode punctuation | 354 | Unicode `S*` (Sm, Sc, Sk, So) counts as punctuation for the emphasis flanking rules. | `Parsing.ST_PUNCTUATION*`, `InlineParserImpl.scanDelimiters` | **medium-high** |
+| B312.3 | Symbols are Unicode punctuation (DONE) | 354 | Unicode `S*` (Sm, Sc, Sk, So) counts as punctuation for the emphasis flanking rules. | `Parsing.ST_PUNCTUATION*`, `InlineParserImpl.scanDelimiters` | **medium-high** |
 
 **B312.1 — done.** New key Parser.HTML_COMMENT_ANY_TEXT (default 	rue, off in every profile except the new
 COMMONMARK_0_31_2), pattern ST_HTMLCOMMENT_ANY_TEXT, HTML_TAG cache key suffix _COMMENT_0312. 625 and 626 left the
@@ -299,6 +299,22 @@ user-supplied list is used verbatim. `HtmlDeepParser` swaps `search`/`source` in
 The baseline is untouched. The pre-existing `math` entry is still in `HTML_BLOCK_TAGS` (no CommonMark version lists
 it), left as is. The deep parser never lets a void tag such as `source` interrupt a paragraph, an older quirk, also
 left. Review: `review-B312.2.md`. Tests: `HtmlBlockTagsSearchNotSourceTest`.
+
+**B312.3 and F3 — done.** New key `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` (default `true`, off in every profile
+except `COMMONMARK_0_31_2`). `\p{Sc}\p{Sk}\p{Sm}\p{So}` joined the four `Parsing` punctuation patterns, in a per
+instance variant pair; no cached pattern uses them, so no cache key was needed. Example 354 left the baseline, which
+now holds only its header. No existing test expectation changed. **New open finding (proposed Task F5):** the
+`&&` in `PUNCTUATION_OPEN`, `PUNCTUATION_CLOSE` and `PUNCTUATION_ONLY` is a literal outside a character class.
+Review: `review-B312.3.md`. Tests: `UnicodePunctuationSymbolsTest` (24 tests, F3).
+
+### Task F5 — directional punctuation patterns use `&&` outside a character class (open, needs a decision)
+
+`Parsing.ST_PUNCTUATION_OPEN`, `_CLOSE` and `_ONLY` are written `^[ASCII...]|[\p{P..}]&&[^...]`. In Java regex `&&` is
+an intersection only inside a class, here it is a literal, and the second branch has no `^`. Measured on JDK 21:
+`PUNCTUATION_OPEN` and `PUNCTUATION_CLOSE` match exactly the ASCII sets for a single code point and not one non-ASCII
+character, `PUNCTUATION_ONLY` matches no single character at all (and is unused). With
+`INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on, no non-ASCII character is punctuation, not even `¡` or `«`. Fixing it
+changes the behaviour of that option and needs its own analysis; B312.3 only added the `S` categories consistently.
 
 Order: B312.1 → B312.2 → B312.3. The first two are independent and cheap; B312.3 is last because it is the
 only one that can disturb every extension which processes delimiters.
@@ -395,7 +411,7 @@ whitespace cases to test, as every `Zs` character is in the BMP.
 
 **Deliberately excluded:** adding the Unicode `S*` categories to the punctuation set. That is Task B312.3.
 
-### Task F3 — tests for the under-tested symbol punctuation rule (open, belongs with B312.3)
+### Task F3 — tests for the under-tested symbol punctuation rule (DONE with B312.3)
 
 
 The 0.31.2 example set detects only **BMP currency symbols** (example 354), yet the change affects roughly
