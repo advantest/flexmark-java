@@ -486,6 +486,44 @@ as `[[\p{...}]&&[^...]]` with the `^` anchor, work out the intended open/close s
 categories (the `Ps`/`Pe`/`Pi`/`Pf` pairs make this non-trivial), and add tests. If no, delete the dead
 alternatives and `PUNCTUATION_ONLY`, and document the option as ASCII-only.
 
+#### Decision (2026-10-01): keep the feature, fix the `&&` properly
+
+Deleting the option was considered and **rejected**. `core_extra_ast_spec.md:6520-6630` already contains six
+examples that show what the feature is for, and they are all **CJK**:
+
+| Input                 | Default (spec-compliant) | Directional ON                      |
+|-----------------------|--------------------------|-------------------------------------|
+| `可以**foo()**可以`   | literal                  | `可以<strong>foo()</strong>可以`     |
+| `可以**()foo()**可以` | literal                  | `可以<strong>()foo()</strong>可以`   |
+| `可以**foo(**可以`    | literal                  | literal — correctly still refuses   |
+| `可以**)foo(**可以`   | literal                  | literal — correctly still refuses   |
+
+CJK text has no word spaces, so `**bold**` sits directly against ideographs; with a trailing `()` inside the
+emphasis the closing `**` has punctuation before it and a letter after it and the spec's symmetric rule
+refuses to close it. The directional split fixes exactly that, and examples 7-9 show it does not over-fire.
+The audience for the feature therefore writes non-ASCII text, which rules out "document it as ASCII-only".
+
+The open/close split is also less contradictory than it first appears, because Unicode already answers most
+of it:
+
+| Category               | Example       | Opening set | Closing set | Needs a judgement call?   |
+|------------------------|---------------|-------------|-------------|---------------------------|
+| `Ps` open punctuation  | `（` `［` `｛` | yes         | no          | no — Unicode decides      |
+| `Pe` close punctuation | `）` `］` `｝` | no          | yes         | no — Unicode decides      |
+| `Pc` `Pd` `Po`         | `—` `。` `、` | yes         | yes         | no — behaves like `,`     |
+| all `S` (symbols)      | `©` `€` `°`   | yes         | yes         | no                        |
+| `Pi` / `Pf`            | `«` `»` `“` `”` | **yes**   | **yes**     | yes — locale-dependent    |
+
+Only `Pi`/`Pf` are genuinely ambiguous (`»` closes in French, opens in German »so«), and Unicode's own
+`Bidi_Paired_Bracket` data deliberately takes no position on them. Putting them in **both** sets is the
+conservative answer: it is exactly how the spec-compliant default already treats them, so it introduces no
+new opinion. `可` is `Lo`, a letter, so the existing CJK examples are unaffected either way.
+
+**To do:** rewrite the three patterns as proper intersections with the `^` anchor, `Ps` opening-only, `Pe`
+closing-only, `Pi`/`Pf` in both, everything else in both. Delete `PUNCTUATION_ONLY` (matches nothing, unused).
+Add a test corpus covering fullwidth CJK brackets, guillemets, em dash, ideographic full stop and symbols,
+plus a regression test for the six existing CJK examples.
+
 ### Task F6 — pin the extension fallout of the symbol punctuation change (open, tests only)
 
 B312.3 made ~8,000 symbol code points count as punctuation, which changes the flanking booleans every
@@ -501,9 +539,37 @@ inputs only, not covered by any test) showed real behaviour changes:
 These look **spec-consistent** — the extensions use the same flanking rules, so a symbol now behaves like
 ASCII punctuation — but that is a judgement, not a measurement, and nothing locks the behaviour in.
 
-**To do:** decide per extension whether the new rendering is intended, then add tests that pin it, so a future
-change to the punctuation set cannot silently alter extension output. Candidates to review: strikethrough,
-subscript/superscript, typographic, emoji, ins, and any other module with a `DelimiterProcessor`.
+#### Decision (2026-10-01): the 0.31.2 behaviour is intended; no new option is needed
+
+Re-measured with the extension actually loaded. Note that the ASCII cases **did not change** — `a~~,x~~b`
+was literal in 0.30 too — so this is not a regression, it is `©` finally behaving like `,`:
+
+| Input        | 0.30 profile              | 0.31.2 default       | 0.31.2 + `UNICODE_PUNCTUATION_INCLUDES_SYMBOLS=false` |
+|--------------|---------------------------|----------------------|--------------------------------------------------------|
+| `a~~,x~~b`   | `a~~,x~~b`                | `a~~,x~~b`           | `a~~,x~~b`                                             |
+| `a~~«x~~b`   | `a~~«x~~b`                | `a~~«x~~b`           | `a~~«x~~b`                                             |
+| `a~~©x~~b`   | `a<del>©x</del>b`         | `a~~©x~~b`           | `a<del>©x</del>b`                                      |
+| `a*©x*b`     | `a<em>©x</em>b`           | `a*©x*b`             | `a<em>©x</em>b`                                        |
+| `H~°~O`      | `H<sub>°</sub>O`          | `H~°~O`              | `H<sub>°</sub>O`                                       |
+| `a~~x~~b`    | `a<del>x</del>b`          | `a<del>x</del>b`     | `a<del>x</del>b`                                       |
+
+**Per-extension pinning is architecturally impossible without a second punctuation definition.**
+`InlineParserImpl.scanDelimiters` computes `leftFlanking`/`rightFlanking` centrally from `myParsing.PUNCTUATION`
+*before* consulting any processor, and `StrikethroughDelimiterProcessor.canBeOpener` (lines 29-31) just returns
+`leftFlanking`. A processor does also receive the raw `before`/`after` strings and could re-classify them, but
+that means carrying its own punctuation regex — the duplicate definition we want to avoid.
+
+**The escape hatch already exists and needs no code.** `UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` is an ordinary
+`DataKey`; the profile only picks its *default*. Setting it to `false` under the 0.31.2 profile reproduces the
+0.30 column byte-for-byte while every other 0.31.2 behaviour stays on. That is the documented answer for users
+who need output identical to GitHub.
+
+**GFM divergence, deliberate.** GitHub's renderer (cmark-gfm, still on CommonMark 0.29) was queried through the
+GitHub API and returns `a<del>©x</del>b`, i.e. our old behaviour. Our goal is the CommonMark spec, not GFM, so
+we are early rather than wrong; GFM will change the same way when it rebases.
+
+**To do:** add tests pinning the table above under both the 0.31.2 default and the opt-out, for strikethrough,
+subscript and core emphasis; document the opt-out in `VERSION.md` and `README.md`. **No new option.**
 
 ### Task F7 — the symbol test corpus depends on the JDK's Unicode version (open, low priority)
 
@@ -520,6 +586,19 @@ U+1D400 now serves as the letter control; and **`°` (U+00B0) is `So`**, not `Sk
 **To do:** decide whether the guards should stay version-tolerant (current state, thresholds chosen with
 headroom) or be pinned to a vendored `UnicodeData.txt`. Related to Task F1, which asks the same question for
 `CaseFolding.txt`. Re-check the thresholds whenever the project's minimum JDK moves.
+
+#### Decision (2026-10-01): rely on the JDK's Unicode version, close with a comment
+
+`Character.getType(...)` **is** the Unicode general category property, so the JDK is the correct authority here
+— unlike Task F1, where the JDK offers only simple casing and full case folding is a genuinely different
+algorithm. The category-pinning mechanism the decision would need already exists:
+`fixturesHaveTheCategoryTheyAreMeantToHave` asserts the category of all 15 fixtures, so a JDK upgrade that
+recategorises one of them fails *that* test with a clear message instead of some distant emphasis test. The two
+sweep thresholds are lower bounds and Unicode only ever adds characters, so an upgrade can loosen them but
+never break them.
+
+**To do:** record the decision as a comment in `UnicodePunctuationSymbolsTest`. No production change. No
+vendored `UnicodeData.txt`.
 
 ### Task F1 — verify the exactness of the Unicode case folding (open)
 
@@ -544,6 +623,78 @@ folding driven by `CaseFolding.txt` and documenting the approximation as accepta
 the limitation is already recorded in `VERSION.md` and `review-B30.md`.
 
 No spec example detects this, so the shrink-only baseline cannot enforce it; it needs hand-written tests.
+
+#### Decision (2026-10-01): vendor the official `CaseFolding.txt`
+
+An approximation is not good enough for link resolution: a link either resolves or silently renders as
+literal text, and the failure is invisible to the author. The JDK has no full-case-folding API, so no
+composition of `toLowerCase`/`toUpperCase` can ever be exact — this is the opposite situation to Task F7,
+where the JDK does expose the property directly.
+
+**Licensing — compatible, checked.**
+
+| Artifact                | License            | SPDX            |
+|-------------------------|--------------------|-----------------|
+| `CaseFolding.txt` (UCD) | Unicode License v3 | `Unicode-3.0`   |
+| flexmark-java           | BSD 2-Clause       | `BSD-2-Clause`  |
+| flexmark-extensions     | BSD 2-Clause       | `BSD-2-Clause`  |
+
+The Unicode License is OSI-approved and permissive — no copyleft, no viral effect. Its only obligation is that
+the copyright and permission notice accompanies the data file or appears in the documentation, plus a
+no-endorsement clause. That is weaker than BSD 2-Clause's own attribution requirement, so it adds no constraint
+the project does not already meet. The UCD file carries its own copyright header, so vendoring it verbatim
+already satisfies the notice requirement.
+
+**Which `CaseFolding.txt` lines to use.** Each line has a status field, and the four statuses are alternative
+mappings for the *same* code point — picking the wrong pair either double-counts or applies a locale rule:
+
+| Status | Meaning                | Use? | Why                                                              |
+|--------|------------------------|------|------------------------------------------------------------------|
+| `C`    | common                 | yes  | the 1:1 mappings, the large majority (e.g. `A` → `a`)             |
+| `F`    | full                   | yes  | the 1:n mappings (`ß` → `ss`, `ﬃ` → `ffi`) — length-changing     |
+| `S`    | simple                 | no   | a 1:1 *alternative to* `F` for implementations that cannot change string length; using it together with `F` would apply two mappings to one code point |
+| `T`    | Turkic                 | no   | locale-specific (dotted/dotless i for tr/az); CommonMark wants locale-independent folding |
+
+`C` + `F` is exactly the combination the Unicode standard calls **full case folding**, which is what the spec
+requires. `C` + `S` would be *simple* case folding. Full folding is length-changing, so the implementation must
+build a new string rather than map in place — the current approximation already does, so this is not disruptive.
+
+**To do:** vendor `https://www.unicode.org/Public/15.0.0/ucd/CaseFolding.txt` (version-pinned, not `latest`),
+add `licenses/UNICODE-LICENSE-V3.txt`, name the third-party data in `LICENSE.txt`/`README.md`, drive
+`Escaping.caseFold` from the `C` and `F` entries, and add hand-written tests for `ß`/`ẞ`, the ligatures, final
+sigma, U+0130, and the Cherokee block.
+
+### Task F8 — verify the downstream Advantest projects against this branch (open)
+
+`C:\work\git-repos\flexmark-extensions` (`com.advantest.flexmark`, BSD 2-Clause, five modules: plantuml, math,
+figures, jira-ticket-links, sourcetracking) is maintained for Advantest alongside this fork. Its `pom.xml:26`
+currently pins the **published artifact** `0.65.2-20260519-1651` from `maven.pkg.github.com/advantest/flexmark-java`,
+so it does not yet see this branch. Several further Advantest projects depend on the flexmark libraries and
+carry their own test suites.
+
+A read-only scan found **no references** to any API changed here — not `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS`,
+`UNICODE_PUNCTUATION_INCLUDES_SYMBOLS`, `HTML_COMMENT_ANY_TEXT`, `HTML_BLOCK_TAGS`, `ParserEmulationProfile`,
+`Parsing`, `caseFold` nor `COMMONMARK_LATEST` — so every pending change is **compile-safe**.
+
+One **behavioural** impact was measured. `MathFormulaInLineDelimiterProcessor` is the only custom
+`DelimiterProcessor` in that repo and, unlike strikethrough, reads the punctuation flags directly
+(`canBeOpener → leftFlanking && (beforeIsWhitespace || beforeIsPunctuation)`). Mirroring it exactly:
+
+| Input      | 0.31.2 default   | 0.30 / symbols off | |
+|------------|------------------|--------------------|------------------|
+| `©$x$©`    | formula matched  | literal            | **differs**      |
+| `€$x$€`    | formula matched  | literal            | **differs**      |
+| `a $x$ b`  | matched          | matched            | same             |
+| `.$x$.`    | matched          | matched            | same             |
+| `a$x$b`    | literal          | literal            | same             |
+
+The direction is **enabling** — math *requires* punctuation adjacency where strikethrough is *blocked* by it —
+so no formula stops rendering; some previously-literal `$x$` start matching. Low regression risk. Their math
+test resources are pure ASCII (`$E=mc^2$`), so nothing covers it.
+
+**To do:** build this branch into the local repository, repoint `flexmark-extensions` at `0.65.3-SNAPSHOT`,
+run its suite, and record the result. Then repeat for the other Advantest consumers with the default options
+plus their extension set. Not blocking any milestone here.
 
 ## Constraints I am operating under
 
