@@ -524,7 +524,7 @@ closing-only, `Pi`/`Pf` in both, everything else in both. Delete `PUNCTUATION_ON
 Add a test corpus covering fullwidth CJK brackets, guillemets, em dash, ideographic full stop and symbols,
 plus a regression test for the six existing CJK examples.
 
-### Task F6 — pin the extension fallout of the symbol punctuation change (open, tests only)
+### Task F6 — pin the extension fallout of the symbol punctuation change (DONE, tests only)
 
 B312.3 made ~8,000 symbol code points count as punctuation, which changes the flanking booleans every
 extension delimiter processor consumes. **No extension test failed**, but a scratch probe (run on a handful of
@@ -570,6 +570,10 @@ we are early rather than wrong; GFM will change the same way when it rebases.
 
 **To do:** add tests pinning the table above under both the 0.31.2 default and the opt-out, for strikethrough,
 subscript and core emphasis; document the opt-out in `VERSION.md` and `README.md`. **No new option.**
+
+**Done:** pinned by `SymbolPunctuationExtensionFalloutTest` in `flexmark-ext-gfm-strikethrough` (nine inputs under
+the 0.30 profile, plain defaults, the explicit 0.31.2 profile and the opt-out, plus an opt-out equivalence property
+and the 0.28/0.29 profiles). The opt-out is documented in `VERSION.md` and `README.md`. Review: `review-F6.md`.
 
 ### Task F7 — the symbol test corpus depends on the JDK's Unicode version (open, low priority)
 
