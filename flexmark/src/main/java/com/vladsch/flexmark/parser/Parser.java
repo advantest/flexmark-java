@@ -198,6 +198,14 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> HTML_COMMENT_ANY_TEXT = new DataKey<>("HTML_COMMENT_ANY_TEXT", true);
 
     /**
+     * HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE default true, makes parsing CommonMark Spec 0.31.2 compliant, set to false by every profile other than COMMONMARK_0_31_2:
+     * the tag names starting an HTML block of type 6 contain {@code search} and no longer contain {@code source}.
+     * <p>
+     * Only selects the default value of {@link #HTML_BLOCK_TAGS}, a list set explicitly for HTML_BLOCK_TAGS is used as is.
+     */
+    final public static DataKey<Boolean> HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE = new DataKey<>("HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE", true);
+
+    /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant
      */
     final public static DataKey<Boolean> LINKS_ALLOW_MATCHED_PARENTHESES = new DataKey<>("LINKS_ALLOW_MATCHED_PARENTHESES", true);
