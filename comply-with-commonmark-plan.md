@@ -303,18 +303,9 @@ left. Review: `review-B312.2.md`. Tests: `HtmlBlockTagsSearchNotSourceTest`.
 **B312.3 and F3 — done.** New key `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` (default `true`, off in every profile
 except `COMMONMARK_0_31_2`). `\p{Sc}\p{Sk}\p{Sm}\p{So}` joined the four `Parsing` punctuation patterns, in a per
 instance variant pair; no cached pattern uses them, so no cache key was needed. Example 354 left the baseline, which
-now holds only its header. No existing test expectation changed. **New open finding (proposed Task F5):** the
+now holds only its header. No existing test expectation changed. **New open finding (Task F5):** the
 `&&` in `PUNCTUATION_OPEN`, `PUNCTUATION_CLOSE` and `PUNCTUATION_ONLY` is a literal outside a character class.
 Review: `review-B312.3.md`. Tests: `UnicodePunctuationSymbolsTest` (24 tests, F3).
-
-### Task F5 — directional punctuation patterns use `&&` outside a character class (open, needs a decision)
-
-`Parsing.ST_PUNCTUATION_OPEN`, `_CLOSE` and `_ONLY` are written `^[ASCII...]|[\p{P..}]&&[^...]`. In Java regex `&&` is
-an intersection only inside a class, here it is a literal, and the second branch has no `^`. Measured on JDK 21:
-`PUNCTUATION_OPEN` and `PUNCTUATION_CLOSE` match exactly the ASCII sets for a single code point and not one non-ASCII
-character, `PUNCTUATION_ONLY` matches no single character at all (and is unused). With
-`INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on, no non-ASCII character is punctuation, not even `¡` or `«`. Fixing it
-changes the behaviour of that option and needs its own analysis; B312.3 only added the `S` categories consistently.
 
 Order: B312.1 → B312.2 → B312.3. The first two are independent and cheap; B312.3 is last because it is the
 only one that can disturb every extension which processes delimiters.
@@ -457,6 +448,68 @@ matches it, and would break the "same output as the reference" property that the
 
 **Reopen only if** a future spec version adds an example that forces the stricter behaviour, or commonmark.js
 changes to implement its own spec text.
+
+### Task F5 — directional punctuation patterns use `&&` outside a character class (open, needs a decision)
+
+`Parsing.ST_PUNCTUATION_OPEN`, `_CLOSE` and `_ONLY` are written `^[ASCII...]|[\p{P..}]&&[^...]`. In Java regex `&&`
+is an intersection operator only *inside* a character class. As written it sits at the top level of an
+alternation, where it is a **literal two-character match**, and that second branch also lacks the `^` anchor.
+
+Measured empirically on JDK 21 over every code point:
+
+| Pattern              | Non-ASCII code points matched | Note                                        |
+|----------------------|-------------------------------|---------------------------------------------|
+| `PUNCTUATION`        | 819 (before B312.3)           | correct, no `&&`                            |
+| `PUNCTUATION_OPEN`   | 0                             | matches only its ASCII set; `"¡&&x"` matches |
+| `PUNCTUATION_CLOSE`  | 0                             | matches only its ASCII set                  |
+| `PUNCTUATION_ONLY`   | 0 (matches no single char)    | unused anywhere in the code base            |
+
+Consequence: with `Parser.INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on (a flexmark extension point beyond the
+spec, default `false`), **no non-ASCII character counts as punctuation at all** — not even `¡` or `«`.
+
+B312.3 deliberately only added the `S` categories to these patterns consistently, so the *intent* is now right
+while the effect stays nil. Fixing the `&&` changes the observable behaviour of that option for ~800 existing
+code points plus the ~8,000 symbols, which needs its own analysis and a decision.
+
+**To do:** decide whether the directional option should classify non-ASCII punctuation at all. If yes, rewrite
+as `[[\p{...}]&&[^...]]` with the `^` anchor, work out the intended open/close split for the non-ASCII
+categories (the `Ps`/`Pe`/`Pi`/`Pf` pairs make this non-trivial), and add tests. If no, delete the dead
+alternatives and `PUNCTUATION_ONLY`, and document the option as ASCII-only.
+
+### Task F6 — pin the extension fallout of the symbol punctuation change (open, tests only)
+
+B312.3 made ~8,000 symbol code points count as punctuation, which changes the flanking booleans every
+extension delimiter processor consumes. **No extension test failed**, but a scratch probe (run on a handful of
+inputs only, not covered by any test) showed real behaviour changes:
+
+| Input      | Extension     | New (0.31.2) | Old (0.30) |
+|------------|---------------|--------------|------------|
+| `a~~©x~~b` | strikethrough | literal      | `<del>`    |
+| `H~°~O`    | subscript     | literal      | `<sub>`    |
+| `€:+1:`    | emoji         | emoji        | literal    |
+
+These look **spec-consistent** — the extensions use the same flanking rules, so a symbol now behaves like
+ASCII punctuation — but that is a judgement, not a measurement, and nothing locks the behaviour in.
+
+**To do:** decide per extension whether the new rendering is intended, then add tests that pin it, so a future
+change to the punctuation set cannot silently alter extension output. Candidates to review: strikethrough,
+subscript/superscript, typographic, emoji, ins, and any other module with a `DelimiterProcessor`.
+
+### Task F7 — the symbol test corpus depends on the JDK's Unicode version (open, low priority)
+
+`UnicodePunctuationSymbolsTest` contains an exhaustive sweep with threshold guards (more than 7,000 symbol and
+more than 500 punctuation code points) and a `fixturesHaveTheCategoryTheyAreMeantToHave` test. All of these
+read `Character.getType(...)`, so they assert against **the Unicode version bundled with the running JDK**
+(15.0 on JDK 21), not against a fixed data file. A JDK upgrade moves the ground truth underneath them.
+
+Two of my own fixture claims were wrong when the corpus was written and were corrected against the actual
+category data: **U+1D400 is `Lu`** (a letter), not `Sm` — U+1D6C1 is used for supplementary `Sm` instead, and
+U+1D400 now serves as the letter control; and **`°` (U+00B0) is `So`**, not `Sk` — the `Sk` fixtures are `¨`,
+`˄`, `´` and `¯`. This is exactly the class of error the category test exists to catch.
+
+**To do:** decide whether the guards should stay version-tolerant (current state, thresholds chosen with
+headroom) or be pinned to a vendored `UnicodeData.txt`. Related to Task F1, which asks the same question for
+`CaseFolding.txt`. Re-check the thresholds whenever the project's minimum JDK moves.
 
 ### Task F1 — verify the exactness of the Unicode case folding (open)
 
