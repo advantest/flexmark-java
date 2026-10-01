@@ -72,14 +72,36 @@ public class Parsing {
     final private static String ST_ASCII_PUNCTUATION = "'!\"#\\$%&\\*\\+,\\-\\./:;=\\?@\\\\\\^_`\\|~";
     final private static String ST_ASCII_OPEN_PUNCTUATION = "\\(<\\[\\{";
     final private static String ST_ASCII_CLOSE_PUNCTUATION = "\\)>\\]\\}";
-    final private static Pattern ST_PUNCTUATION = Pattern.compile(
-            "^[" + ST_ASCII_PUNCTUATION + ST_ASCII_OPEN_PUNCTUATION + ST_ASCII_CLOSE_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]");
-    final private static Pattern ST_PUNCTUATION_OPEN = Pattern.compile(
-            "^[" + ST_ASCII_PUNCTUATION + ST_ASCII_OPEN_PUNCTUATION + "]|[\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]&&[^" + ST_ASCII_CLOSE_PUNCTUATION + "]");
-    final private static Pattern ST_PUNCTUATION_CLOSE = Pattern.compile(
-            "^[" + ST_ASCII_PUNCTUATION + ST_ASCII_CLOSE_PUNCTUATION + "]|[\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]&&[^" + ST_ASCII_OPEN_PUNCTUATION + "]");
-    final private static Pattern ST_PUNCTUATION_ONLY = Pattern.compile(
-            "^[" + ST_ASCII_PUNCTUATION + "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}]&&[^" + ST_ASCII_OPEN_PUNCTUATION + ST_ASCII_CLOSE_PUNCTUATION + "]");
+    final private static String ST_UNICODE_PUNCTUATION_CATEGORIES = "\\p{Pc}\\p{Pd}\\p{Pe}\\p{Pf}\\p{Pi}\\p{Po}\\p{Ps}";
+    // CommonMark 0.31: the S categories are Unicode punctuation too
+    final private static String ST_UNICODE_PUNCTUATION_SYMBOL_CATEGORIES = ST_UNICODE_PUNCTUATION_CATEGORIES + "\\p{Sc}\\p{Sk}\\p{Sm}\\p{So}";
+
+    private static Pattern punctuation(String categories) {
+        return Pattern.compile("^[" + ST_ASCII_PUNCTUATION + ST_ASCII_OPEN_PUNCTUATION + ST_ASCII_CLOSE_PUNCTUATION + categories + "]");
+    }
+
+    private static Pattern punctuationOpen(String categories) {
+        return Pattern.compile("^[" + ST_ASCII_PUNCTUATION + ST_ASCII_OPEN_PUNCTUATION + "]|[" + categories + "]&&[^" + ST_ASCII_CLOSE_PUNCTUATION + "]");
+    }
+
+    private static Pattern punctuationClose(String categories) {
+        return Pattern.compile("^[" + ST_ASCII_PUNCTUATION + ST_ASCII_CLOSE_PUNCTUATION + "]|[" + categories + "]&&[^" + ST_ASCII_OPEN_PUNCTUATION + "]");
+    }
+
+    private static Pattern punctuationOnly(String categories) {
+        return Pattern.compile("^[" + ST_ASCII_PUNCTUATION + categories + "]&&[^" + ST_ASCII_OPEN_PUNCTUATION + ST_ASCII_CLOSE_PUNCTUATION + "]");
+    }
+
+    // CommonMark up to 0.30 punctuation, without the S categories
+    final private static Pattern ST_PUNCTUATION = punctuation(ST_UNICODE_PUNCTUATION_CATEGORIES);
+    final private static Pattern ST_PUNCTUATION_OPEN = punctuationOpen(ST_UNICODE_PUNCTUATION_CATEGORIES);
+    final private static Pattern ST_PUNCTUATION_CLOSE = punctuationClose(ST_UNICODE_PUNCTUATION_CATEGORIES);
+    final private static Pattern ST_PUNCTUATION_ONLY = punctuationOnly(ST_UNICODE_PUNCTUATION_CATEGORIES);
+    // CommonMark 0.31 punctuation, with the S categories
+    final private static Pattern ST_PUNCTUATION_SYMBOLS = punctuation(ST_UNICODE_PUNCTUATION_SYMBOL_CATEGORIES);
+    final private static Pattern ST_PUNCTUATION_OPEN_SYMBOLS = punctuationOpen(ST_UNICODE_PUNCTUATION_SYMBOL_CATEGORIES);
+    final private static Pattern ST_PUNCTUATION_CLOSE_SYMBOLS = punctuationClose(ST_UNICODE_PUNCTUATION_SYMBOL_CATEGORIES);
+    final private static Pattern ST_PUNCTUATION_ONLY_SYMBOLS = punctuationOnly(ST_UNICODE_PUNCTUATION_SYMBOL_CATEGORIES);
     final private static Pattern ST_PUNCTUATION_OPEN_ONLY = Pattern.compile(
             "^[" + ST_ASCII_OPEN_PUNCTUATION + "]");
     final private static Pattern ST_PUNCTUATION_CLOSE_ONLY = Pattern.compile(
@@ -89,10 +111,10 @@ public class Parsing {
     final public String ASCII_OPEN_PUNCTUATION = ST_ASCII_OPEN_PUNCTUATION;
     final public String ASCII_CLOSE_PUNCTUATION = ST_ASCII_CLOSE_PUNCTUATION;
 
-    final public Pattern PUNCTUATION = ST_PUNCTUATION;
-    final public Pattern PUNCTUATION_OPEN = ST_PUNCTUATION_OPEN;
-    final public Pattern PUNCTUATION_CLOSE = ST_PUNCTUATION_CLOSE;
-    final public Pattern PUNCTUATION_ONLY = ST_PUNCTUATION_ONLY;
+    final public Pattern PUNCTUATION;
+    final public Pattern PUNCTUATION_OPEN;
+    final public Pattern PUNCTUATION_CLOSE;
+    final public Pattern PUNCTUATION_ONLY;
     final public Pattern PUNCTUATION_OPEN_ONLY = ST_PUNCTUATION_OPEN_ONLY;
     final public Pattern PUNCTUATION_CLOSE_ONLY = ST_PUNCTUATION_CLOSE_ONLY;
 
@@ -394,6 +416,11 @@ public class Parsing {
         boolean htmlTagNoVtFf = Parser.HTML_TAG_WHITESPACE_NO_VT_FF.get(options);
         boolean htmlCommentAnyText = Parser.HTML_COMMENT_ANY_TEXT.get(options);
         this.HTMLCOMMENT = htmlCommentAnyText ? ST_HTMLCOMMENT_ANY_TEXT : ST_HTMLCOMMENT;
+        boolean unicodePunctuationIncludesSymbols = Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS.get(options);
+        this.PUNCTUATION = unicodePunctuationIncludesSymbols ? ST_PUNCTUATION_SYMBOLS : ST_PUNCTUATION;
+        this.PUNCTUATION_OPEN = unicodePunctuationIncludesSymbols ? ST_PUNCTUATION_OPEN_SYMBOLS : ST_PUNCTUATION_OPEN;
+        this.PUNCTUATION_CLOSE = unicodePunctuationIncludesSymbols ? ST_PUNCTUATION_CLOSE_SYMBOLS : ST_PUNCTUATION_CLOSE;
+        this.PUNCTUATION_ONLY = unicodePunctuationIncludesSymbols ? ST_PUNCTUATION_ONLY_SYMBOLS : ST_PUNCTUATION_ONLY;
 
         if (intellijDummyIdentifier) {
             this.ADDITIONAL_CHARS = ST_ADDITIONAL_CHARS_IDI;

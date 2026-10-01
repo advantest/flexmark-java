@@ -229,7 +229,8 @@ public class UnicodePunctuationSymbolsTest {
     public void spec354FormWithTheSpecSymbols() {
         assertNew(p("*$*alpha.") + p("*" + POUND + "*alpha.") + p("*" + EURO + "*alpha."),
                 "*$*alpha.\n\n*" + POUND + "*alpha.\n\n*" + EURO + "*alpha.\n");
-        assertOld(p("<em>$</em>alpha.") + p("<em>" + POUND + "</em>alpha.") + p("<em>" + EURO + "</em>alpha."),
+        // $ is ASCII punctuation, so it is punctuation before 0.31 as well
+        assertOld(p("*$*alpha.") + p("<em>" + POUND + "</em>alpha.") + p("<em>" + EURO + "</em>alpha."),
                 "*$*alpha.\n\n*" + POUND + "*alpha.\n\n*" + EURO + "*alpha.\n");
     }
 

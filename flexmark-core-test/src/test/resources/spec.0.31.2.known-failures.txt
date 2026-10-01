@@ -15,4 +15,3 @@
 #
 # The cluster labels are PROVISIONAL until confirmed by the implementation of the respective 0.31 change
 # (https://github.com/commonmark/commonmark-spec/blob/0.31.2/changelog.txt, section [0.31]).
-354 # Emphasis and strong emphasis: 5 - [unicode symbols] $, £, € must count as Unicode punctuation for flanking
