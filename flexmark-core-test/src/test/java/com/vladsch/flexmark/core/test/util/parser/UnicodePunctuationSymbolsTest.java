@@ -387,6 +387,20 @@ public class UnicodePunctuationSymbolsTest {
         }
     }
 
+    /**
+     * Pins the Unicode general category of every fixture, so that a JDK upgrade which recategorises one of them fails
+     * here, where the cause is obvious, instead of somewhere in the expectations below.
+     * <p>
+     * Deliberately no {@code UnicodeData.txt} is bundled for the categories, unlike the {@code CaseFolding.txt} bundled
+     * for {@link com.vladsch.flexmark.util.sequence.Escaping#caseFold(CharSequence)}. The CommonMark specification
+     * defines Unicode punctuation by its general category, and {@link Character#getType(int)} <em>is</em> that
+     * property, so the JDK is the authority. Case folding is a different matter: the JDK only offers locale dependent
+     * simple casing, never the full folding the specification asks for, which is why that data has to be bundled.
+     * <p>
+     * The consequence is that the categories follow the Unicode version of the running JDK, currently Unicode 15 on
+     * JDK 21. That is intended. The sweep thresholds below are lower bounds, so code points added by a later Unicode
+     * version can only loosen them, never break them.
+     */
     @Test
     public void fixturesHaveTheCategoryTheyAreMeantToHave() {
         assertEquals(Character.CURRENCY_SYMBOL, Character.getType(YEN.codePointAt(0)));

@@ -49,8 +49,9 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
   consolidated into the single `FullSpec0312DefaultOptionsCoreTest` (no parser option);
   `FullSpec029DefaultOptionsCoreTest`
   and `FullSpec030DefaultOptionsCoreTest` were removed, older versions are asserted by their explicit-profile
-  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-up F7 is
-  unchanged; F1, F5 and F6 are now done.
+  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Follow-ups F1, F5, F6 and F7
+  are all done; only **F8** (verifying the downstream Advantest projects against this branch) is open, and it is
+  explicitly non-blocking.
 
 ---
 
@@ -586,7 +587,7 @@ subscript and core emphasis; document the opt-out in `VERSION.md` and `README.md
 the 0.30 profile, plain defaults, the explicit 0.31.2 profile and the opt-out, plus an opt-out equivalence property
 and the 0.28/0.29 profiles). The opt-out is documented in `VERSION.md` and `README.md`. Review: `review-F6.md`.
 
-### Task F7 — the symbol test corpus depends on the JDK's Unicode version (open, low priority)
+### Task F7 — the symbol test corpus depends on the JDK's Unicode version (DONE)
 
 `UnicodePunctuationSymbolsTest` contains an exhaustive sweep with threshold guards (more than 7,000 symbol and
 more than 500 punctuation code points) and a `fixturesHaveTheCategoryTheyAreMeantToHave` test. All of these
@@ -612,8 +613,9 @@ recategorises one of them fails *that* test with a clear message instead of some
 sweep thresholds are lower bounds and Unicode only ever adds characters, so an upgrade can loosen them but
 never break them.
 
-**To do:** record the decision as a comment in `UnicodePunctuationSymbolsTest`. No production change. No
-vendored `UnicodeData.txt`.
+**Done:** the decision is recorded as a Javadoc comment on `fixturesHaveTheCategoryTheyAreMeantToHave` in
+`UnicodePunctuationSymbolsTest`, contrasting it with Task F1 and noting that the sweep thresholds are lower
+bounds. No production change. No vendored `UnicodeData.txt`.
 
 ### Task F1 — verify the exactness of the Unicode case folding (DONE)
 
