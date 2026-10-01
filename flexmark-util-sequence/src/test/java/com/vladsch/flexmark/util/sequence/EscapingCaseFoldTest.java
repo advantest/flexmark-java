@@ -136,6 +136,15 @@ public class EscapingCaseFoldTest {
     }
 
     @Test
+    public void asciiFastPathMatchesTable() throws IOException {
+        Map<Integer, String> entries = readEntries();
+        for (int cp = 0; cp < 0x80; cp++) {
+            String expected = cp >= 'A' && cp <= 'Z' ? String.valueOf((char) (cp + 32)) : null;
+            assertEquals(String.format("U+%04X", cp), expected, entries.get(cp));
+        }
+    }
+
+    @Test
     public void resourceIsUnmodified() throws Exception {
         byte[] hash = MessageDigest.getInstance("SHA-256").digest(readResource());
         StringBuilder sb = new StringBuilder();

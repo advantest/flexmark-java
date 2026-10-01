@@ -5,9 +5,16 @@ import com.vladsch.flexmark.util.misc.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -567,29 +574,96 @@ public class Escaping {
     }
 
     /**
-     * Approximation of the Unicode case fold (full case folding, C and F status of CaseFolding.txt) which is locale
-     * independent: lower case, upper case, lower case, each applied per code point (so the final sigma rule of String.toLowerCase is\n     * not applied). Lower casing first maps U+1E9E (capital sharp s), which has no
-     * upper case mapping, to U+00DF, the upper casing expands that to SS, and the last lower casing gives ss.
+     * Unicode full case folding (the C and F entries of CaseFolding.txt), which is locale independent and has no
+     * context dependent rules, for example Σ, σ and ς all fold to σ. This is the case fold the CommonMark
+     * specification requires for matching link reference labels.
      * <p>
-     * This is not a table based case fold. It is not an implementation of CaseFolding.txt. Compared with the C and F entries of the latest
-     * CaseFolding.txt, 163 of 1606 differ: U+0130 (folds to i without the combining dot), Cherokee letters (folded to
-     * small instead of capital letters, which still puts the same letters in one equivalence class) and characters
-     * added to Unicode after the Unicode version of the running JDK.
+     * The mappings are read from the bundled, unmodified CaseFolding.txt of <b>Unicode 15.0.0</b>, the Unicode
+     * version of JDK 21. The fold is therefore pinned to that version: a newer JDK does not change it, and code
+     * points which are not listed in the file, including characters added to Unicode after 15.0.0, fold to
+     * themselves. Upgrading means replacing the data file, its recorded SHA-256 and the tests.
+     * <p>
+     * Only the C (common) and F (full) entries are used. S (simple) entries are alternatives to F entries for
+     * the same code point and T (Turkic) entries are locale specific. Folding can change the length, for example
+     * U+00DF folds to ss and U+0130 folds to i followed by U+0307, so the result is a new string.
      *
      * @param s sequence to fold
-     * @return approximately case folded string
+     * @return case folded string
+     * @throws IllegalStateException if the bundled CaseFolding.txt cannot be loaded
      */
     @NotNull
     public static String caseFold(@NotNull CharSequence s) {
-        String upper = lowerCaseChars(s.toString()).toUpperCase(Locale.ROOT);
-        return lowerCaseChars(upper);
+        int length = s.length();
+        StringBuilder sb = null;
+        int i = 0;
+
+        while (i < length) {
+            int cp = Character.codePointAt(s, i);
+            int count = Character.charCount(cp);
+            String folded;
+
+            if (cp < 0x80) {
+                // the C entries of CaseFolding.txt for ASCII are exactly A-Z to a-z, see EscapingCaseFoldTest
+                folded = cp >= 'A' && cp <= 'Z' ? String.valueOf((char) (cp + ('a' - 'A'))) : null;
+            } else {
+                folded = CaseFoldTable.MAP.get(cp);
+            }
+
+            if (folded != null && sb == null) {
+                sb = new StringBuilder(length + 8);
+                sb.append(s, 0, i);
+            }
+
+            if (sb != null) {
+                if (folded != null) sb.append(folded);
+                else sb.append(s, i, i + count);
+            }
+            i += count;
+        }
+
+        return sb == null ? s.toString() : sb.toString();
     }
 
-    // per code point, unlike String.toLowerCase() this does not apply the context dependent final sigma rule
-    private static String lowerCaseChars(String s) {
-        StringBuilder sb = new StringBuilder(s.length());
-        s.codePoints().forEach(cp -> sb.appendCodePoint(Character.toLowerCase(cp)));
-        return sb.toString();
+    /**
+     * Holder of the code point to folded string table, loaded once on first use and immutable afterwards.
+     * <p>
+     * Source: https://www.unicode.org/Public/15.0.0/ucd/CaseFolding.txt
+     * <br>SHA-256: CDD49E55EAE3BBF1F0A3F6580C974A0263CB86A6A08DAA10FBF705B4808A56F7 (84690 bytes)
+     * <br>License: Unicode License v3 (Unicode-3.0), see licenses/UNICODE-LICENSE-V3.txt
+     */
+    private static final class CaseFoldTable {
+        static final String RESOURCE = "CaseFolding.txt";
+        static final Map<Integer, String> MAP = load();
+
+        private static Map<Integer, String> load() {
+            try (InputStream in = Escaping.class.getResourceAsStream(RESOURCE)) {
+                if (in == null) {
+                    throw new IllegalStateException("Missing resource " + Escaping.class.getPackage().getName().replace('.', '/') + "/" + RESOURCE);
+                }
+
+                Map<Integer, String> map = new HashMap<>(2048);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    if (line.isEmpty() || line.charAt(0) == '#') continue;
+
+                    // code; status; mapping; # name
+                    String[] fields = line.split(";", 4);
+                    String status = fields[1].trim();
+                    if (!status.equals("C") && !status.equals("F")) continue;
+
+                    StringBuilder folded = new StringBuilder();
+                    for (String hex : fields[2].trim().split(" ")) folded.appendCodePoint(Integer.parseInt(hex, 16));
+                    map.put(Integer.parseInt(fields[0].trim(), 16), folded.toString());
+                }
+
+                return Collections.unmodifiableMap(map);
+            } catch (IOException | RuntimeException e) {
+                if (e instanceof IllegalStateException) throw (IllegalStateException) e;
+                throw new IllegalStateException("Cannot load resource " + Escaping.class.getPackage().getName().replace('.', '/') + "/" + RESOURCE, e);
+            }
+        }
     }
 
     @Nullable
