@@ -12,6 +12,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
     COMMONMARK_0_28(COMMONMARK),
     COMMONMARK_0_29(COMMONMARK),
     COMMONMARK_0_30(COMMONMARK),
+    COMMONMARK_0_31_2(COMMONMARK),
     FIXED_INDENT(null),
     KRAMDOWN(null),
     MARKDOWN(null),
@@ -60,7 +61,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
 
     public MutableListOptions getOptions(DataHolder dataHolder) {
         MutableListOptions options = createOptions(dataHolder);
-        if (this != COMMONMARK_0_30 && this != COMMONMARK_0_29) {
+        if (this != COMMONMARK_0_31_2 && this != COMMONMARK_0_30 && this != COMMONMARK_0_29) {
             // CommonMark 0.29 list rules are the defaults and are unchanged in 0.30, every older or other profile keeps the previous behaviour
             options.setNoItemAtCodeIndent(false);
         }
@@ -325,7 +326,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
             else if (this == COMMONMARK_0_28) {
                 // IMPORTANT: implement 0.29 as defaults with 0.28 as changes
             }
-            else if (this == COMMONMARK_0_29 || this == COMMONMARK_0_30) {
+            else if (this == COMMONMARK_0_29 || this == COMMONMARK_0_30 || this == COMMONMARK_0_31_2) {
                 // IMPORTANT: 0.29 list rules are the defaults of the list options, older profiles opt out, 0.30 has no list changes
             }
             return new MutableListOptions((DataHolder) null).setParserEmulationFamily(this);
@@ -502,13 +503,13 @@ public enum ParserEmulationProfile implements MutableDataSetter {
                 // IMPORTANT: 0.28/0.29 differences
             } else if (this == COMMONMARK_0_29) {
                 // IMPORTANT: 0.29 keeps its own rules while the DataKey defaults follow 0.30, the 0.30 keys are switched off below
-            } else if (this == COMMONMARK_0_30) {
+            } else if (this == COMMONMARK_0_30 || this == COMMONMARK_0_31_2) {
                 // IMPORTANT: 0.30 is implemented as the defaults of the parser options, older profiles opt out
                 // set the next specification version's parsing rule options here
             }
         }
 
-        if (this != COMMONMARK_0_30 && this != COMMONMARK_0_29) {
+        if (this != COMMONMARK_0_31_2 && this != COMMONMARK_0_30 && this != COMMONMARK_0_29) {
             // CommonMark 0.29 parsing rules are unchanged in 0.30, every older or other profile keeps the previous behaviour
             dataHolder.set(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES, false);
             dataHolder.set(Parser.CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES, false);
@@ -521,12 +522,17 @@ public enum ParserEmulationProfile implements MutableDataSetter {
             // Parser.LISTS_NO_ITEM_AT_CODE_INDENT is a list option, set by getOptions()
         }
 
-        if (this != COMMONMARK_0_30) {
+        if (this != COMMONMARK_0_31_2 && this != COMMONMARK_0_30) {
             // CommonMark 0.30 parsing rules are the defaults of the DataKeys, every other profile, including 0.29, opts out
             dataHolder.set(Parser.HTML_BLOCK_TEXTAREA_TYPE_1, false);
             dataHolder.set(Parser.REFERENCE_LABEL_UNICODE_CASE_FOLD, false);
             dataHolder.set(Parser.HTML_DECLARATION_ASCII_LETTER, false);
             dataHolder.set(Parser.HTML_TAG_WHITESPACE_NO_VT_FF, false);
+        }
+
+        if (this != COMMONMARK_0_31_2) {
+            // CommonMark 0.31.2 parsing rules are the defaults of the DataKeys, every other profile, including 0.30, opts out
+            dataHolder.set(Parser.HTML_COMMENT_ANY_TEXT, false);
         }
 
         return dataHolder;

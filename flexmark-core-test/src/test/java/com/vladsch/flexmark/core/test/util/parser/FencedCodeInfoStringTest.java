@@ -65,7 +65,8 @@ public class FencedCodeInfoStringTest {
         assertTrue(Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(null));
         for (ParserEmulationProfile profile : ParserEmulationProfile.values()) {
             boolean expected = profile == ParserEmulationProfile.COMMONMARK_0_29
-                    || profile == ParserEmulationProfile.COMMONMARK_0_30;
+                    || profile == ParserEmulationProfile.COMMONMARK_0_30
+                    || profile == ParserEmulationProfile.COMMONMARK_0_31_2;
             assertEquals("profile " + profile, expected,
                     Parser.FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES.get(profile.getProfileOptions()));
         }

@@ -56,12 +56,14 @@ public class Parsing {
     final private static String ST_ADDITIONAL_CHARS_SET_NO_IDI = "";
 
     final public static String ST_HTMLCOMMENT = "<!---->|<!--(?:-?[^>-])(?:-?[^-])*-->";
+    // CommonMark 0.31: <!-->, <!---> or <!-- text --> where text does not contain -->, possessive loop is stack safe on long comments
+    final public static String ST_HTMLCOMMENT_ANY_TEXT = "<!-->|<!--->|<!--[^-]*+(?:-(?!->)[^-]*+)*+-->";
     final public static String ST_PROCESSINGINSTRUCTION = "[<][?].*?[?][>]";
     final public static String ST_CDATA = "<!\\[CDATA\\[[\\s\\S]*?\\]\\]>";
     final public static String ST_SINGLEQUOTEDVALUE = "'[^']*'";
     final public static String ST_DOUBLEQUOTEDVALUE = "\"[^\"]*\"";
 
-    final public String HTMLCOMMENT = ST_HTMLCOMMENT;
+    final public String HTMLCOMMENT;
     final public String PROCESSINGINSTRUCTION = ST_PROCESSINGINSTRUCTION;
     final public String CDATA = ST_CDATA;
     final public String SINGLEQUOTEDVALUE = ST_SINGLEQUOTEDVALUE;
@@ -390,6 +392,8 @@ public class Parsing {
         boolean legacyEntityLimit = hasLegacyEntityLimit(options);
         boolean htmlDeclarationAsciiLetter = Parser.HTML_DECLARATION_ASCII_LETTER.get(options);
         boolean htmlTagNoVtFf = Parser.HTML_TAG_WHITESPACE_NO_VT_FF.get(options);
+        boolean htmlCommentAnyText = Parser.HTML_COMMENT_ANY_TEXT.get(options);
+        this.HTMLCOMMENT = htmlCommentAnyText ? ST_HTMLCOMMENT_ANY_TEXT : ST_HTMLCOMMENT;
 
         if (intellijDummyIdentifier) {
             this.ADDITIONAL_CHARS = ST_ADDITIONAL_CHARS_IDI;
@@ -479,7 +483,7 @@ public class Parsing {
                             (htmlForTranslator ? "|(?:" + translationAutolinkTagPattern + ")" : "") +
                             ")>"));
 
-            this.HTML_TAG = getCachedPattern("HTML_TAG" + (htmlDeclarationAsciiLetter ? "_DECLARATION_030" : "") + (htmlTagNoVtFf ? "_WS_030" : ""), patternTypeFlags.withHtmlTranslator(), entry -> Pattern.compile('^' + ("(?:" + OPENTAG + "|" + CLOSETAG + "|" + HTMLCOMMENT
+            this.HTML_TAG = getCachedPattern("HTML_TAG" + (htmlDeclarationAsciiLetter ? "_DECLARATION_030" : "") + (htmlTagNoVtFf ? "_WS_030" : "") + (htmlCommentAnyText ? "_COMMENT_0312" : ""), patternTypeFlags.withHtmlTranslator(), entry -> Pattern.compile('^' + ("(?:" + OPENTAG + "|" + CLOSETAG + "|" + HTMLCOMMENT
                     + "|" + PROCESSINGINSTRUCTION + "|" + DECLARATION + "|" + CDATA +
                     (htmlForTranslator ? "|<(?:" + translationHtmlInlineTagPattern + ")>|</(?:" + translationHtmlInlineTagPattern + ")>" : "") + ")"), Pattern.CASE_INSENSITIVE));
 

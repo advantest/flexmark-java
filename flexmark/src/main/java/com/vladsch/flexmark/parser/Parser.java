@@ -38,7 +38,7 @@ public class Parser implements IParse {
 
     final public static DataKey<KeepType> REFERENCES_KEEP = new DataKey<>("REFERENCES_KEEP", KeepType.FIRST);
     /**
-     * REFERENCE_LABEL_UNICODE_CASE_FOLD default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_29:
+     * REFERENCE_LABEL_UNICODE_CASE_FOLD default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_29:
      * link labels match if they are equal after the Unicode case fold, instead of after lower casing, so that [ẞ] matches [SS].
      * The case fold is an approximation, see {@link com.vladsch.flexmark.util.sequence.Escaping#caseFold(CharSequence)}.
      * Only the lookup key of the {@link com.vladsch.flexmark.ast.util.ReferenceRepository} is changed, the source text of labels is kept
@@ -109,54 +109,54 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> STRONG_WRAPS_EMPHASIS = new DataKey<>("STRONG_WRAPS_EMPHASIS", false);
 
     /**
-     * FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * the info string of a tilde code fence may contain backticks and tildes, backtick fences still disallow backticks
      */
     final public static DataKey<Boolean> FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES = new DataKey<>("FENCED_CODE_TILDE_INFO_ALLOWS_BACKTICKS_AND_TILDES", true);
 
     /**
-     * CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES default true, makes rendering CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES default true, makes rendering CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * line endings in a code span become spaces, one space is stripped from both ends unless the span consists only of spaces,
      * interior whitespace is not collapsed and tabs are not treated as spaces
      */
     final public static DataKey<Boolean> CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES = new DataKey<>("CODE_SPAN_NORMALIZE_LINE_ENDINGS_AND_KEEP_INTERIOR_SPACES", true);
 
     /**
-     * EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * the "multiple of 3" rule for delimiter runs that can both open and close emphasis does not apply if the
      * lengths of both runs are multiples of 3
      */
     final public static DataKey<Boolean> EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION = new DataKey<>("EMPHASIS_MULTIPLE_OF_THREE_EXEMPTION", true);
 
     /**
-     * LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * a link destination in pointy brackets may contain spaces and tabs but no line breaks or unescaped &lt; or &gt;,
      * an escaped &gt; does not close it. Takes precedence over {@link #SPACE_IN_LINK_URLS} for destinations in pointy brackets
      */
     final public static DataKey<Boolean> LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES = new DataKey<>("LINK_DESTINATION_POINTY_BRACKETS_ALLOW_SPACES", true);
 
     /**
-     * LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * a link destination which is not in pointy brackets may not start with &lt;
      */
     final public static DataKey<Boolean> LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET = new DataKey<>("LINK_DESTINATION_NOT_STARTING_WITH_POINTY_BRACKET", true);
 
     /**
-     * REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * the title of a link reference definition must be separated from its destination by whitespace,
      * <code>[foo]: &lt;bar&gt;(baz)</code> is not a definition
      */
     final public static DataKey<Boolean> REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE = new DataKey<>("REFERENCE_DEFINITION_TITLE_REQUIRES_SPACE", true);
 
     /**
-     * HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * link reference definitions at the start of a paragraph are not part of the text of a setext heading which
      * ends the paragraph, and an underline following a paragraph which consists only of definitions is not a heading
      */
     final public static DataKey<Boolean> HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS = new DataKey<>("HEADING_SETEXT_AFTER_REFERENCE_DEFINITIONS", true);
 
     /**
-     * LISTS_NO_ITEM_AT_CODE_INDENT default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28, in ParserEmulationProfile.getOptions():
+     * LISTS_NO_ITEM_AT_CODE_INDENT default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28, in ParserEmulationProfile.getOptions():
      * a line indented {@link #LISTS_CODE_INDENT} or more columns, relative to the content of its container, cannot
      * start a list item, even when it is indented less than the content of the preceding list item. It is then
      * a continuation line of a paragraph or else an indented code block.
@@ -165,30 +165,37 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> LISTS_NO_ITEM_AT_CODE_INDENT = new DataKey<>("LISTS_NO_ITEM_AT_CODE_INDENT", true);
 
     /**
-     * LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29 and COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_28:
+     * LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING default true, makes parsing CommonMark Spec 0.29 compliant, set to false by every profile other than COMMONMARK_0_29, COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_28:
      * a link title in parentheses may contain a ( only if it is backslash-escaped
      */
     final public static DataKey<Boolean> LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING = new DataKey<>("LINK_TITLE_PARENTHESES_NO_UNESCAPED_OPENING", true);
 
     /**
-     * HTML_BLOCK_TEXTAREA_TYPE_1 default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30, including COMMONMARK_0_26 to COMMONMARK_0_29:
+     * HTML_BLOCK_TEXTAREA_TYPE_1 default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30 and COMMONMARK_0_31_2, including COMMONMARK_0_26 to COMMONMARK_0_29:
      * a line starting with &lt;textarea starts an HTML block of type 1, like pre, script and style. The block
      * is not ended by a blank line but by a line containing an end tag of one of these tags, including &lt;/textarea&gt;
      */
     final public static DataKey<Boolean> HTML_BLOCK_TEXTAREA_TYPE_1 = new DataKey<>("HTML_BLOCK_TEXTAREA_TYPE_1", true);
     /**
-     * HTML_DECLARATION_ASCII_LETTER default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30:
+     * HTML_DECLARATION_ASCII_LETTER default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30 and COMMONMARK_0_31_2:
      * a declaration is <! an ASCII letter of any case, zero or more characters other than > and >, the whitespace after the name is not required.
      * Applies to inline HTML and to HTML blocks of type 4
      */
     final public static DataKey<Boolean> HTML_DECLARATION_ASCII_LETTER = new DataKey<>("HTML_DECLARATION_ASCII_LETTER", true);
 
     /**
-     * HTML_TAG_WHITESPACE_NO_VT_FF default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30:
+     * HTML_TAG_WHITESPACE_NO_VT_FF default true, makes parsing CommonMark Spec 0.30 compliant, set to false by every profile other than COMMONMARK_0_30 and COMMONMARK_0_31_2:
      * whitespace in HTML tags is spaces, tabs and up to one line ending, vertical tab and form feed are not whitespace. Applies to open and closing tags
      * of inline HTML and to the tag name terminators of HTML block starts of types 1, 6 and 7
      */
     final public static DataKey<Boolean> HTML_TAG_WHITESPACE_NO_VT_FF = new DataKey<>("HTML_TAG_WHITESPACE_NO_VT_FF", true);
+
+    /**
+     * HTML_COMMENT_ANY_TEXT default true, makes parsing CommonMark Spec 0.31.2 compliant, set to false by every profile other than COMMONMARK_0_31_2:
+     * an inline HTML comment is &lt;!--&gt;, &lt;!---&gt; or &lt;!--, a string of characters not including --&gt;, and --&gt;.
+     * The text may contain --, start with - and end with -. Before 0.31 the text could not start with &gt; or -&gt;, contain -- or end with -
+     */
+    final public static DataKey<Boolean> HTML_COMMENT_ANY_TEXT = new DataKey<>("HTML_COMMENT_ANY_TEXT", true);
 
     /**
      * LINKS_ALLOW_MATCHED_PARENTHESES default true, when false makes parsing CommonMark Spec 0.27 compliant

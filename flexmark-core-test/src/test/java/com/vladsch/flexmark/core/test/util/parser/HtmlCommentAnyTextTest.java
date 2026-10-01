@@ -103,7 +103,7 @@ public class HtmlCommentAnyTextTest {
     @Test
     public void unterminatedCommentIsText() {
         assertAll("<p>foo &lt;!-- bar</p>\n", "foo <!-- bar\n");
-        assertAll("<p>foo &lt;!-- bar -- baz --&gt;</p>\n".replace("&lt;!-- bar -- baz --&gt;", "&lt;!-- bar -- baz --"), "foo <!-- bar -- baz --\n");
+        assertAll("<p>foo &lt;!-- bar -- baz --</p>\n", "foo <!-- bar -- baz --\n");
     }
 
     @Test
@@ -148,8 +148,7 @@ public class HtmlCommentAnyTextTest {
 
     @Test
     public void markdownInsideACommentIsNotInterpreted() {
-        assertNew("<p>*a* <!-- *b* -- _c_ --> *d*</p>\n".replace("*a*", "<em>a</em>").replace("*d*", "<em>d</em>"),
-                "*a* <!-- *b* -- _c_ --> *d*\n");
+        assertNew("<p><em>a</em> <!-- *b* -- _c_ --> <em>d</em></p>\n", "*a* <!-- *b* -- _c_ --> *d*\n");
     }
 
     @Test
@@ -217,7 +216,7 @@ public class HtmlCommentAnyTextTest {
     public void formatterKeepsCommentsWithDoubleHyphen() {
         for (String md : new String[] {
                 "foo <!-- a--b --> bar\n", "foo <!---- a ----> bar\n", "foo <!--> bar\n", "foo <!---> bar\n",
-                "foo <!-- a\n-- b --> bar\n", "<!-- a--b -->\n\n*x*\n", "* item <!-- a--b -->\n"}) {
+                "foo <!-- a\n-- b --> bar\n", "<!-- a--b -->\n", "<!-->\n", "<!--->\n"}) {
             for (ParserEmulationProfile profile : NEW_BEHAVIOUR) {
                 assertEquals(String.valueOf(profile), md, format(profile, md));
             }
