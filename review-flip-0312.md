@@ -12,7 +12,7 @@ comments in four tests, a missing blank line in VERSION.md that merged two parag
   getOptions) are off for every profile except 0.29, 0.30 and 0.31.2. The four 0.30 keys are off for every profile
   except 0.30 and 0.31.2. The three 0.31.2 keys are off for every profile except 0.31.2. Layering is exhaustive,
   no code change needed.
-* spec.txt is a byte-exact copy of spec.0.31.2.txt, SHA-256 $h1 for both ($h2).
+* spec.txt is a byte-exact copy of spec.0.31.2.txt, SHA-256 `257C41AD946F7A1414A499ACA402A1AA8FDAC3678532266611348C1CF54F4B80` for both.
 * Added FullOrigSpec0312CoreTest and FullSpec0312DefaultOptionsCoreTest (super(null), the only default-options
   full-spec test). Deleted FullSpec029DefaultOptionsCoreTest and FullSpec030DefaultOptionsCoreTest, which had to
   pin HTML_COMMENT_ANY_TEXT=false. Deleted ComboOrigSpec0312CoreTest and spec.0.31.2.known-failures.txt.
@@ -33,3 +33,4 @@ comply-with-commonmark-plan.md (Status, Task B312 heading, coverage table). Left
 
 Not verified: link label case folding stays a Java approximation (unchanged); no external 0.31.2 reference
 implementation comparison beyond the spec examples.
+
