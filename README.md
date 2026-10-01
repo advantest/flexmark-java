@@ -354,6 +354,7 @@ Major processor families are implemented and some family members also:
 * [ ] [Jekyll]
 * [CommonMark] for latest implemented spec, currently [CommonMark (spec 0.31.2)]
   * [ ] [League/CommonMark]
+  * [CommonMark (spec 0.26)] for specific version compatibility
   * [CommonMark (spec 0.27)] for specific version compatibility
   * [CommonMark (spec 0.28)] for specific version compatibility
   * [CommonMark (spec 0.29)] for specific version compatibility
@@ -612,11 +613,12 @@ BSD (2-clause) licensed, see [LICENSE.txt] file.
 
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/reference/admonitions/
 [CommonMark]: https://commonmark.org
+[CommonMark (spec 0.26)]: https://spec.commonmark.org/0.26
 [CommonMark (spec 0.27)]: https://spec.commonmark.org/0.27
 [CommonMark (spec 0.28)]: https://spec.commonmark.org/0.28
 [CommonMark (spec 0.29)]: https://spec.commonmark.org/0.29
- [CommonMark (spec 0.30)]: https://spec.commonmark.org/0.30
- [CommonMark (spec 0.31.2)]: https://spec.commonmark.org/0.31.2
+[CommonMark (spec 0.30)]: https://spec.commonmark.org/0.30
+[CommonMark (spec 0.31.2)]: https://spec.commonmark.org/0.31.2
 [DocxConverter Sample]: flexmark-java-samples/src/com/vladsch/flexmark/java/samples/DocxConverterCommonMark.java
 [Extensions.java]: flexmark-profile-pegdown/src/main/java/com/vladsch/flexmark/profile/pegdown/Extensions.java
 [GitHub]: https://github.com/vsch/laravel-translation-manager
