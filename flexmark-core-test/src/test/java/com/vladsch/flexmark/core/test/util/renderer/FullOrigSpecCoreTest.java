@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * The default specification resource spec.txt is the specification of the version COMMONMARK_LATEST
  * points at, so it is tested with that version's profile.
  * <p>
- * Currently this duplicates {@link FullOrigSpec030CoreTest}, because COMMONMARK_LATEST is COMMONMARK_0_30 and
- * spec.txt is the 0.30 spec. Its purpose is to catch COMMONMARK_LATEST and spec.txt drifting apart.
+ * Currently this duplicates {@link FullOrigSpec0312CoreTest}, because COMMONMARK_LATEST is COMMONMARK_0_31_2 and
+ * spec.txt is the 0.31.2 spec. Its purpose is to catch COMMONMARK_LATEST and spec.txt drifting apart.
  */
 final public class FullOrigSpecCoreTest extends OrigSpecCoreTest {
     static final String SPEC_RESOURCE = "/spec.txt";

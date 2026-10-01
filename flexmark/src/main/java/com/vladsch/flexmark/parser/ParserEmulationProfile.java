@@ -33,12 +33,12 @@ public enum ParserEmulationProfile implements MutableDataSetter {
      * advanced only when the corresponding full specification test passes without failures, and every
      * advance is recorded in VERSION.md.
      * <p>
-     * Currently {@link #COMMONMARK_0_30}, whose full specification test passes without failures. Advancing
+     * Currently {@link #COMMONMARK_0_31_2}, whose full specification test passes without failures. Advancing
      * this alias changes the default of {@code Parser.PARSER_EMULATION_PROFILE}. The DataKey defaults of the
      * individual parser options follow the newest supported version, older profiles opt out of them, use
-     * {@link #COMMONMARK_0_29} to pin the previous version.
+     * {@link #COMMONMARK_0_30} to pin the previous version.
      */
-    final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_30;
+    final public static ParserEmulationProfile COMMONMARK_LATEST = COMMONMARK_0_31_2;
 
     ParserEmulationProfile(ParserEmulationProfile family) {
         this.family = family == null ? this : family;
