@@ -73,7 +73,7 @@ public class SpecIntegrationTest extends RendererSpecTest {
         Map<String, String> m = new HashMap<>();
 
         // Not a spec autolink because of space, but the resulting text contains a valid URL
-        m.put("<http://foo.bar/baz bim>\n", "<p>&lt;<a href=\"http://foo.bar/baz\">http://foo.bar/baz</a> bim&gt;</p>\n");
+        m.put("<https://foo.bar/baz bim>\n", "<p>&lt;<a href=\"https://foo.bar/baz\">https://foo.bar/baz</a> bim&gt;</p>\n");
 
         // Not a spec autolink, but the resulting text contains a valid email
         m.put("<foo\\+@bar.example.com>\n", "<p>&lt;<a href=\"mailto:foo+@bar.example.com\">foo+@bar.example.com</a>&gt;</p>\n");
@@ -82,10 +82,10 @@ public class SpecIntegrationTest extends RendererSpecTest {
         m.put("<heck://bing.bong>\n", "<p>&lt;<a href=\"heck://bing.bong%3E\">heck://bing.bong&gt;</a></p>\n");
 
         // Not a spec autolink because of spaces, but autolink extension doesn't limit schemes
-        m.put("< http://foo.bar >\n", "<p>&lt; <a href=\"http://foo.bar\">http://foo.bar</a> &gt;</p>\n");
+        m.put("< https://foo.bar >\n", "<p>&lt; <a href=\"https://foo.bar\">https://foo.bar</a> &gt;</p>\n");
 
         // Plain autolink
-        m.put("http://example.com\n", "<p><a href=\"http://example.com\">http://example.com</a></p>\n");
+        m.put("https://example.com\n", "<p><a href=\"https://example.com\">https://example.com</a></p>\n");
 
         // Plain autolink
         m.put("foo@bar.example.com\n", "<p><a href=\"mailto:foo@bar.example.com\">foo@bar.example.com</a></p>\n");
