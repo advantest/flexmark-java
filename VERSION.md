@@ -125,6 +125,20 @@ implemented specification version is named explicitly by `ParserEmulationProfile
 aliases `COMMONMARK_0_30`. All 652 examples of the unmodified 0.30 specification render correctly, both with
 `COMMONMARK_0_30` applied and with no options at all. `spec.txt` of `flexmark-test-specs` now tracks 0.30.
 
+### CommonMark 0.31.2 (in progress)
+
+**Breaking:** the default configuration now parses inline HTML comments as CommonMark 0.31.2. The new
+profile `ParserEmulationProfile.COMMONMARK_0_31_2` was added, `COMMONMARK_LATEST` stays `COMMONMARK_0_30` until all
+0.31.2 changes are implemented. Code which needs the previous comment rule must apply `COMMONMARK_0_30` or older, or
+set `Parser.HTML_COMMENT_ANY_TEXT` to `false`. `COMMONMARK_0_31_2` keeps all 0.30 options.
+
+* Add: `Parser.HTML_COMMENT_ANY_TEXT` (default `true`): an inline HTML comment is `<!-->`, `<!--->` or `<!--`, text
+  not containing `-->`, and `-->`. The text may contain `--`, start with `-` and end with `-`. Turned off by every
+  profile except `COMMONMARK_0_31_2`. HTML blocks of type 2 were already correct and are unchanged.
+* Fix: the Markdown formatter turned the complete comments `<!-->` and `<!--->` into `<!---->`, inline and as
+  block.
+* Fix: `FullSpec029DefaultOptionsCoreTest` and `FullSpec030DefaultOptionsCoreTest` set
+  `HTML_COMMENT_ANY_TEXT=false`, as the default is now the 0.31.2 comment rule.
 ### CommonMark 0.30
 
 **Breaking:** flexmark-java now parses as CommonMark 0.30 by default and `COMMONMARK_LATEST` is
