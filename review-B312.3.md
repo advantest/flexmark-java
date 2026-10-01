@@ -39,7 +39,7 @@ Measured with a scratch probe on JDK 21 (deleted), `Matcher.matches()` on every 
 
 * `PUNCTUATION`: 819 non-ASCII code points (before this change), as expected.
 * `PUNCTUATION_OPEN`: matches the ASCII and open sets exactly, **0** non-ASCII code points. It matches
-  the 4-character strings `(&&x` and `¡&&x`, the second alternative being the literal text `[category char]&&[not close]`.
+  the 4-character strings `(&&x` and `¡&&x`: the second alternative is the literal `X&&Y`.
 * `PUNCTUATION_CLOSE`: the same, 0 non-ASCII code points.
 * `PUNCTUATION_ONLY`: matches no single character at all (needs `X&&Y`), and it is not used anywhere.
 
@@ -52,7 +52,8 @@ The tests assert nothing about symbols with the option on, only that letters are
 
 `PUNCTUATION*` are plain `Pattern` fields, none of them goes through `Parsing.getCachedPattern`. The only consumer
 is `InlineParserImpl.scanDelimiters` (grep over all modules, `*_PUNCTUATION*` and `.PUNCTUATION`). The Parsing
-instances created elsewhere (`LightInlineParserImpl`, `JekyllTagBlockParser`, `MacroBlockParser`) get the fields from the
+instances created elsewhere (`LightInlineParserImpl`, `JekyllTagBlockParser`, `MacroBlockParser`) get the fields
+from the
 same constructor. No cache key needed. `HTML_TAG` and the other cached patterns do not use punctuation.
 
 ## Behaviour change in extension modules (expected, spec consistent, no test changed)
