@@ -42,7 +42,15 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
   Review: `review-B30.md`.
 - **Task A312 — done (measurement only).** `spec.0.31.2.txt` added (652 examples, 2024-01-28), the gap under the
   default configuration is **3 of 652** examples. The substantial work is in the **latent** gaps, not the failing
-  examples. Next: Task B312.
+  examples.
+- **Task B312 — done, defaults flip included.** All three clusters (B312.1 to B312.3) done. `COMMONMARK_LATEST` is now
+  `COMMONMARK_0_31_2`, 0.31.2 is the **default**, `spec.txt` tracks 0.31.2 (byte-exact copy of `spec.0.31.2.txt`),
+  the known-failures baseline and `ComboOrigSpec0312CoreTest` are retired. The default-options full-spec tests were
+  consolidated into the single `FullSpec0312DefaultOptionsCoreTest` (no parser option);
+  `FullSpec029DefaultOptionsCoreTest`
+  and `FullSpec030DefaultOptionsCoreTest` were removed, older versions are asserted by their explicit-profile
+  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-ups F1, F5, F6 and F7 are
+  unchanged.
 
 ---
 
@@ -277,7 +285,7 @@ Everything else in [0.31] is editorial: link and typo fixes, "compact" → "coll
 before "link label", and tooling entries. The Unicode whitespace definition was reworded but not changed,
 and flexmark's `UNICODE_WHITESPACE_CHAR` already matches it exactly.
 
-## Task B312 — CommonMark 0.31.2 implementation (B312.1 to B312.3 done)
+## Task B312 — CommonMark 0.31.2 implementation (DONE, defaults flipped)
 
 Only three examples fail, but **this is not a small task**: the punctuation cluster has by far the widest
 blast radius of any change in this whole effort, and the genuinely important defects are latent.
@@ -360,7 +368,9 @@ Proposed keys: `HTML_COMMENT_ANY_TEXT` (B312.1), `HTML_BLOCK_TAGS_SEARCH_NOT_SOU
 
 Finally, as for 0.30: add `COMMONMARK_0_31_2` with its wiring, advance `COMMONMARK_LATEST` and `spec.txt`,
 add `FullOrigSpec0312CoreTest` and a default-options variant, retire the baseline and `ComboOrigSpec0312CoreTest`,
-update `VERSION.md`, and tag the milestone.
+update `VERSION.md`, and tag the milestone. **Done** (the maintainer sets the tag after verifying the build).
+The default-options tests were consolidated: only `FullSpec0312DefaultOptionsCoreTest` remains, tracking the newest
+version.
 
 Two points need a decision before B312.3 starts:
 
@@ -551,12 +561,12 @@ Spec coverage (whole-file tests apply the profile shown, all run in `CoreRendere
 | 0.27 | `FullOrigSpec027CoreTest`           | 622      | `COMMONMARK_0_27`   | passes                          |
 | 0.28 | `FullOrigSpec028CoreTest`           | 624      | `COMMONMARK_0_28`   | passes                          |
 | 0.29 | `FullOrigSpec029CoreTest`           | 649      | `COMMONMARK_0_29`   | passes                          |
-| 0.29 | `FullSpec029DefaultOptionsCoreTest` | 649      | none (defaults)     | passes                          |
-| 0.30 | `FullOrigSpec030CoreTest`           | 652      | `COMMONMARK_0_30`   | passes                          |
-| 0.30 | `FullSpec030DefaultOptionsCoreTest` | 652      | none (defaults)     | passes                          |
-| 0.30 | `FullOrigSpecCoreTest`              | 652      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
-| 0.31.2 | `ComboOrigSpec0312CoreTest`       | 652      | none (defaults)     | passes with a 3-entry shrink-only baseline (354, 625, 626) |
+| 0.30   | `FullOrigSpec030CoreTest`           | 652      | `COMMONMARK_0_30`   | passes                          |
+| 0.31.2 | `FullOrigSpec0312CoreTest`          | 652      | `COMMONMARK_0_31_2` | passes                          |
+| 0.31.2 | `FullSpec0312DefaultOptionsCoreTest` | 652     | none (defaults)     | passes, the only default-options test |
+| 0.31.2 | `FullOrigSpecCoreTest`              | 652      | `COMMONMARK_LATEST` | passes, guards `spec.txt` drift |
 
-`FullSpec029DefaultOptionsCoreTest` still passes under the 0.30 defaults: none of the four 0.30 changes
-alters the rendering of any 0.29 example, so the older default-options test remains a valid regression guard.
+The 0.29 and 0.30 default-options tests were removed when 0.31.2 became the default: the default comment grammar
+changed, so they had to pin `HTML_COMMENT_ANY_TEXT=false` and no longer tested the defaults. Exactly one test asserts
+the out-of-the-box configuration (the newest version), older versions are asserted through their explicit profiles.
 

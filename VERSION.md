@@ -120,17 +120,36 @@
 
 ## Next
 
-CommonMark specification tracking. flexmark-java now supports CommonMark 0.30 (and 0.29 before it). The
+CommonMark specification tracking. flexmark-java now supports CommonMark 0.31.2 (and 0.30 and 0.29 before it). The
 implemented specification version is named explicitly by `ParserEmulationProfile.COMMONMARK_LATEST`, which now
-aliases `COMMONMARK_0_30`. All 652 examples of the unmodified 0.30 specification render correctly, both with
-`COMMONMARK_0_30` applied and with no options at all. `spec.txt` of `flexmark-test-specs` now tracks 0.30.
+aliases `COMMONMARK_0_31_2`. All 652 examples of the unmodified 0.31.2 specification render correctly, both with
+`COMMONMARK_0_31_2` applied and with no options at all. `spec.txt` of `flexmark-test-specs` now tracks 0.31.2.
 
-### CommonMark 0.31.2 (in progress)
+### CommonMark 0.31.2
 
-**Breaking:** the default configuration now parses inline HTML comments as CommonMark 0.31.2. The new
-profile `ParserEmulationProfile.COMMONMARK_0_31_2` was added, `COMMONMARK_LATEST` stays `COMMONMARK_0_30` until all
-0.31.2 changes are implemented. Code which needs the previous comment rule must apply `COMMONMARK_0_30` or older, or
-set `Parser.HTML_COMMENT_ANY_TEXT` to `false`. `COMMONMARK_0_31_2` keeps all 0.30 options.
+**Breaking:** flexmark-java now parses as CommonMark 0.31.2 by default and `COMMONMARK_LATEST` is
+`COMMONMARK_0_31_2`. A new profile `COMMONMARK_0_31_2` was added. Code which needs the 0.30 behaviour must apply
+`ParserEmulationProfile.COMMONMARK_0_30` explicitly. What changes for the default configuration:
+
+* HTML comments: an inline HTML comment may contain `--`, and `<!-->` and `<!--->` are complete comments.
+* HTML blocks of type 6: `<search>` starts a block and interrupts a paragraph, `<source>` no longer does.
+* Emphasis flanking: Unicode symbols (general categories `Sm`, `Sc`, `Sk`, `So`) count as punctuation, so `*£*alpha`
+  is no longer emphasis.
+
+`COMMONMARK_0_31_2` keeps all 0.29 and 0.30 options. The three new 0.31.2 options below are turned off by
+`COMMONMARK_0_30` and every older profile and family.
+
+Tests: `FullOrigSpec0312CoreTest` (explicit `COMMONMARK_0_31_2`) and `FullSpec0312DefaultOptionsCoreTest` (no parser
+option) run the unmodified 0.31.2 specification. `FullSpec0312DefaultOptionsCoreTest` is now the single default
+options full specification test, `FullSpec029DefaultOptionsCoreTest` and `FullSpec030DefaultOptionsCoreTest` were
+removed because they had to pin `HTML_COMMENT_ANY_TEXT` and no longer tested the defaults. Older versions are tested
+through the explicit profiles, `FullOrigSpec026CoreTest` to `FullOrigSpec030CoreTest`. The 0.31.2 known failures
+baseline and `ComboOrigSpec0312CoreTest` were retired as the baseline is empty.
+
+Details of the three changes:
+
+**Breaking:** the default configuration parses inline HTML comments as CommonMark 0.31.2. Code which needs the
+previous comment rule must apply `COMMONMARK_0_30` or older, or set `Parser.HTML_COMMENT_ANY_TEXT` to `false`.
 
 * Add: `Parser.HTML_COMMENT_ANY_TEXT` (default `true`): an inline HTML comment is `<!-->`, `<!--->` or `<!--`, text
   not containing `-->`, and `-->`. The text may contain `--`, start with `-` and end with `-`. Turned off by every
@@ -138,9 +157,8 @@ set `Parser.HTML_COMMENT_ANY_TEXT` to `false`. `COMMONMARK_0_31_2` keeps all 0.3
 * Fix: the Markdown formatter turned the complete comments `<!-->` and `<!--->` into `<!---->`, inline and as
   block.
 * Fix: `FullSpec029DefaultOptionsCoreTest` and `FullSpec030DefaultOptionsCoreTest` set
-  `HTML_COMMENT_ANY_TEXT=false`, as the default is now the 0.31.2 comment rule.
-
-**Breaking:** the default configuration now also uses the CommonMark 0.31.2 tag names for HTML blocks of type 6:
+  `HTML_COMMENT_ANY_TEXT=false`, as the default is the 0.31.2 comment rule. Both were later removed, see above.
+**Breaking:** the default configuration also uses the CommonMark 0.31.2 tag names for HTML blocks of type 6:
 `<search>` starts a block and interrupts a paragraph, `<source>` no longer does. Code which needs the previous list
 must apply `COMMONMARK_0_30` or older, or set `Parser.HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE` to `false`.
 
@@ -151,7 +169,7 @@ must apply `COMMONMARK_0_30` or older, or set `Parser.HTML_BLOCK_TAGS_SEARCH_NOT
 * Note: `Parser.HTML_BLOCK_TAGS` still contains `math`, which no CommonMark version lists. This is an older flexmark
   deviation and was left unchanged.
 
-**Breaking:** the default configuration now also treats Unicode symbols as punctuation for the emphasis flanking
+**Breaking:** the default configuration also treats Unicode symbols as punctuation for the emphasis flanking
 rules, as CommonMark 0.31.2 does: `*£*alpha` is no longer emphasis. Code which needs the previous rule must apply
 `COMMONMARK_0_30` or older, or set `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` to `false`.
 
