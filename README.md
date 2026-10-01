@@ -622,6 +622,9 @@ Copyright (c) 2016-2023, Vladimir Schneider.
 
 BSD (2-clause) licensed, see [LICENSE.txt] file.
 
+The Unicode `CaseFolding.txt` 15.0.0 data file bundled in `flexmark-util-sequence` is licensed under the
+Unicode License v3 (SPDX: `Unicode-3.0`), see [licenses/UNICODE-LICENSE-V3.txt].
+
 [Admonition Extension, Material for MkDocs]: https://squidfunk.github.io/mkdocs-material/reference/admonitions/
 [CommonMark]: https://commonmark.org
 [CommonMark (spec 0.26)]: https://spec.commonmark.org/0.26
@@ -639,6 +642,7 @@ BSD (2-clause) licensed, see [LICENSE.txt] file.
 [Jekyll]: https://jekyllrb.com
 [Kramdown]: https://kramdown.gettalong.org
 [LICENSE.txt]: LICENSE.txt
+[licenses/UNICODE-LICENSE-V3.txt]: licenses/UNICODE-LICENSE-V3.txt
 [League/CommonMark]: https://github.com/thephpleague/commonmark
 [Markdown]: https://daringfireball.net/projects/markdown/
 [Markdown Navigator]: https://github.com/vsch/idea-multimarkdown
