@@ -130,10 +130,6 @@ public class UnicodePunctuationSymbolsTest {
         return Formatter.builder(options).build().render(Parser.builder(options).build().parse(markdown));
     }
 
-    private static String directional(DataHolder options) {
-        return new MutableDataSet(options).set(Parser.INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS, true).toImmutable().toString();
-    }
-
     private static void assertNew(String expected, String markdown) {
         for (ParserEmulationProfile profile : NEW_BEHAVIOUR) {
             assertEquals(String.valueOf(profile) + " " + markdown, expected, render(options(profile), markdown));
@@ -519,8 +515,7 @@ public class UnicodePunctuationSymbolsTest {
         }
     }
 
-    // the option only re-classifies opening and closing characters, it must not change what is punctuation:
-    // the same symbols are accepted by the parser with it on, in the new configuration, without an exception
+    // smoke: every symbol code point is accepted by the parser with the option on, no exception
     @Test
     public void directionalPunctuationsSurvivesTheExhaustiveSweep() {
         DataHolder options = directionalOptions(null);
@@ -531,6 +526,5 @@ public class UnicodePunctuationSymbolsTest {
             String s = cp(c);
             assertNotNull(renderer.render(parser.parse("a*" + s + "foo* _foo_" + s + " " + s + "_foo_")));
         }
-        assertEquals(directional(DEFAULT), directional(DEFAULT));
     }
 }
