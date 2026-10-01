@@ -49,12 +49,8 @@ import static org.junit.Assert.assertTrue;
  * The new rule is the default and the rule of {@link ParserEmulationProfile#COMMONMARK_0_31_2}. Every other
  * profile, 0.26 to 0.30 are tested, keeps the old rule through {@link Parser#UNICODE_PUNCTUATION_INCLUDES_SYMBOLS}.
  * <p>
- * {@link Parser#INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS} (a flexmark extension, default off): the patterns it
- * uses are known to match only ASCII characters for a single code point (a {@code &&} written outside of a
- * character class is a literal). With the option on, no non-ASCII character, symbol or not, is currently
- * classified as punctuation. What the option should do for non-ASCII characters is undefined by the spec, so no
- * expectation is asserted for symbols with the option on. Only the spec-derived control is: a letter is not
- * punctuation under any configuration.
+ * {@link Parser#INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS} (a flexmark extension, default off) is covered by
+ * {@link DirectionalPunctuationTest}. Here only a smoke test checks that symbols and letters survive it.
  */
 public class UnicodePunctuationSymbolsTest {
     private static final DataHolder DEFAULT = new MutableDataSet().toImmutable();
