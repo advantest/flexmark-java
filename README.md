@@ -384,6 +384,17 @@ family were added in 0.11.0:
 * Pegdown HTML block parsing rules, without pegdown extensions
   `ParserEmulationProfile.PEGDOWN_STRICT`
 
+:information_source: CommonMark 0.31.2 treats Unicode symbols (`©`, `€`, `°`, emoji) as punctuation for emphasis
+flanking, which also applies to extension delimiters such as `~~` and `~`: `a~~©x~~b` is not strikethrough. GitHub
+(cmark-gfm, CommonMark 0.29) still renders `<del>`. For output identical to GitHub keep the 0.31.2 profile and
+turn the symbol rule off:
+
+```java
+MutableDataSet options = new MutableDataSet()
+        .set(Parser.EXTENSIONS, Collections.singleton(StrikethroughSubscriptExtension.create()))
+        .set(Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS, false);
+```
+
 ### History and Motivation
 
 **flexmark-java** is a fork of [commonmark-java] project, modified to generate an AST which

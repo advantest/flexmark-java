@@ -181,6 +181,21 @@ rules, as CommonMark 0.31.2 does: `*£*alpha` is no longer emphasis. Code which 
   so the set of punctuation characters does not depend on that option.
 * Note: extension delimiters follow the same flanking rules, so e.g. `~~`, `~`, `^`, `++` and `:` (emoji) next to a
   symbol behave as they do next to ASCII punctuation: `a~~©x~~b` is no longer strikethrough and `€:+1:` is now an emoji.
+* Note: this is intended and pinned by `SymbolPunctuationExtensionFalloutTest`. The ASCII cases never changed,
+  `a~~,x~~b` was literal before too: `©` now behaves like `,`. Before and after, with `StrikethroughSubscriptExtension`:
+
+  | Input      | `COMMONMARK_0_30` or opt-out | 0.31.2 default  |
+  |------------|------------------------------|-----------------|
+  | `a~~©x~~b` | `a<del>©x</del>b`            | `a~~©x~~b`      |
+  | `a*©x*b`   | `a<em>©x</em>b`              | `a*©x*b`        |
+  | `H~°~O`    | `H<sub>°</sub>O`             | `H~°~O`         |
+  | `~~©x~~`   | `<del>©x</del>`              | `<del>©x</del>` |
+
+  To keep the previous output while staying on 0.31.2, set `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` to `false`.
+  It renders identically to `COMMONMARK_0_30` and leaves all other 0.31.2 behaviour on.
+* Note: this deliberately differs from GitHub. Its renderer (cmark-gfm, still CommonMark 0.29) renders
+  `a<del>©x</del>b`, the old behaviour. flexmark-java follows the CommonMark specification, so use the opt-out above
+  if the output must match GitHub.
 * Note: with `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on, the `PUNCTUATION_OPEN`, `PUNCTUATION_CLOSE` and
   `PUNCTUATION_ONLY` patterns of `Parsing` contain a `&&` outside of a character class, which is a literal there, so
   they only match ASCII characters. This older defect was left unchanged.
