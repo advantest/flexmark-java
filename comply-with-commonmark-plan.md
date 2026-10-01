@@ -284,9 +284,14 @@ blast radius of any change in this whole effort, and the genuinely important def
 
 | #      | Cluster                | Examples | Change | Classes | Risk |
 |--------|------------------------|----------|--------|---------|------|
-| B312.1 | HTML comment grammar   | 625, 626 | Comment text may contain `--`; `<!-->` and `<!--->` are complete empty comments. | `Parsing.ST_HTMLCOMMENT` | low |
+| B312.1 | HTML comment grammar (DONE) | 625, 626 | Comment text may contain `--`; `<!-->` and `<!--->` are complete empty comments. | `Parsing.ST_HTMLCOMMENT` | low |
 | B312.2 | Block tag list         | none     | `search` joins the type 6 tag list, `source` leaves it. | `Parser.HTML_BLOCK_TAGS`, `HtmlDeepParser.BLOCK_TAGS` | low |
 | B312.3 | Symbols are Unicode punctuation | 354 | Unicode `S*` (Sm, Sc, Sk, So) counts as punctuation for the emphasis flanking rules. | `Parsing.ST_PUNCTUATION*`, `InlineParserImpl.scanDelimiters` | **medium-high** |
+
+**B312.1 — done.** New key Parser.HTML_COMMENT_ANY_TEXT (default 	rue, off in every profile except the new
+COMMONMARK_0_31_2), pattern ST_HTMLCOMMENT_ANY_TEXT, HTML_TAG cache key suffix _COMMENT_0312. 625 and 626 left the
+baseline. The formatter needed a fix for <!--> and <!--->. The default-options 0.29/0.30 spec tests now set the
+key to alse. Review: eview-B312.1.md. Tests: HtmlCommentAnyTextTest.
 
 Order: B312.1 → B312.2 → B312.3. The first two are independent and cheap; B312.3 is last because it is the
 only one that can disturb every extension which processes delimiters.
