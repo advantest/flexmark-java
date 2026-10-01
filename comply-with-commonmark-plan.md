@@ -49,8 +49,8 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
   consolidated into the single `FullSpec0312DefaultOptionsCoreTest` (no parser option);
   `FullSpec029DefaultOptionsCoreTest`
   and `FullSpec030DefaultOptionsCoreTest` were removed, older versions are asserted by their explicit-profile
-  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-ups F1, F5, F6 and F7 are
-  unchanged.
+  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-ups F1, F5 and F7 are
+  unchanged; F6 is now done.
 
 ---
 
