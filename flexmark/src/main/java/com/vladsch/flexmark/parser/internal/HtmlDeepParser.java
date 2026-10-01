@@ -51,7 +51,7 @@ public class HtmlDeepParser {
                 "nav|noframes|" +
                 "ol|optgroup|option|" +
                 "p|param|pre|" +
-                "section|source|summary|" +
+                "search|section|summary|" +
                 "table|tbody|td|tfoot|th|thead|title|tr|track|" +
                 "ul").split("\\|");
         BLOCK_TAGS.addAll(Arrays.asList(blockTags));
@@ -112,6 +112,14 @@ public class HtmlDeepParser {
     }
 
     public HtmlDeepParser(List<String> customTags) {
+        this(customTags, true);
+    }
+
+    /**
+     * @param customTags       tags to add to the built-in block tags
+     * @param searchNotSource  true for the CommonMark 0.31 built-in block tags, which contain search and not source, false for 0.30 and older, which contain source and not search
+     */
+    public HtmlDeepParser(List<String> customTags, boolean searchNotSource) {
         myOpenTags = new ArrayList<>();
         myClosingPattern = null;
         myHtmlMatch = null;
@@ -119,6 +127,10 @@ public class HtmlDeepParser {
         myFirstBlockTag = false;
 
         myBlockTags = new HashSet<>(BLOCK_TAGS);
+        if (!searchNotSource) {
+            myBlockTags.remove("search");
+            myBlockTags.add("source");
+        }
         myBlockTags.addAll(customTags);
     }
 

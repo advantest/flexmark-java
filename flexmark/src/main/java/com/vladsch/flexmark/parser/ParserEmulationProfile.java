@@ -533,6 +533,7 @@ public enum ParserEmulationProfile implements MutableDataSetter {
         if (this != COMMONMARK_0_31_2) {
             // CommonMark 0.31.2 parsing rules are the defaults of the DataKeys, every other profile, including 0.30, opts out
             dataHolder.set(Parser.HTML_COMMENT_ANY_TEXT, false);
+            dataHolder.set(Parser.HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE, false);
         }
 
         return dataHolder;

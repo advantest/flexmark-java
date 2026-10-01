@@ -220,7 +220,7 @@ public class Parser implements IParse {
     final public static DataKey<Boolean> HTML_BLOCK_COMMENT_ONLY_FULL_LINE = new DataKey<>("HTML_BLOCK_COMMENT_ONLY_FULL_LINE", false);
     final public static DataKey<Boolean> HTML_BLOCK_START_ONLY_ON_BLOCK_TAGS = new DataKey<>("HTML_BLOCK_START_ONLY_ON_BLOCK_TAGS", HTML_BLOCK_DEEP_PARSER);
 
-    final public static DataKey<List<String>> HTML_BLOCK_TAGS = new DataKey<>("HTML_BLOCK_TAGS", Arrays.asList(
+    final private static List<String> HTML_BLOCK_TAGS_0_30 = Collections.unmodifiableList(Arrays.asList(
             "address",
             "article",
             "aside",
@@ -286,6 +286,75 @@ public class Parser implements IParse {
             "track",
             "ul"
     ));
+
+    final private static List<String> HTML_BLOCK_TAGS_0_31_2 = Collections.unmodifiableList(Arrays.asList(
+            "address",
+            "article",
+            "aside",
+            "base",
+            "basefont",
+            "blockquote",
+            "body",
+            "caption",
+            "center",
+            "col",
+            "colgroup",
+            "dd",
+            "details",
+            "dialog",
+            "dir",
+            "div",
+            "dl",
+            "dt",
+            "fieldset",
+            "figcaption",
+            "figure",
+            "footer",
+            "form",
+            "frame",
+            "frameset",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "head",
+            "header",
+            "hr",
+            "html",
+            "iframe",
+            "legend",
+            "li",
+            "link",
+            "main",
+            "math",
+            "menu",
+            "menuitem",
+            "meta",
+            "nav",
+            "noframes",
+            "ol",
+            "optgroup",
+            "option",
+            "p",
+            "param",
+            "search",
+            "section",
+            "summary",
+            "table",
+            "tbody",
+            "td",
+            "tfoot",
+            "th",
+            "thead",
+            "title",
+            "tr",
+            "track",
+            "ul"
+    ));
+
+    final public static DataKey<List<String>> HTML_BLOCK_TAGS = new DataKey<>("HTML_BLOCK_TAGS", HTML_BLOCK_TAGS_0_31_2, options -> HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE.get(options) ? HTML_BLOCK_TAGS_0_31_2 : HTML_BLOCK_TAGS_0_30);
 
     /**
      * Blank line interrupts HTML block when not in raw tag, otherwise only when closed
