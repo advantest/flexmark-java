@@ -212,11 +212,13 @@ every profile except `COMMONMARK_0_29` and `COMMONMARK_0_30`.
   `pre`, `script` and `style`, so its content is passed through raw and the block ends at `</textarea>`.
 * Add: `Parser.REFERENCE_LABEL_UNICODE_CASE_FOLD` (default `true`): link reference labels are matched by Unicode
   case folding instead of lower-casing, so `[ẞ]` matches `[SS]`. Only the lookup key is normalized, the label
-  source text is untouched. **This is an approximation**: case folding is implemented in
-  `Escaping.caseFold` as lower-casing each code point, `toUpperCase(Locale.ROOT)`, then lower-casing each code
-  point again, it is not a table of the Unicode `CaseFolding.txt`. Compared with the latest `CaseFolding.txt`
-  (C and F entries) 163 of 1606 entries differ: U+0130, the Cherokee letters (same equivalence class, other
-  representative) and characters newer than the Unicode version of the running JDK.
+  source text is untouched. `Escaping.caseFold` is a real, table-driven Unicode full case folding: it uses the C
+  and F entries of the bundled `CaseFolding.txt` of Unicode 15.0.0 (the Unicode version of JDK 21), so it is
+  pinned to that version and does not change with the JDK. Code points not in the file fold to themselves.
+  Compared with the former lower/upper/lower approximation, U+0130 now folds to `i` followed by U+0307 (was `i`),
+  U+0131 now folds to itself (was `i`), and the Cherokee letters now fold to the capital letters (was small
+  letters, the same equivalence classes). The data file is licensed under the Unicode License v3, see
+  `licenses/UNICODE-LICENSE-V3.txt`.
 * Add: `Parser.HTML_DECLARATION_ASCII_LETTER` (default `true`): an HTML declaration is `<!` followed by ASCII
   letters of any case and needs no whitespace before its content (inline raw HTML and block type 4).
 * Add: `Parser.HTML_TAG_WHITESPACE_NO_VT_FF` (default `true`): vertical tab and form feed are no longer

@@ -49,8 +49,8 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
   consolidated into the single `FullSpec0312DefaultOptionsCoreTest` (no parser option);
   `FullSpec029DefaultOptionsCoreTest`
   and `FullSpec030DefaultOptionsCoreTest` were removed, older versions are asserted by their explicit-profile
-  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-ups F1, F5 and F7 are
-  unchanged; F6 is now done.
+  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-ups F5 and F7 are
+  unchanged; F1 and F6 are now done.
 
 ---
 
@@ -604,7 +604,7 @@ never break them.
 **To do:** record the decision as a comment in `UnicodePunctuationSymbolsTest`. No production change. No
 vendored `UnicodeData.txt`.
 
-### Task F1 — verify the exactness of the Unicode case folding (open)
+### Task F1 — verify the exactness of the Unicode case folding (DONE)
 
 
 B30.3 matches link labels with `Escaping.caseFold`, which lower-cases each code point, upper-cases the
@@ -668,6 +668,15 @@ add `licenses/UNICODE-LICENSE-V3.txt`, name the third-party data in `LICENSE.txt
 `Escaping.caseFold` from the `C` and `F` entries, and add hand-written tests for `ß`/`ẞ`, the ligatures, final
 sigma, U+0130, and the Cherokee block.
 
+#### Outcome (DONE)
+
+`Escaping.caseFold` is now table-driven over the `C` and `F` entries (1530 entries) of the vendored, unmodified
+`CaseFolding.txt` 15.0.0, loaded lazily once, immutable, failing fast with `IllegalStateException` if the resource
+is missing. Licence: `licenses/UNICODE-LICENSE-V3.txt`, notices in `LICENSE.txt` and `README.md`. Behaviour changes
+against the approximation: U+0130 (now `i` + U+0307), U+0131 (now itself, was `i`) and the Cherokee letters (now
+folded to capitals). Pinned by `EscapingCaseFoldTest` in `flexmark-util-sequence`, including a data-driven check of
+every `C`/`F` entry, a check that the ASCII fast path equals the table, and a SHA-256 integrity check of the
+data file. Review: `review-F1.md`.
 ### Task F8 — verify the downstream Advantest projects against this branch (open)
 
 `C:\work\git-repos\flexmark-extensions` (`com.advantest.flexmark`, BSD 2-Clause, five modules: plantuml, math,
