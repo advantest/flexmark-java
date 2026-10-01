@@ -28,7 +28,7 @@ public class HtmlBlockTextareaTest {
         return HtmlRenderer.builder(options).build().render(Parser.builder(options).build().parse(markdown));
     }
 
-    // no options at all, 0.30 is the default behaviour
+    // no options at all, the default (0.31.2) keeps the 0.30 behaviour
     private static void assert030(String expected, String markdown) {
         assertEquals(expected, render(null, markdown));
     }

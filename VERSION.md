@@ -158,6 +158,7 @@ previous comment rule must apply `COMMONMARK_0_30` or older, or set `Parser.HTML
   block.
 * Fix: `FullSpec029DefaultOptionsCoreTest` and `FullSpec030DefaultOptionsCoreTest` set
   `HTML_COMMENT_ANY_TEXT=false`, as the default is the 0.31.2 comment rule. Both were later removed, see above.
+
 **Breaking:** the default configuration also uses the CommonMark 0.31.2 tag names for HTML blocks of type 6:
 `<search>` starts a block and interrupts a paragraph, `<source>` no longer does. Code which needs the previous list
 must apply `COMMONMARK_0_30` or older, or set `Parser.HTML_BLOCK_TAGS_SEARCH_NOT_SOURCE` to `false`.
