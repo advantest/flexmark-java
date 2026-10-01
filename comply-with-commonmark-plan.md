@@ -49,8 +49,8 @@ was **confirmed** against the 0.25 → 0.26 specification diff before the fix wa
   consolidated into the single `FullSpec0312DefaultOptionsCoreTest` (no parser option);
   `FullSpec029DefaultOptionsCoreTest`
   and `FullSpec030DefaultOptionsCoreTest` were removed, older versions are asserted by their explicit-profile
-  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-ups F5 and F7 are
-  unchanged; F1 and F6 are now done.
+  `FullOrigSpec026` to `FullOrigSpec030CoreTest`. Review: `review-flip-0312.md`. Open follow-up F7 is
+  unchanged; F1, F5 and F6 are now done.
 
 ---
 
@@ -311,7 +311,7 @@ left. Review: `review-B312.2.md`. Tests: `HtmlBlockTagsSearchNotSourceTest`.
 **B312.3 and F3 — done.** New key `Parser.UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` (default `true`, off in every profile
 except `COMMONMARK_0_31_2`). `\p{Sc}\p{Sk}\p{Sm}\p{So}` joined the four `Parsing` punctuation patterns, in a per
 instance variant pair; no cached pattern uses them, so no cache key was needed. Example 354 left the baseline, which
-now holds only its header. No existing test expectation changed. **New open finding (Task F5):** the
+now holds only its header. No existing test expectation changed. **Finding (Task F5, since done):** the
 `&&` in `PUNCTUATION_OPEN`, `PUNCTUATION_CLOSE` and `PUNCTUATION_ONLY` is a literal outside a character class.
 Review: `review-B312.3.md`. Tests: `UnicodePunctuationSymbolsTest` (24 tests, F3).
 
@@ -459,7 +459,7 @@ matches it, and would break the "same output as the reference" property that the
 **Reopen only if** a future spec version adds an example that forces the stricter behaviour, or commonmark.js
 changes to implement its own spec text.
 
-### Task F5 — directional punctuation patterns use `&&` outside a character class (open, needs a decision)
+### Task F5 — directional punctuation patterns use `&&` outside a character class (DONE)
 
 `Parsing.ST_PUNCTUATION_OPEN`, `_CLOSE` and `_ONLY` are written `^[ASCII...]|[\p{P..}]&&[^...]`. In Java regex `&&`
 is an intersection operator only *inside* a character class. As written it sits at the top level of an
@@ -524,6 +524,17 @@ closing-only, `Pi`/`Pf` in both, everything else in both. Delete `PUNCTUATION_ON
 Add a test corpus covering fullwidth CJK brackets, guillemets, em dash, ideographic full stop and symbols,
 plus a regression test for the six existing CJK examples.
 
+#### Result
+
+`Parsing.punctuationOpen` / `punctuationClose` now build `^[ASCII open]|^[[categories]&&[^ASCII close \p{Pe}]]` and
+`^[ASCII close]|^[[categories]&&[^ASCII open \p{Ps}]]`; the old/new (`S` categories) variant pairs are kept and still
+selected by `UNICODE_PUNCTUATION_INCLUDES_SYMBOLS`. `PUNCTUATION_ONLY` and its variants were deleted (unreferenced).
+Probes with the option on, `_` as delimiter, before and after: `a«_b_»c`, `a—_b_—c`, `a。_b_。c`, `a€_b_€c` and
+`¿_b_?` were literal and now render emphasis, as with the option off. Tests: `DirectionalPunctuationTest` (an
+exhaustive code point sweep of both sets for both variants, the fullwidth bracket asymmetry, the CJK examples,
+the option-off control, a formatter round trip) and examples 10 to 12 of `Directional punctuations` in
+`core_extra_ast_spec.md`. The CommonMark spec suites are unchanged, the option is not part of the spec. The formatter
+needed no change. Review: `review-F5.md`.
 ### Task F6 — pin the extension fallout of the symbol punctuation change (DONE, tests only)
 
 B312.3 made ~8,000 symbol code points count as punctuation, which changes the flanking booleans every

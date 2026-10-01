@@ -196,10 +196,12 @@ rules, as CommonMark 0.31.2 does: `*£*alpha` is no longer emphasis. Code which 
 * Note: this deliberately differs from GitHub. Its renderer (cmark-gfm, still CommonMark 0.29) renders
   `a<del>©x</del>b`, the old behaviour. flexmark-java follows the CommonMark specification, so use the opt-out above
   if the output must match GitHub.
-* Note: with `INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on, the `PUNCTUATION_OPEN`, `PUNCTUATION_CLOSE` and
-  `PUNCTUATION_ONLY` patterns of `Parsing` contain a `&&` outside of a character class, which is a literal there, so
-  they only match ASCII characters. This older defect was left unchanged.
-
+* Fix: with `Parser.INLINE_DELIMITER_DIRECTIONAL_PUNCTUATIONS` on, no non-ASCII character counted as punctuation,
+  because the `&&` in the `Parsing.PUNCTUATION_OPEN` and `PUNCTUATION_CLOSE` patterns sat outside a character class.
+  They now classify Unicode punctuation: `Ps` is only opening and `Pe` only closing punctuation, `Pi`, `Pf` and
+  all other punctuation (and symbols, unless `UNICODE_PUNCTUATION_INCLUDES_SYMBOLS` is off) are in both sets.
+  `a«_b_»c` renders emphasis with the option on again. The default (option off) is unchanged.
+* Remove: the unused `Parsing.PUNCTUATION_ONLY` pattern.
 ### CommonMark 0.30
 
 **Breaking:** flexmark-java now parses as CommonMark 0.30 by default and `COMMONMARK_LATEST` is
