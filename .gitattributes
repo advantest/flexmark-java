@@ -1,0 +1,3 @@
+# keep the vendored Unicode data byte-exact, its SHA-256 is verified by EscapingCaseFoldTest
+flexmark-util-sequence/src/main/resources/com/vladsch/flexmark/util/sequence/CaseFolding.txt -text
+flexmark-util-sequence/src/main/resources/com/vladsch/flexmark/util/sequence/UNICODE-LICENSE-V3.txt -text
