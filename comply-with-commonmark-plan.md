@@ -718,7 +718,7 @@ The direction is **enabling** — math *requires* punctuation adjacency where st
 so no formula stops rendering; some previously-literal `$x$` start matching. Low regression risk. Their math
 test resources are pure ASCII (`$E=mc^2$`), so nothing covers it.
 
-**To do:** build this branch into the local repository, repoint `flexmark-extensions` at `0.65.3-SNAPSHOT`,
+**To do:** build this branch into the local repository, repoint `flexmark-extensions` at `0.66.0-SNAPSHOT`,
 run its suite, and record the result. Then repeat for the other Advantest consumers with the default options
 plus their extension set. Not blocking any milestone here.
 
