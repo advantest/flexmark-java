@@ -180,6 +180,24 @@ public class SequenceUtilsTest {
     }
 
     @Test
+    public void test_countLeadingColumnsExpandsTabsToTheNextTabStop() {
+        assertEquals(4, SequenceUtils.countLeadingColumns("    x", 0, SPACE_TAB));
+        assertEquals(4, SequenceUtils.countLeadingColumns("\tx", 0, SPACE_TAB));
+        assertEquals(8, SequenceUtils.countLeadingColumns("\t\tx", 0, SPACE_TAB));
+        assertEquals(4, SequenceUtils.countLeadingColumns("  \tx", 0, SPACE_TAB));
+        assertEquals(5, SequenceUtils.countLeadingColumns("  \t x", 0, SPACE_TAB));
+        assertEquals(0, SequenceUtils.countLeadingColumns("x", 0, SPACE_TAB));
+        assertEquals(2, SequenceUtils.countLeadingColumns("  ", 0, SPACE_TAB));
+    }
+
+    @Test
+    public void test_countLeadingColumnsPlacesTheTabStopsFromTheStartingColumn() {
+        assertEquals(2, SequenceUtils.countLeadingColumns("\tx", 2, SPACE_TAB));
+        assertEquals(1, SequenceUtils.countLeadingColumns("\tx", 3, SPACE_TAB));
+        assertEquals(4, SequenceUtils.countLeadingColumns("\tx", 4, SPACE_TAB));
+    }
+
+    @Test
     public void test_compareIgnoringCaseOrdersByTheLetterNotByItsCase() {
         assertTrue(SequenceUtils.compare("abc", "ABD", true) < 0);
         assertTrue(SequenceUtils.compare("ABD", "abc", true) > 0);

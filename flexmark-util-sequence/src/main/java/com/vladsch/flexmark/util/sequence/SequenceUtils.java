@@ -652,23 +652,17 @@ public interface SequenceUtils {
     }
 
     static int countLeadingColumns(@NotNull CharSequence thizz, int startColumn, @NotNull CharPredicate chars) {
-        int fromIndex = 0;
         int endIndex = thizz.length();
-        int index = indexOfAnyNot(thizz, chars, fromIndex, endIndex);
+        int index = indexOfAnyNot(thizz, chars, 0, endIndex);
+        int end = index == -1 ? endIndex : index;
 
         // expand tabs
-        int end = index == -1 ? endIndex : index;
-        int columns = index == -1 ? endIndex - fromIndex : index - fromIndex;
-        int tab = indexOf(thizz, '\t', fromIndex, end);
-        if (tab != -1) {
-            int delta = startColumn;
-            do {
-                delta += tab + columnsToNextTabStop(tab + delta);
-                tab = indexOf(thizz, '\t', tab + 1);
-            } while (tab >= 0 && tab < endIndex);
-            columns += delta;
+        int column = startColumn;
+        for (int i = 0; i < end; i++) {
+            if (thizz.charAt(i) == '\t') column += columnsToNextTabStop(column);
+            else column++;
         }
-        return columns;
+        return column - startColumn;
     }
 
     // TEST: this
