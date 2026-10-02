@@ -32,6 +32,7 @@ import org.junit.runners.Suite;
         SegmentOffsetTreeTest.class,
         BasedOffsetTrackerTest.class,
         LineAppendableImplTest.class,
+        RangeTest.class,
 })
 public class SequenceTestSuite {
 }
