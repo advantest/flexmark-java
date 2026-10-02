@@ -114,6 +114,31 @@ public class OrderedSetSparseTest {
     }
 
     @Test
+    public void test_placingAValueBeyondTheEndFillsTheGapWithHoles() {
+        OrderedSet<String> set = setOf("a");
+
+        assertTrue(set.setValueAt(3, "d", null));
+
+        assertEquals(2, set.size());
+        assertEquals(3, set.indexOf("d"));
+        assertEquals("d", set.getValue(3));
+        assertFalse(set.isValidIndex(1));
+        assertFalse(set.isValidIndex(2));
+        assertTrue(set.isSparse());
+    }
+
+    @Test
+    public void test_placingAValueDirectlyAfterTheEndAppendsIt() {
+        OrderedSet<String> set = setOf("a");
+
+        assertTrue(set.setValueAt(1, "b", null));
+
+        assertEquals(2, set.size());
+        assertEquals(1, set.indexOf("b"));
+        assertFalse(set.isSparse());
+    }
+
+    @Test
     public void test_addNullReservesAnIndexWithoutAValue() {
         OrderedSet<String> set = setOf("a");
 

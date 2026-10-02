@@ -231,7 +231,7 @@ public class OrderedSet<E> implements Set<E>, Iterable<E> {
                 }
                 // old element was removed, just replace
             } else {
-                if (index > valueList.size()) addNulls(index - 1);
+                addNulls(index);
             }
         }
 
