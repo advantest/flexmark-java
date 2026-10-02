@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         DocumentTest.class,
+        NodeTest.class,
 })
 public class AstTestSuite {
 }
