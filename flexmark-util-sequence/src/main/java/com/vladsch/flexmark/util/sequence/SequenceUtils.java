@@ -202,7 +202,7 @@ public interface SequenceUtils {
                 if (pos < 0 || pos + sMax > endIndex) break;
                 if (matchChars(thizz, s, pos)) return pos;
                 pos++;
-            } while (pos + sMax < endIndex);
+            } while (pos + sMax <= endIndex);
         }
 
         return -1;

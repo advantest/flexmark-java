@@ -223,4 +223,13 @@ public class SequenceUtilsTest {
         assertEquals(3, SequenceUtils.indexOf("abcabc", "abc", 1, 6));
         assertEquals(-1, SequenceUtils.indexOf("abcabc", "abc", 1, 5));
     }
+
+    @Test
+    public void test_indexOfFindsAMatchEndingAtTheLastPositionOfTheWindow() {
+        assertEquals(3, SequenceUtils.indexOf("hello", "lo"));
+        assertEquals(1, SequenceUtils.indexOf("aab", "ab"));
+        assertEquals(2, SequenceUtils.indexOf("aaab", "ab"));
+        assertEquals(4, SequenceUtils.indexOf("abcabc", "bc", 2, 6));
+        assertEquals(-1, SequenceUtils.indexOf("abcabc", "bc", 2, 5));
+    }
 }
