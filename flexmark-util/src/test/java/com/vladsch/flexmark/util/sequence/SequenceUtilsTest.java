@@ -180,6 +180,16 @@ public class SequenceUtilsTest {
     }
 
     @Test
+    public void test_matchedCharCountStopsAtTheEndOfTheWindow() {
+        assertEquals(2, SequenceUtils.matchedCharCount("abcdef", "abc", 0, 2));
+        assertEquals(3, SequenceUtils.matchedCharCount("abcdef", "abc", 0, 6));
+        assertEquals(2, SequenceUtils.matchedCharCount("abcdef", "abc", 0, 2, false));
+        assertEquals(2, SequenceUtils.matchedCharCountIgnoreCase("abcdef", "ABC", 0, 2));
+        assertEquals(3, SequenceUtils.matchedCharCountIgnoreCase("abcdef", "ABC", 0, 6));
+        assertEquals(1, SequenceUtils.matchedCharCount("abcdef", "bcd", 1, 2));
+    }
+
+    @Test
     public void test_countLeadingColumnsExpandsTabsToTheNextTabStop() {
         assertEquals(4, SequenceUtils.countLeadingColumns("    x", 0, SPACE_TAB));
         assertEquals(4, SequenceUtils.countLeadingColumns("\tx", 0, SPACE_TAB));

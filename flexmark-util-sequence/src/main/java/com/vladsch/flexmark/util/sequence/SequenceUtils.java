@@ -473,11 +473,11 @@ public interface SequenceUtils {
     static boolean matchCharsReversed(@NotNull CharSequence thizz, @NotNull CharSequence chars, int endIndex)                               { return endIndex + 1 >= chars.length() && matchChars(thizz, chars, endIndex + 1 - chars.length(), false); }
     static boolean matchCharsReversedIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int endIndex)                     { return endIndex + 1 >= chars.length() && matchChars(thizz, chars, endIndex + 1 - chars.length(), true); }
 
-    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex, boolean ignoreCase) { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, ignoreCase); }
+    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex, boolean ignoreCase) { return matchedCharCount(thizz, chars, startIndex, endIndex, false, ignoreCase); }
     static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, boolean ignoreCase)               { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, ignoreCase); }
-    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)                     { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, false); }
+    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)                     { return matchedCharCount(thizz, chars, startIndex, endIndex, false, false); }
     static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex)                                   { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, false); }
-    static int matchedCharCountIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)           { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, true); }
+    static int matchedCharCountIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)           { return matchedCharCount(thizz, chars, startIndex, endIndex, false, true); }
     static int matchedCharCountIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex)                         { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, true); }
 
     static int matchedCharCountReversed(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int fromIndex)            { return matchedCharCountReversed(thizz, chars, startIndex, fromIndex, false); }
