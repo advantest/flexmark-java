@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
         MarkdownTransposeTableTest.class,
         MarkdownSortTableTest.class,
         TableCellOffsetInfoTest.class,
+        TablesParsingOptionsTest.class,
         //JiraTablesSpecTest.class,
 })
 public class ExtTablesTestSuite {
