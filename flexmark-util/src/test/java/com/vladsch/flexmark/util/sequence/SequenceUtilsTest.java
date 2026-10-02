@@ -180,6 +180,22 @@ public class SequenceUtilsTest {
     }
 
     @Test
+    public void test_compareIgnoringCaseOrdersByTheLetterNotByItsCase() {
+        assertTrue(SequenceUtils.compare("abc", "ABD", true) < 0);
+        assertTrue(SequenceUtils.compare("ABD", "abc", true) > 0);
+        assertTrue(SequenceUtils.compare("ABC", "abd", true) < 0);
+        assertTrue(SequenceUtils.compare("abd", "ABC", true) > 0);
+    }
+
+    @Test
+    public void test_compareIgnoringCaseOrdersEqualSequencesAlikeAgainstAThird() {
+        assertEquals(0, SequenceUtils.compare("ABD", "abd", true));
+        assertEquals(
+                Integer.signum(SequenceUtils.compare("abc", "abd", true)),
+                Integer.signum(SequenceUtils.compare("abc", "ABD", true)));
+    }
+
+    @Test
     public void test_compareCanIgnoreCharactersFromASet() {
         assertEquals(0, SequenceUtils.compare("a b", "a\tb", false, SPACE_TAB));
         assertTrue(SequenceUtils.compare("a b", "a-b", false, SPACE_TAB) < 0);

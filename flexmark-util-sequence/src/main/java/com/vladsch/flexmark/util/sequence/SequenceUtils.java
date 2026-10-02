@@ -374,7 +374,7 @@ public interface SequenceUtils {
 
                     // NOTE: if both chars are in the ignore set, then it is a match
                     if (ignoreChars == null || !(ignoreChars.test(c1) && ignoreChars.test(c2))) {
-                        return c1 - c2;
+                        return Character.toLowerCase(u1) - Character.toLowerCase(u2);
                     }
                 }
             }
