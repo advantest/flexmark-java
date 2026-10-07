@@ -2,6 +2,8 @@ package com.vladsch.flexmark.util.misc;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -13,6 +15,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Utils {
+    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
 
     public static <T> T ifNull(T receiver, T altValue) {
         return (receiver == null) ? altValue : receiver;
@@ -237,7 +240,7 @@ public class Utils {
         try {
             return URLDecoder.decode(receiver, charSet != null ? charSet : "UTF-8");
         } catch (UnsupportedEncodingException | IllegalArgumentException e) {
-            //e.printStackTrace()
+            LOG.warn("\"{}\" could not be decoded, so it is used as it stands.", receiver, e);
             return orEmpty(receiver);
         }
     }
@@ -246,7 +249,7 @@ public class Utils {
         try {
             return URLEncoder.encode(receiver, charSet != null ? charSet : "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            //e.printStackTrace()
+            LOG.warn("\"{}\" could not be encoded, so it is used as it stands.", receiver, e);
             return orEmpty(receiver);
         }
     }
@@ -583,12 +586,13 @@ public class Utils {
                 sb.append(line).append('\n');
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("A stream could not be read to its end, so what was appended breaks off"
+                    + " where the reading stopped.", e);
         } finally {
             try {
                 br.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.warn("A stream that was read to its end could not be closed.", e);
             }
         }
     }

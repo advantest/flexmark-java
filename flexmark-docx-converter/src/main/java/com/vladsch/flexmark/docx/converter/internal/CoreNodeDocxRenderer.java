@@ -68,6 +68,8 @@ import org.docx4j.toc.TocException;
 import org.docx4j.toc.TocGenerator;
 import org.docx4j.wml.*;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.xml.bind.JAXBElement;
 import java.awt.image.BufferedImage;
@@ -82,6 +84,8 @@ import static com.vladsch.flexmark.util.html.Attribute.CLASS_ATTR;
 
 @SuppressWarnings({ "WeakerAccess", "MethodMayBeStatic", "OverlyCoupledClass" })
 public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
+    private static final Logger LOG = LoggerFactory.getLogger(CoreNodeDocxRenderer.class);
+
     final public static DataKey<Integer> LIST_ITEM_NUMBER = new DataKey<>("LIST_ITEM_NUMBER", 0);
     final public static NullableDataKey<ListSpacing> LIST_ITEM_SPACING = new NullableDataKey<>("LIST_ITEM_SPACING");
     final public static HashSet<DocxRendererPhase> RENDERING_PHASES = new HashSet<>(Arrays.asList(
@@ -201,10 +205,12 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                             try {
                                 tocGenerator.updateToc(true);
                             } catch (TocException e1) {
-                                e1.printStackTrace();
+                                LOG.warn("The table of contents could not be updated, so the"
+                                        + " document keeps the one it already had.", e1);
                             }
                         } else {
-                            e.printStackTrace();
+                            LOG.warn("The table of contents could not be generated, so the"
+                                    + " document has none.", e);
                         }
                     }
                     // to generate page numbers, you should install your own local instance of Plutext PDF Converter,
@@ -761,7 +767,8 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                 try {
                     docx.getDocxDocument().addAltChunk(AltChunkType.Html, node.getChars().toString().getBytes(StandardCharsets.UTF_8));
                 } catch (Docx4JException e) {
-                    e.printStackTrace();
+                    LOG.warn("An HTML block could not be added to the document, so the document is"
+                            + " missing what that block held.", e);
                 }
             }
         }
@@ -798,7 +805,8 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                 try {
                     docx.getDocxDocument().addAltChunk(AltChunkType.Html, node.getChars().toString().getBytes(StandardCharsets.UTF_8));
                 } catch (Docx4JException e) {
-                    e.printStackTrace();
+                    LOG.warn("An inline piece of HTML could not be added to the document, so the"
+                            + " document is missing what it held.", e);
                 }
             }
         }
@@ -1405,7 +1413,9 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(useFormat);
             currentTime = dateFormat.format(date);
-        } catch (Exception ignored) {
+        } catch (Exception failure) {
+            LOG.warn("\"{}\" is no format a time can be written in, so the time stays empty in the"
+                    + " document.", useFormat, failure);
         }
         return currentTime;
     }
@@ -1417,7 +1427,9 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(useFormat);
                 currentDate = dateFormat.format(date);
-            } catch (Exception ignored) {
+            } catch (Exception failure) {
+                LOG.warn("\"{}\" is no format a date can be written in, so the date stays empty in"
+                        + " the document.", useFormat, failure);
             }
         }
         return currentDate;
@@ -1626,7 +1638,8 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
 
             return run;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.warn("An image could not be placed in the document, so nothing is put where it"
+                    + " should have been.", e);
         }
 
         return null;
@@ -2107,7 +2120,8 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                     docx.contextFramed(new FootnoteFrame(docx, ftnEdn, footnoteBlock));
                 }
             } catch (Docx4JException e) {
-                e.printStackTrace();
+                LOG.warn("A footnote could not be added to the document, so the reference to it"
+                        + " leads nowhere.", e);
             }
         }
     }
@@ -2356,7 +2370,8 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                     try {
                         return myDocx.getFootnotesPart().getRelationshipsPart();
                     } catch (Docx4JException e) {
-                        e.printStackTrace();
+                        LOG.warn("The footnotes part could not be reached, so relationships are"
+                                + " written to the main document instead.", e);
                         return myDocx.getDocxDocument().getRelationshipsPart();
                     }
                 }
@@ -2366,7 +2381,8 @@ public class CoreNodeDocxRenderer implements PhasedNodeDocxRenderer {
                     try {
                         return myDocx.getFootnotesPart();
                     } catch (Docx4JException e) {
-                        e.printStackTrace();
+                        LOG.warn("The footnotes part could not be reached, so the content is put"
+                                + " into the main document instead.", e);
                         return myDocx.getDocxDocument();
                     }
                 }

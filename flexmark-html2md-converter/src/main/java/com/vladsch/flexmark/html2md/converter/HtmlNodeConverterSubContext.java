@@ -3,10 +3,13 @@ package com.vladsch.flexmark.html2md.converter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jsoup.nodes.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public abstract class HtmlNodeConverterSubContext implements HtmlNodeConverterContext {
+    private static final Logger LOG = LoggerFactory.getLogger(HtmlNodeConverterSubContext.class);
     final protected HtmlMarkdownWriter markdown;
     NodeRenderingHandlerWrapper<?> renderingHandlerWrapper;
     @Nullable Node myRenderingNode;
@@ -38,7 +41,8 @@ public abstract class HtmlNodeConverterSubContext implements HtmlNodeConverterCo
         try {
             markdown.appendTo(out, maxBlankLines, maxTrailingBlankLines);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("Converted Markdown could not be written to its destination, so the"
+                    + " destination holds less than was converted.", e);
         }
     }
 }

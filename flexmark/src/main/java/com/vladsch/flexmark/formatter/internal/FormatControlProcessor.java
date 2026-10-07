@@ -10,11 +10,15 @@ import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.DataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class FormatControlProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(FormatControlProcessor.class);
+
     final public static String OPEN_COMMENT = "<!--";
     final public static String CLOSE_COMMENT = "-->";
 
@@ -64,6 +68,8 @@ public class FormatControlProcessor {
         try {
             return Pattern.compile(markerText);
         } catch (PatternSyntaxException var3) {
+            LOG.warn("The formatter tag \"{}\" is no valid pattern, so the tags are read as plain"
+                    + " text for the rest of this run.", markerText, var3);
             formatterTagsAcceptRegexp = false;
             return null;
         }

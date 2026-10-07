@@ -39,6 +39,8 @@ import org.docx4j.openpackaging.parts.WordprocessingML.StyleDefinitionsPart;
 import org.docx4j.wml.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -49,6 +51,8 @@ import java.util.*;
  */
 @SuppressWarnings("WeakerAccess")
 public class DocxRenderer implements IRender {
+    private static final Logger LOG = LoggerFactory.getLogger(DocxRenderer.class);
+
     final public static DataKey<String> STYLES_XML = new DataKey<>("STYLES_XML", getResourceString("/styles.xml"));
     final public static DataKey<String> NUMBERING_XML = new DataKey<>("NUMBERING_XML", getResourceString("/numbering.xml"));
 
@@ -227,7 +231,8 @@ public class DocxRenderer implements IRender {
             WordprocessingMLPackage mlPackage = WordprocessingMLPackage.load(inputStream);
             return mlPackage;
         } catch (Docx4JException e) {
-            e.printStackTrace();
+            LOG.warn("The document template could not be loaded, so no template is returned and"
+                    + " nothing can be rendered on top of it.", e);
         }
         return null;
     }
@@ -261,13 +266,8 @@ public class DocxRenderer implements IRender {
             // (main doc part it if necessary)
             MainDocumentPart documentPart = out.getMainDocumentPart();
             if (documentPart == null) {
-                try {
-                    documentPart = new MainDocumentPart();
-                    out.addTargetPart(documentPart);
-                } catch (InvalidFormatException e) {
-                    e.printStackTrace();
-                    throw e;
-                }
+                documentPart = new MainDocumentPart();
+                out.addTargetPart(documentPart);
             }
 
             if (documentPart.getStyleDefinitionsPart() == null) {
@@ -287,10 +287,11 @@ public class DocxRenderer implements IRender {
                 assert documentPart.getNumberingDefinitionsPart() != null : "Numbering failed to set";
             }
         } catch (InvalidFormatException e) {
-            e.printStackTrace();
+            LOG.warn("A part of the document could not be added in the expected format, so the"
+                    + " document keeps neither the styles nor the numbering it was given.", e);
         } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+            LOG.warn("The styles and the numbering could not be set on the document, so it is"
+                    + " rendered with whatever the template brought.", e);
         }
     }
 
@@ -301,13 +302,8 @@ public class DocxRenderer implements IRender {
             try {
                 DocPropsCustomPart customPropsPart = out.getDocPropsCustomPart();
                 if (customPropsPart == null) {
-                    try {
-                        customPropsPart = new DocPropsCustomPart();
-                        out.addTargetPart(customPropsPart);
-                    } catch (InvalidFormatException e) {
-                        e.printStackTrace();
-                        throw e;
-                    }
+                    customPropsPart = new DocPropsCustomPart();
+                    out.addTargetPart(customPropsPart);
                 }
 
                 if (customPropsPart.getContents() == null) {
@@ -318,10 +314,11 @@ public class DocxRenderer implements IRender {
                     customPropsPart.setProperty(entry.getKey(), entry.getValue());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOG.warn("The custom document properties could not be set, so the document carries"
+                        + " none of them.", e);
             }
         }
-        
+
         String pageSize = PAGE_SIZE.get(options).trim().toLowerCase();
         if (!pageSize.isEmpty()) {
             PageSizePaper sz = null;
@@ -389,9 +386,11 @@ public class DocxRenderer implements IRender {
                     : XmlDocxSorter.sortDocumentParts(outputStream.toString("UTF-8"));
             return s;
         } catch (Docx4JException e) {
-            e.printStackTrace();
+            LOG.warn("The rendered document could not be saved, so an empty string is returned in"
+                    + " place of it.", e);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            LOG.warn("The saved document could not be read back as UTF-8, so an empty string is"
+                    + " returned in place of it.", e);
         }
         return "";
     }
@@ -402,7 +401,8 @@ public class DocxRenderer implements IRender {
         try {
             output.append(docx);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("The rendered document could not be appended to the output, so the output"
+                    + " breaks off where the appending stopped.", e);
         }
     }
 

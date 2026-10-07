@@ -11,6 +11,8 @@ import com.vladsch.flexmark.util.misc.*;
 import com.vladsch.flexmark.util.sequence.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -25,6 +27,7 @@ import static com.vladsch.flexmark.util.misc.Utils.*;
 
 @SuppressWarnings("WeakerAccess")
 public class MarkdownTable {
+    private static final Logger LOG = LoggerFactory.getLogger(MarkdownTable.class);
 
     final public TableSection header;
     final public TableSection separator;
@@ -1489,11 +1492,13 @@ public class MarkdownTable {
                         int adjustForBlank = cell.text.isBlank() ? -1 : 0;
                         if (!setTrackedOffsetIndex(cell.trackedTextOffset + cell.getTextStartOffset(i == 0 ? null : row.cells.get(i - 1)), cellOffset + minLimit(adjustedCell.trackedTextOffset + adjustForBlank, 0) + adjustedCell.trackedTextAdjust)) {
                             // QUERY: Triggered after sort table in MdNav for header row
-                            System.out.println(String.format("Offset not found: cell.trackedTextOffset: %d, adjusted trackedOffset: %d in offsets: %s"
+                            LOG.warn("A tracked offset could not be placed in the formatted table,"
+                                            + " so it stays where it was: cell offset {},"
+                                            + " adjusted offset {}, among {}."
                                     , cell.trackedTextOffset
                                     , cell.trackedTextOffset + cell.getTextStartOffset(i == 0 ? null : row.cells.get(i - 1))
                                     , trackedOffsets
-                            ));
+                            );
                         }
                     }
                 }

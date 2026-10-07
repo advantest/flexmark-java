@@ -3,10 +3,14 @@ package com.vladsch.flexmark.html;
 import com.vladsch.flexmark.html.renderer.NodeRendererContext;
 import com.vladsch.flexmark.util.ast.Node;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public abstract class NodeRendererSubContext implements NodeRendererContext {
+    private static final Logger LOG = LoggerFactory.getLogger(NodeRendererSubContext.class);
+
     final HtmlWriter htmlWriter;
     Node renderingNode;
     NodeRenderingHandlerWrapper renderingHandlerWrapper;
@@ -31,7 +35,8 @@ public abstract class NodeRendererSubContext implements NodeRendererContext {
         try {
             htmlWriter.appendTo(out, maxBlankLines, maxTrailingBlankLines);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("Rendered HTML could not be written to its destination, so the destination"
+                    + " holds less than was rendered.", e);
         }
     }
 

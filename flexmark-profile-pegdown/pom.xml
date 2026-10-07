@@ -125,6 +125,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>
+                        <!-- Keep what the coverage measurement put into argLine: the property is
+                             set while the build runs, so it is read late rather than inherited -->
+                        @{argLine}
                         <!-- Open the java.lang package for reflection, otherwise pegdown throws the following exception in tests
                              Could not determine whether class 'org.pegdown.Parser$$parboiled' has already been loaded
                         

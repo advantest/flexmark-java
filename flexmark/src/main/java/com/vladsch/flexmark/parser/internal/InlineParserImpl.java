@@ -22,12 +22,16 @@ import com.vladsch.flexmark.util.sequence.SegmentedSequence;
 import com.vladsch.flexmark.util.sequence.SequenceUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 
 public class InlineParserImpl extends LightInlineParserImpl implements InlineParser, ParagraphPreProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(InlineParserImpl.class);
+
     protected final BitSet originalSpecialCharacters;
     protected final BitSet delimiterCharacters;
     protected final Map<Character, DelimiterProcessor> delimiterProcessors;
@@ -1765,8 +1769,8 @@ public class InlineParserImpl extends LightInlineParserImpl implements InlinePar
             if (existing.getClass() != toAdd.getClass()) {
                 throw new IllegalArgumentException("Delimiter processor conflict with delimiter char '" + delimiterChar + "', existing " + existing.getClass().getCanonicalName() + ", added " + toAdd.getClass().getCanonicalName());
             } else {
-                // warning???
-                System.out.println("Delimiter processor for char '" + delimiterChar + "', added more than once " + existing.getClass().getCanonicalName());
+                LOG.warn("A delimiter processor for the character '{}' was added more than once: {}",
+                        delimiterChar, existing.getClass().getCanonicalName());
             }
         }
     }

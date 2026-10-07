@@ -7,11 +7,15 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.StyleDefinitionsPart;
 import org.docx4j.wml.Style;
 import org.docx4j.wml.Styles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class DocxRendererOptions {
+    private static final Logger LOG = LoggerFactory.getLogger(DocxRendererOptions.class);
+
     final private static HashMap<String, String> standardStyleNames = new HashMap<>();
     static {
         standardStyleNames.put("AsideBlock", "AsideBlock");
@@ -306,7 +310,8 @@ public class DocxRendererOptions {
                 nameToStyleStyleId.put(styleName, styleId);
             }
         } catch (Docx4JException e) {
-            e.printStackTrace();
+            LOG.warn("The style definitions of the template could not be read, so no style name is"
+                    + " known and every style is addressed by its identifier alone.", e);
         }
     }
 }

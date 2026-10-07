@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
         OrderedMapTest.class,
         OrderedMultiMapTest.class,
         OrderedSetTest.class,
+        OrderedSetSparseTest.class,
         ClassificationBagTest.class,
         MaxAggregatorTest.class,
         MinAggregatorTest.class,

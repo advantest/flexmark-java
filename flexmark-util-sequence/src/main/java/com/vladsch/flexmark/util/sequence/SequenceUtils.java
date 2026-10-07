@@ -202,7 +202,7 @@ public interface SequenceUtils {
                 if (pos < 0 || pos + sMax > endIndex) break;
                 if (matchChars(thizz, s, pos)) return pos;
                 pos++;
-            } while (pos + sMax < endIndex);
+            } while (pos + sMax <= endIndex);
         }
 
         return -1;
@@ -374,7 +374,7 @@ public interface SequenceUtils {
 
                     // NOTE: if both chars are in the ignore set, then it is a match
                     if (ignoreChars == null || !(ignoreChars.test(c1) && ignoreChars.test(c2))) {
-                        return c1 - c2;
+                        return Character.toLowerCase(u1) - Character.toLowerCase(u2);
                     }
                 }
             }
@@ -473,11 +473,11 @@ public interface SequenceUtils {
     static boolean matchCharsReversed(@NotNull CharSequence thizz, @NotNull CharSequence chars, int endIndex)                               { return endIndex + 1 >= chars.length() && matchChars(thizz, chars, endIndex + 1 - chars.length(), false); }
     static boolean matchCharsReversedIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int endIndex)                     { return endIndex + 1 >= chars.length() && matchChars(thizz, chars, endIndex + 1 - chars.length(), true); }
 
-    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex, boolean ignoreCase) { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, ignoreCase); }
+    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex, boolean ignoreCase) { return matchedCharCount(thizz, chars, startIndex, endIndex, false, ignoreCase); }
     static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, boolean ignoreCase)               { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, ignoreCase); }
-    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)                     { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, false); }
+    static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)                     { return matchedCharCount(thizz, chars, startIndex, endIndex, false, false); }
     static int matchedCharCount(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex)                                   { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, false); }
-    static int matchedCharCountIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)           { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, true); }
+    static int matchedCharCountIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int endIndex)           { return matchedCharCount(thizz, chars, startIndex, endIndex, false, true); }
     static int matchedCharCountIgnoreCase(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex)                         { return matchedCharCount(thizz, chars, startIndex, Integer.MAX_VALUE, false, true); }
 
     static int matchedCharCountReversed(@NotNull CharSequence thizz, @NotNull CharSequence chars, int startIndex, int fromIndex)            { return matchedCharCountReversed(thizz, chars, startIndex, fromIndex, false); }
@@ -652,23 +652,17 @@ public interface SequenceUtils {
     }
 
     static int countLeadingColumns(@NotNull CharSequence thizz, int startColumn, @NotNull CharPredicate chars) {
-        int fromIndex = 0;
         int endIndex = thizz.length();
-        int index = indexOfAnyNot(thizz, chars, fromIndex, endIndex);
+        int index = indexOfAnyNot(thizz, chars, 0, endIndex);
+        int end = index == -1 ? endIndex : index;
 
         // expand tabs
-        int end = index == -1 ? endIndex : index;
-        int columns = index == -1 ? endIndex - fromIndex : index - fromIndex;
-        int tab = indexOf(thizz, '\t', fromIndex, end);
-        if (tab != -1) {
-            int delta = startColumn;
-            do {
-                delta += tab + columnsToNextTabStop(tab + delta);
-                tab = indexOf(thizz, '\t', tab + 1);
-            } while (tab >= 0 && tab < endIndex);
-            columns += delta;
+        int column = startColumn;
+        for (int i = 0; i < end; i++) {
+            if (thizz.charAt(i) == '\t') column += columnsToNextTabStop(column);
+            else column++;
         }
-        return columns;
+        return column - startColumn;
     }
 
     // TEST: this
