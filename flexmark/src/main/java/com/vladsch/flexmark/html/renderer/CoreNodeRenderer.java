@@ -766,8 +766,8 @@ public class CoreNodeRenderer implements NodeRenderer {
         }
 
         if (resolvedLink == null) {
-            // empty ref, we treat it as text
-            html.text(node.getChars().unescape());
+            // empty ref, we treat it as text, the reference label is raw source and may still hold a CR
+            html.text(Escaping.normalizeEOL(node.getChars().unescape()));
         } else {
             if (!(context.isDoNotRenderLinks() || isSuppressed)) {
                 String altText = new TextCollectingVisitor().collectAndGetText(node);
@@ -819,12 +819,13 @@ public class CoreNodeRenderer implements NodeRenderer {
         if (resolvedLink == null) {
             // empty ref, we treat it as text
             assert !node.isDefined();
+            // the reference label is raw source and is never parsed into inlines, so it may still hold a CR
             if (!node.hasChildren()) {
-                html.text(node.getChars().unescape());
+                html.text(Escaping.normalizeEOL(node.getChars().unescape()));
             } else {
-                html.text(node.getChars().prefixOf(node.getChildChars()).unescape());
+                html.text(Escaping.normalizeEOL(node.getChars().prefixOf(node.getChildChars()).unescape()));
                 renderChildrenSourceLineWrapped(node, node.getText(), context, html);
-                html.text(node.getChars().suffixOf(node.getChildChars()).unescape());
+                html.text(Escaping.normalizeEOL(node.getChars().suffixOf(node.getChildChars()).unescape()));
             }
         } else {
             if (context.isDoNotRenderLinks() || isSuppressed) {
