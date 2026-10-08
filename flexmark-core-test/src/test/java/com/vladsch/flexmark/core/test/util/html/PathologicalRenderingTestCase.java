@@ -43,7 +43,26 @@ public abstract class PathologicalRenderingTestCase extends RenderingTestCase {
     private int x = 100000;
 
     @Rule
-    public Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
+    public Timeout timeout = new Timeout(timeoutSeconds(), TimeUnit.SECONDS);
+
+    /**
+     * These tests guard against pathological, super-linear parsing behaviour, where the cost explodes by orders of
+     * magnitude. A wider budget therefore still catches a real regression.
+     * <p>
+     * macOS machines on Intel hardware are erratic enough to exceed the normal budget without anything being wrong,
+     * so they get a wider one. The slowest of these tests was measured at roughly 120 ms on Linux, 190 ms on macOS on
+     * Apple Silicon and 90 ms on Windows, but at 3700 ms on a macOS continuous integration runner on Intel hardware,
+     * where a sibling test of the same shape still finished in 220 ms. Apple Silicon reports an architecture of
+     * aarch64 and keeps the normal budget.
+     */
+    private static int timeoutSeconds() {
+        return timeoutSeconds(System.getProperty("os.name", ""), System.getProperty("os.arch", ""));
+    }
+
+    static int timeoutSeconds(String osName, String osArch) {
+        boolean macOnIntel = osName.startsWith("Mac") && osArch.equals("x86_64");
+        return macOnIntel ? 10 : 3;
+    }
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
