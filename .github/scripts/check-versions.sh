@@ -14,6 +14,8 @@
 #    these branches, the build warns, but does not fail.
 # D  A tag x.y.z deploys only if it equals the version, the version has no -SNAPSHOT and the tagged commit
 #    is on main, or the build fails.
+# E  A tag deploys only if none of the dependencies, the transitive ones included, and none of the parents
+#    is a -SNAPSHOT version, or the build fails.
 #
 # It reads GITHUB_REF_TYPE and GITHUB_REF_NAME as GitHub Actions sets them, needs the branches of the
 # remote REMOTE (default: origin) fetched with their history, and writes deploy=true or deploy=false to
@@ -57,6 +59,8 @@ if [ "$ref_type" = tag ]; then
 	[ "$ref_name" = "$version" ] || fail "The tag $ref_name does not name the version $version."
 	[[ "$version" != *-SNAPSHOT ]] || fail "The tag $ref_name names a -SNAPSHOT version; a release has none."
 	is_merged_into_main HEAD || fail "The tag $ref_name is not on main; releases are published from main."
+	mvn -B -q org.apache.maven.plugins:maven-enforcer-plugin:3.5.0:enforce -Drules=requireReleaseDeps ||
+		fail "The release $version depends on a -SNAPSHOT version."
 	deploy=true
 elif [ "$ref_name" = main ] || [[ "$ref_name" == release/* ]]; then
 	if [[ "$ref_name" == release/* ]]; then
