@@ -101,6 +101,43 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- The tests of FlexmarkInfo compare the version it reads with the version of this project.
+                 argLine is left alone, as the coverage measurement passes its agent through it. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <expectedVersion>${project.version}</expectedVersion>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <!-- Runs the *IT tests against the packaged JAR, which failsafe puts on the class path
+                 instead of target/classes. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <expectedVersion>${project.version}</expectedVersion>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>benchmark</id>

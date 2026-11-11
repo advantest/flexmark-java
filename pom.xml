@@ -95,6 +95,23 @@
     </properties>
 
     <build>
+
+        <!-- Every module writes its version into META-INF/<groupId>/<artifactId>/version.properties,
+             filtered from the template src/version/version.properties of this repository. The path
+             differs per artifact, so the versions of several libraries on one class path do not clash
+             the way a version resource at the root of the class path would. The resources plugin
+             writes the file, so it is also there when the classes run from the class folders of an
+             IDE that lets Maven process the resources, as m2e does. -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/../src/version</directory>
+                <filtering>true</filtering>
+                <targetPath>META-INF/${project.groupId}/${project.artifactId}</targetPath>
+            </resource>
+        </resources>
     
         <plugins>
           <plugin>
@@ -166,6 +183,14 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.2.2</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <!-- Writes Implementation-Version, among others, into every JAR. -->
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
